@@ -136,7 +136,7 @@ static int readimu_nvt(FILE* fp, imu_t* imu)
     double g_scale = 1.085069444444444E-07; /* 0.1/(3600*256) */
 
     /* Search the INSPVASA with INS_SOLUTION_GOOD status */
-    vec3_t r, v, a;
+    v3_t r, v, a;
     while (fgets(buff, MAXIMULEN, fp)) {
         token = strtok(buff, seps);
         if (!strcmp(token, "%INSPVASA")) {
@@ -165,7 +165,7 @@ static int readimu_nvt(FILE* fp, imu_t* imu)
         }
     }
 
-    dcm_t dcm;
+    m3_t dcm;
     euler2dcm(&a, &dcm);
     ned2ecef(&r, &v, &dcm);
     dcm2euler(&dcm, &a);

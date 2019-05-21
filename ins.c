@@ -5,37 +5,37 @@
 
 #define PI 3.14159265358979
 
-extern vec3_t vec_cross(vec3_t v1, vec3_t v2)
+extern v3_t vec_cross(v3_t v1, v3_t v2)
 {
-    vec3_t v;
+    v3_t v;
     v.i = v1.j * v2.k - v1.k * v2.j;
     v.j = v1.k * v2.i - v1.i * v2.k;
     v.k = v1.i * v2.j - v1.j * v2.i;
     return v;
 }
-extern vec3_t vec_add(vec3_t v1, vec3_t v2)
+extern v3_t vec_add(v3_t v1, v3_t v2)
 {
-    return (vec3_t) { v1.i + v2.i, v1.j + v2.j, v1.k + v2.k };
+    return (v3_t) { v1.i + v2.i, v1.j + v2.j, v1.k + v2.k };
 }
-extern vec3_t vec_del(vec3_t v1, vec3_t v2)
+extern v3_t vec_del(v3_t v1, v3_t v2)
 {
-    return (vec3_t) { v1.i - v2.i, v1.j - v2.j, v1.k - v2.k };
+    return (v3_t) { v1.i - v2.i, v1.j - v2.j, v1.k - v2.k };
 }
-extern vec3_t vec_dot(double s, vec3_t v)
+extern v3_t vec_dot(double s, v3_t v)
 {
-    return (vec3_t) { s * v.i, s * v.j, s * v.k };
+    return (v3_t) { s * v.i, s * v.j, s * v.k };
 }
-extern dcm_t m3_transpose(dcm_t A)
+extern m3_t m3_transpose(m3_t A)
 {
-    dcm_t dcm;
+    m3_t dcm;
     dcm.m11 = A.m11, dcm.m12 = A.m21, dcm.m13 = A.m31;
     dcm.m21 = A.m12, dcm.m22 = A.m22, dcm.m23 = A.m32;
     dcm.m31 = A.m13, dcm.m32 = A.m23, dcm.m33 = A.m33;
     return dcm;
 }
-extern dcm_t m3_mul(dcm_t A, dcm_t B)
+extern m3_t m3_mul(m3_t A, m3_t B)
 {
-    dcm_t C;
+    m3_t C;
     C.m11 = A.m11 * B.m11 + A.m12 * B.m21 + A.m13 * B.m31;
     C.m12 = A.m11 * B.m12 + A.m12 * B.m22 + A.m13 * B.m32;
     C.m13 = A.m11 * B.m13 + A.m12 * B.m23 + A.m13 * B.m33;
@@ -47,9 +47,9 @@ extern dcm_t m3_mul(dcm_t A, dcm_t B)
     C.m33 = A.m31 * B.m13 + A.m32 * B.m23 + A.m33 * B.m33;
     return C;
 }
-vec3_t m3_mul_vec(dcm_t A, vec3_t B)
+v3_t m3_mul_vec(m3_t A, v3_t B)
 {
-    vec3_t C;
+    v3_t C;
     C.i = A.m11 * B.i + A.m12 * B.j + A.m13 * B.k;
     C.j = A.m21 * B.i + A.m22 * B.j + A.m23 * B.k;
     C.k = A.m31 * B.i + A.m32 * B.j + A.m33 * B.k;
@@ -64,7 +64,7 @@ earth_t wgs84 = {
     .e = 0.0818191908425  /* Eccentricity */
 };
 
-int asymmetric_mat(const vec3_t* v3, dcm_t* mat)
+int asymmetric_mat(const v3_t* v3, m3_t* mat)
 {
     mat->m11 = 0, mat->m12 = -v3->k, mat->m13 = v3->j;
     mat->m21 = v3->k, mat->m22 = 0, mat->m23 = -v3->i;
@@ -72,7 +72,7 @@ int asymmetric_mat(const vec3_t* v3, dcm_t* mat)
     return 0;
 }
 
-extern int euler2quat(const vec3_t* euler, quat_t* quat)
+extern int euler2quat(const v3_t* euler, quat_t* quat)
 {
     double si = sin(euler->i / 2), ci = cos(euler->i / 2);
     double sj = sin(euler->j / 2), cj = cos(euler->j / 2);
@@ -85,7 +85,7 @@ extern int euler2quat(const vec3_t* euler, quat_t* quat)
     return 0;
 }
 
-extern int quat2euler(const quat_t* quat, vec3_t* euler)
+extern int quat2euler(const quat_t* quat, v3_t* euler)
 {
     euler->i = atan2(2 * (-quat->q0 * quat->q1 + quat->q2 * quat->q3),
         1 - 2 * quat->q1 * quat->q1 - 2 * quat->q2 * quat->q2);
@@ -94,31 +94,31 @@ extern int quat2euler(const quat_t* quat, vec3_t* euler)
         1 - 2 * quat->q2 * quat->q2 - 2 * quat->q3 * quat->q3);
 
     if (euler->i <= -PI) /* Limit Roll Angle to (-pi,pi] */
-        euler->i += 2*PI;
+        euler->i += 2 * PI;
     else if (euler->i > PI)
-        euler->i -= 2*PI;
-    if (euler->k < 0)    /* Limit Heading Angle to [0,2pi) */
-        euler->k += 2*PI;
+        euler->i -= 2 * PI;
+    if (euler->k < 0) /* Limit Heading Angle to [0,2pi) */
+        euler->k += 2 * PI;
     /* Pitch Angle limit to [-pi/2,pi/2], asin return value range */
     return 0;
 }
 
-int dcm2euler(const dcm_t* dcm, vec3_t* euler)
+int dcm2euler(const m3_t* dcm, v3_t* euler)
 {
     euler->i = atan2(dcm->m23, dcm->m33);
     euler->j = -asin(dcm->m13);
     euler->k = atan2(dcm->m12, dcm->m11);
 
     if (euler->i <= -PI) /* Limit Roll Angle to (-pi,pi] */
-        euler->i += 2*PI;
+        euler->i += 2 * PI;
     else if (euler->i > PI)
-        euler->i -= 2*PI;
-    if (euler->k < 0)    /* Limit Heading Angle to [0,2pi) */
-        euler->k += 2*PI;
+        euler->i -= 2 * PI;
+    if (euler->k < 0) /* Limit Heading Angle to [0,2pi) */
+        euler->k += 2 * PI;
     /* Pitch Angle limit to [-pi/2,pi/2], asin return value range */
     return 0;
 }
-int euler2dcm(const vec3_t* euler, dcm_t* dcm)
+int euler2dcm(const v3_t* euler, m3_t* dcm)
 {
     double sin_phi = sin(euler->i);
     double cos_phi = cos(euler->i);
@@ -140,7 +140,7 @@ int euler2dcm(const vec3_t* euler, dcm_t* dcm)
     return 0;
 }
 
-extern int dcm2quat(const dcm_t* dcm, quat_t* quat)
+extern int dcm2quat(const m3_t* dcm, quat_t* quat)
 {
     double qq4;
     if (dcm->m11 >= dcm->m22 + dcm->m33) {
@@ -172,7 +172,7 @@ extern int dcm2quat(const dcm_t* dcm, quat_t* quat)
     return 0;
 }
 
-extern int quat2dcm(const quat_t* quat, dcm_t* dcm)
+extern int quat2dcm(const quat_t* quat, m3_t* dcm)
 {
     double q11 = quat->q0 * quat->q0, q12 = quat->q0 * quat->q1,
            q13 = quat->q0 * quat->q2, q14 = quat->q0 * quat->q3,
@@ -212,7 +212,7 @@ extern int quat_inv(quat_t* quat)
     return 0;
 }
 
-extern int dtheta2quat(const vec3_t* dtheta, quat_t* quat)
+extern int dtheta2quat(const v3_t* dtheta, quat_t* quat)
 {
     const double F1 = 2 * 1; // define Fk = 2^k * k!
     const double F2 = F1 * 2 * 2;
@@ -246,10 +246,10 @@ extern quat_t quat_mul(quat_t P, quat_t Q)
     qtmp.q3 = P.q0 * Q.q3 + P.q3 * Q.q0 + P.q1 * Q.q2 - P.q2 * Q.q1;
     return qtmp;
 }
-extern vec3_t quat_mul_vec(quat_t quat, vec3_t vec)
+extern v3_t quat_mul_vec(quat_t quat, v3_t vec)
 {
     quat_t qtmp;
-    vec3_t vtmp;
+    v3_t vtmp;
     qtmp.q0 = -quat.q1 * vec.i - quat.q2 * vec.j - quat.q3 * vec.k;
     qtmp.q1 = quat.q0 * vec.i + quat.q2 * vec.k - quat.q3 * vec.j;
     qtmp.q2 = quat.q0 * vec.j + quat.q3 * vec.i - quat.q1 * vec.k;
@@ -263,11 +263,11 @@ extern vec3_t quat_mul_vec(quat_t quat, vec3_t vec)
     return vtmp;
 }
 
-extern dcm_t formCen_ned(double lat, double lon)
+extern m3_t formCen_ned(double lat, double lon)
 {
     double coslat = cos(lat), sinlat = sin(lat);
     double coslon = cos(lon), sinlon = sin(lon);
-    dcm_t Cen;
+    m3_t Cen;
     Cen.m11 = -sinlat * coslon;
     Cen.m12 = -sinlat * sinlon;
     Cen.m13 = coslat;
@@ -280,7 +280,7 @@ extern dcm_t formCen_ned(double lat, double lon)
     return Cen;
 }
 
-extern int ned2ecef(vec3_t* pos, vec3_t* vel, dcm_t* dcm)
+extern int ned2ecef(v3_t* pos, v3_t* vel, m3_t* dcm)
 {
     double lat = pos->i, lon = pos->j, hgt = pos->k;
     double coslat = cos(lat), sinlat = sin(lat);
@@ -294,7 +294,7 @@ extern int ned2ecef(vec3_t* pos, vec3_t* vel, dcm_t* dcm)
     pos->k = ((1 - wgs84.e * wgs84.e) * Re + hgt) * sinlat;
 
     if (vel != NULL || dcm != NULL) {
-        dcm_t Cne;
+        m3_t Cne;
         Cne.m11 = -sinlat * coslon;
         Cne.m21 = -sinlat * sinlon;
         Cne.m31 = coslat;
@@ -312,7 +312,7 @@ extern int ned2ecef(vec3_t* pos, vec3_t* vel, dcm_t* dcm)
     return 0;
 }
 
-extern int ecef2ned(vec3_t* pos, vec3_t* vel, dcm_t* dcm)
+extern int ecef2ned(v3_t* pos, v3_t* vel, m3_t* dcm)
 {
     /* ref Pual 2012, C.29 - C.38 */
     double lon = atan2(pos->j, pos->i);
@@ -339,7 +339,7 @@ extern int ecef2ned(vec3_t* pos, vec3_t* vel, dcm_t* dcm)
 
     if (vel != NULL || dcm != NULL) {
         double coslon = cos(lon), sinlon = sin(lon);
-        dcm_t Cen;
+        m3_t Cen;
         Cen.m11 = -sinlat * coslon;
         Cen.m12 = -sinlat * sinlon;
         Cen.m13 = coslat;
@@ -357,7 +357,7 @@ extern int ecef2ned(vec3_t* pos, vec3_t* vel, dcm_t* dcm)
     return 0;
 }
 
-int gravity_ecef(const vec3_t* r, vec3_t* ge)
+int gravity_ecef(const v3_t* r, v3_t* ge)
 {
     double mag_r = sqrt(r->i * r->i + r->j * r->j + r->k * r->k);
     if (mag_r == 0) {
@@ -378,11 +378,11 @@ int gravity_ecef(const vec3_t* r, vec3_t* ge)
     return 0;
 }
 
-extern int nav_equations_ecef(double dt, const vec3_t* dtheta, const vec3_t* dv,
-    vec3_t* r, vec3_t* v, quat_t* q)
+extern int nav_equations_ecef(double dt, const v3_t* dtheta, const v3_t* dv,
+    v3_t* r, v3_t* v, quat_t* q)
 {
     /* Attitude update */
-    vec3_t dtheta_ie = { 0, 0, -wgs84.wie * dt };
+    v3_t dtheta_ie = { 0, 0, -wgs84.wie * dt };
     quat_t q_earth;
     dtheta2quat(&dtheta_ie, &q_earth);
     quat_t q_body;
@@ -391,32 +391,32 @@ extern int nav_equations_ecef(double dt, const vec3_t* dtheta, const vec3_t* dv,
     *q = quat_mul(quat_mul(q_earth, old_q), q_body);
     quat_normalize(q);
     /* Specific force transform(velocity form) */
-    vec3_t dtheta_ie_half = { 0, 0, -wgs84.wie * dt / 2 };
+    v3_t dtheta_ie_half = { 0, 0, -wgs84.wie * dt / 2 };
     dtheta2quat(&dtheta_ie_half, &q_earth);
-    vec3_t dv_rot = vec_dot(0.5, vec_cross(*dtheta, *dv));
-    vec3_t dv_e = quat_mul_vec(quat_mul(q_earth, old_q), vec_add(*dv, dv_rot));
+    v3_t dv_rot = vec_dot(0.5, vec_cross(*dtheta, *dv));
+    v3_t dv_e = quat_mul_vec(quat_mul(q_earth, old_q), vec_add(*dv, dv_rot));
     /* An another specific force transform
-    vec3_t dtheta_ie_half = {0,0,-wgs84.wie*dt/2};
+    v3_t dtheta_ie_half = {0,0,-wgs84.wie*dt/2};
     dtheta2quat(&dtheta_ie_half,&q_earth);
-    vec3_t dtheta_half = {dtheta->i/2,dtheta->j/2,dtheta->k/2};
+    v3_t dtheta_half = {dtheta->i/2,dtheta->j/2,dtheta->k/2};
     dtheta2quat(&dtheta_half,&q_body);
     quat_t q_ave = quat_mul(quat_mul(q_earth,old_q),q_body);
-    vec3_t dv_e = quat_mul_vec(q_ave,*dv);*/
+    v3_t dv_e = quat_mul_vec(q_ave,*dv);*/
     /* Velocity update */
-    vec3_t ge;
+    v3_t ge;
     gravity_ecef(r, &ge);
-    vec3_t old_v = *v;
+    v3_t old_v = *v;
     v->i = old_v.i + dv_e.i + dt * (ge.i + 2 * wgs84.wie * old_v.j);
     v->j = old_v.j + dv_e.j + dt * (ge.j - 2 * wgs84.wie * old_v.i);
     v->k = old_v.k + dv_e.k + dt * ge.k;
     /* Position update */
-    vec3_t old_r = *r;
+    v3_t old_r = *r;
     *r = vec_add(old_r, vec_dot(0.5 * dt, vec_add(old_v, *v)));
     return 0;
 }
 
-extern int multisample(const vec3_t* dtheta_list, const vec3_t* dv_list, int N,
-    vec3_t* dtheta, vec3_t* dv)
+extern int multisample(const v3_t* dtheta_list, const v3_t* dv_list, int N,
+    v3_t* dtheta, v3_t* dv)
 {
     if (abs(N) == 1) {
         *dtheta = dtheta_list[0];
@@ -433,7 +433,7 @@ extern int multisample(const vec3_t* dtheta_list, const vec3_t* dv_list, int N,
             { 250. / 504, 525. / 504, 650. / 504, 1375. / 504 } // 5
         };
         double* pcf = conefactors[N - 2];
-        vec3_t sum_c = {}, sum_s = {}, sum_w = {}, sum_v = {};
+        v3_t sum_c = {}, sum_s = {}, sum_w = {}, sum_v = {};
         int i = 0;
         for (; i < N - 1; i++) {
             /* sum of cross_product factor */
@@ -450,21 +450,21 @@ extern int multisample(const vec3_t* dtheta_list, const vec3_t* dv_list, int N,
         *dtheta = vec_add(sum_w, vec_cross(sum_c, dtheta_list[i]));
         /* sculling error compensation for velocity increment, ref
          * Paul2013(5.98)*/
-        /* vec3_t rot = vec_dot(0.5,vec_cross(sum_w,sum_v)); */
-        vec3_t scul = vec_add(
+        /* v3_t rot = vec_dot(0.5,vec_cross(sum_w,sum_v)); */
+        v3_t scul = vec_add(
             vec_cross(sum_c, dv_list[i]), vec_cross(sum_s, dtheta_list[i]));
         /* *dv = vec_add(sum_v, vec_add(rot,scul)); */
         *dv = vec_add(sum_v, scul);
     }
     if (N == -2) {
-        vec3_t sum_c = vec_dot(1.0 / 12, dtheta_list[0]);
-        vec3_t sum_s = vec_dot(1.0 / 12, dv_list[0]);
+        v3_t sum_c = vec_dot(1.0 / 12, dtheta_list[0]);
+        v3_t sum_s = vec_dot(1.0 / 12, dv_list[0]);
         /* ref Yan2016(P31:2.5-37) */
         *dtheta = vec_add(dtheta_list[1], vec_cross(sum_c, dtheta_list[1]));
         /* ref Yan2016(P73:4.1-36,P76:4.1-55) */
-        vec3_t scul = vec_add(
+        v3_t scul = vec_add(
             vec_cross(sum_c, dv_list[1]), vec_cross(sum_s, dtheta_list[1]));
-        /* vec3_t rot = vec_dot(0.5,vec_cross(dtheta_list[1],dv_list[1])); */
+        /* v3_t rot = vec_dot(0.5,vec_cross(dtheta_list[1],dv_list[1])); */
         /* *dv = vec_add(dv_list[1], vec_add(rot,scul)); */
         *dv = vec_add(dv_list[1], scul);
     }
