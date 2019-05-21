@@ -33,10 +33,10 @@ static double str2num(const char* s, int i, int n)
     return sscanf(str, "%lf", &value) == 1 ? value : 0.0;
 }
 
-void nav_ins_ecef(const imu_t* imu, int N, vec3_t r, vec3_t v, quat_t q)
+void nav_ins_ecef(const imu_t* imu, int N, v3_t r, v3_t v, quat_t q)
 {
-    vec3_t euler;
-    vec3_t dtheta_list[5], dv_list[5], dtheta, dv;
+    v3_t euler;
+    v3_t dtheta_list[5], dv_list[5], dtheta, dv;
     double dt = imu->data[1].time.sec - imu->data[0].time.sec;
 
     if (N < 0) /* update first abs(N)-1 when N<0*/
@@ -67,7 +67,7 @@ void nav_ins_ecef(const imu_t* imu, int N, vec3_t r, vec3_t v, quat_t q)
     }
 }
 
-void get_init_para(char* infile, vec3_t* r, vec3_t* v, quat_t* q)
+void get_init_para(char* infile, v3_t* r, v3_t* v, quat_t* q)
 {
     FILE* fp;
     if (!(fp = fopen(infile, "r"))) {
@@ -76,7 +76,7 @@ void get_init_para(char* infile, vec3_t* r, vec3_t* v, quat_t* q)
     }
     char buff[240];
     fgets(buff, 240, fp);
-    vec3_t e;
+    v3_t e;
     r->i = str2num(buff, 17, 16);
     r->j = str2num(buff, 34, 16);
     r->k = str2num(buff, 51, 16);
@@ -93,18 +93,18 @@ void get_init_para(char* infile, vec3_t* r, vec3_t* v, quat_t* q)
 
 void set_imu(imu_t* imus)
 {
-    imus->initQr = (vec3_t) { 10.0, 10.0, 10.0 };
-    imus->initQv = (vec3_t) { 1.0, 1.0, 1.0 };
-    imus->initQa = (vec3_t) { 1.0 * DEG2RAD, 1.0 * DEG2RAD, 1.0 * DEG2RAD };
-    imus->initQab = (vec3_t) { 20.0 * DPH2RPS, 20.0 * DPH2RPS, 20.0 * DPH2RPS };
-    imus->initQgb = (vec3_t) { 50.0 * MG2MPS, 50.0 * MG2MPS, 50.0 * MG2MPS };
-    imus->arw = (vec3_t) { 0.0667 * DPSH2RPSS, 0.0667 * DPSH2RPSS,
+    imus->initQr = (v3_t) { 10.0, 10.0, 10.0 };
+    imus->initQv = (v3_t) { 1.0, 1.0, 1.0 };
+    imus->initQa = (v3_t) { 1.0 * DEG2RAD, 1.0 * DEG2RAD, 1.0 * DEG2RAD };
+    imus->initQab = (v3_t) { 20.0 * DPH2RPS, 20.0 * DPH2RPS, 20.0 * DPH2RPS };
+    imus->initQgb = (v3_t) { 50.0 * MG2MPS, 50.0 * MG2MPS, 50.0 * MG2MPS };
+    imus->arw = (v3_t) { 0.0667 * DPSH2RPSS, 0.0667 * DPSH2RPSS,
         0.0667 * DPSH2RPSS };
-    imus->arrw = (vec3_t) { 1e-6, 1e-6, 1e-6 };
-    imus->vrw = (vec3_t) { 200 * 9.8e-6, 200 * 9.8e-6, 200 * 9.8e-6 };
-    imus->vrrw = (vec3_t) { 1e-3, 1e-3, 1e-3 };
-    imus->Ta = (vec3_t) { 1000.0, 1000.0, 1000.0 };
-    imus->Tg = (vec3_t) { 1000.0, 1000.0, 1000.0 };
+    imus->arrw = (v3_t) { 1e-6, 1e-6, 1e-6 };
+    imus->vrw = (v3_t) { 200 * 9.8e-6, 200 * 9.8e-6, 200 * 9.8e-6 };
+    imus->vrrw = (v3_t) { 1e-3, 1e-3, 1e-3 };
+    imus->Ta = (v3_t) { 1000.0, 1000.0, 1000.0 };
+    imus->Tg = (v3_t) { 1000.0, 1000.0, 1000.0 };
 }
 
 int main()
@@ -114,8 +114,8 @@ int main()
     set_imu(&imu);
     imu_trans_rnx(&imu, "../testdata/1_level_rnx3/IMU.rnx");
 
-    vec3_t r;
-    vec3_t v;
+    v3_t r;
+    v3_t v;
     quat_t q;
     // readimu_file("./data/ECEF_IMU_meas_1.csv",&imu,FT_CSV);
     // print_imu(&imu);

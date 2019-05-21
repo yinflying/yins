@@ -5,7 +5,7 @@
 
 #define PI 3.14159265358979
 
-extern v3_t vec_cross(v3_t v1, v3_t v2)
+extern v3_t v3_cross(v3_t v1, v3_t v2)
 {
     v3_t v;
     v.i = v1.j * v2.k - v1.k * v2.j;
@@ -13,18 +13,23 @@ extern v3_t vec_cross(v3_t v1, v3_t v2)
     v.k = v1.i * v2.j - v1.j * v2.i;
     return v;
 }
-extern v3_t vec_add(v3_t v1, v3_t v2)
+extern v3_t v3_add(v3_t v1, v3_t v2)
 {
     return (v3_t) { v1.i + v2.i, v1.j + v2.j, v1.k + v2.k };
 }
-extern v3_t vec_del(v3_t v1, v3_t v2)
+extern v3_t v3_del(v3_t v1, v3_t v2)
 {
     return (v3_t) { v1.i - v2.i, v1.j - v2.j, v1.k - v2.k };
 }
-extern v3_t vec_dot(double s, v3_t v)
+extern v3_t v3_dot(double s, v3_t v)
 {
     return (v3_t) { s * v.i, s * v.j, s * v.k };
 }
+extern double v3_norm(v3_t v)
+{
+    return sqrt(v.i * v.i + v.j * v.j + v.k * v.k);
+}
+
 extern m3_t m3_transpose(m3_t A)
 {
     m3_t dcm;
@@ -47,7 +52,7 @@ extern m3_t m3_mul(m3_t A, m3_t B)
     C.m33 = A.m31 * B.m13 + A.m32 * B.m23 + A.m33 * B.m33;
     return C;
 }
-v3_t m3_mul_vec(m3_t A, v3_t B)
+v3_t m3_mul_v3(m3_t A, v3_t B)
 {
     v3_t C;
     C.i = A.m11 * B.i + A.m12 * B.j + A.m13 * B.k;
@@ -246,7 +251,7 @@ extern quat_t quat_mul(quat_t P, quat_t Q)
     qtmp.q3 = P.q0 * Q.q3 + P.q3 * Q.q0 + P.q1 * Q.q2 - P.q2 * Q.q1;
     return qtmp;
 }
-extern v3_t quat_mul_vec(quat_t quat, v3_t vec)
+extern v3_t quat_mul_v3(quat_t quat, v3_t vec)
 {
     quat_t qtmp;
     v3_t vtmp;
@@ -305,7 +310,7 @@ extern int ned2ecef(v3_t* pos, v3_t* vel, m3_t* dcm)
         Cne.m23 = -coslat * sinlon;
         Cne.m33 = -sinlat;
         if (vel != NULL)
-            *vel = m3_mul_vec(Cne, *vel); /* Veb_n => Veb_e */
+            *vel = m3_mul_v3(Cne, *vel); /* Veb_n => Veb_e */
         if (dcm != NULL)
             *dcm = m3_mul(Cne, *dcm); /* Cbn => Cbe */
     }
@@ -350,7 +355,7 @@ extern int ecef2ned(v3_t* pos, v3_t* vel, m3_t* dcm)
         Cen.m32 = -coslat * sinlon;
         Cen.m33 = -sinlat;
         if (vel != NULL)
-            *vel = m3_mul_vec(Cen, *vel); /* Veb_e => Veb_n */
+            *vel = m3_mul_v3(Cen, *vel); /* Veb_e => Veb_n */
         if (dcm != NULL)
             *dcm = m3_mul(Cen, *dcm); /* Cbe => Cbn */
     }
@@ -378,8 +383,8 @@ int gravity_ecef(const v3_t* r, v3_t* ge)
     return 0;
 }
 
-extern int nav_equations_ecef(double dt, const v3_t* dtheta, const v3_t* dv,
-    v3_t* r, v3_t* v, quat_t* q)
+extern int nav_equations_ecef(
+    double dt, const v3_t* dtheta, const v3_t* dv, v3_t* r, v3_t* v, quat_t* q)
 {
     /* Attitude update */
     v3_t dtheta_ie = { 0, 0, -wgs84.wie * dt };
@@ -393,15 +398,8 @@ extern int nav_equations_ecef(double dt, const v3_t* dtheta, const v3_t* dv,
     /* Specific force transform(velocity form) */
     v3_t dtheta_ie_half = { 0, 0, -wgs84.wie * dt / 2 };
     dtheta2quat(&dtheta_ie_half, &q_earth);
-    v3_t dv_rot = vec_dot(0.5, vec_cross(*dtheta, *dv));
-    v3_t dv_e = quat_mul_vec(quat_mul(q_earth, old_q), vec_add(*dv, dv_rot));
-    /* An another specific force transform
-    v3_t dtheta_ie_half = {0,0,-wgs84.wie*dt/2};
-    dtheta2quat(&dtheta_ie_half,&q_earth);
-    v3_t dtheta_half = {dtheta->i/2,dtheta->j/2,dtheta->k/2};
-    dtheta2quat(&dtheta_half,&q_body);
-    quat_t q_ave = quat_mul(quat_mul(q_earth,old_q),q_body);
-    v3_t dv_e = quat_mul_vec(q_ave,*dv);*/
+    v3_t dv_rot = v3_dot(0.5, v3_cross(*dtheta, *dv));
+    v3_t dv_e = quat_mul_v3(quat_mul(q_earth, old_q), v3_add(*dv, dv_rot));
     /* Velocity update */
     v3_t ge;
     gravity_ecef(r, &ge);
@@ -411,12 +409,12 @@ extern int nav_equations_ecef(double dt, const v3_t* dtheta, const v3_t* dv,
     v->k = old_v.k + dv_e.k + dt * ge.k;
     /* Position update */
     v3_t old_r = *r;
-    *r = vec_add(old_r, vec_dot(0.5 * dt, vec_add(old_v, *v)));
+    *r = v3_add(old_r, v3_dot(0.5 * dt, v3_add(old_v, *v)));
     return 0;
 }
 
-extern int multisample(const v3_t* dtheta_list, const v3_t* dv_list, int N,
-    v3_t* dtheta, v3_t* dv)
+extern int multisample(
+    const v3_t* dtheta_list, const v3_t* dv_list, int N, v3_t* dtheta, v3_t* dv)
 {
     if (abs(N) == 1) {
         *dtheta = dtheta_list[0];
@@ -437,36 +435,43 @@ extern int multisample(const v3_t* dtheta_list, const v3_t* dv_list, int N,
         int i = 0;
         for (; i < N - 1; i++) {
             /* sum of cross_product factor */
-            sum_c = vec_add(sum_c, vec_dot(pcf[i], dtheta_list[i]));
-            sum_s = vec_add(sum_s, vec_dot(pcf[i], dv_list[i]));
+            sum_c = v3_add(sum_c, v3_dot(pcf[i], dtheta_list[i]));
+            sum_s = v3_add(sum_s, v3_dot(pcf[i], dv_list[i]));
             /* sum of angular increment and velocity increment */
-            sum_w = vec_add(sum_w, dtheta_list[i]);
-            sum_v = vec_add(sum_v, dv_list[i]);
+            sum_w = v3_add(sum_w, dtheta_list[i]);
+            sum_v = v3_add(sum_v, dv_list[i]);
         }
-        sum_w = vec_add(sum_w, dtheta_list[i]);
-        sum_v = vec_add(sum_v, dv_list[i]);
+        sum_w = v3_add(sum_w, dtheta_list[i]);
+        sum_v = v3_add(sum_v, dv_list[i]);
         /* coning error compensation for angular increment, ref Paul2013(5.97)
          */
-        *dtheta = vec_add(sum_w, vec_cross(sum_c, dtheta_list[i]));
+        *dtheta = v3_add(sum_w, v3_cross(sum_c, dtheta_list[i]));
         /* sculling error compensation for velocity increment, ref
          * Paul2013(5.98)*/
-        /* v3_t rot = vec_dot(0.5,vec_cross(sum_w,sum_v)); */
-        v3_t scul = vec_add(
-            vec_cross(sum_c, dv_list[i]), vec_cross(sum_s, dtheta_list[i]));
-        /* *dv = vec_add(sum_v, vec_add(rot,scul)); */
-        *dv = vec_add(sum_v, scul);
+        /* v3_t rot = v3_dot(0.5,v3_cross(sum_w,sum_v)); */
+        v3_t scul = v3_add(
+            v3_cross(sum_c, dv_list[i]), v3_cross(sum_s, dtheta_list[i]));
+        /* *dv = v3_add(sum_v, v3_add(rot,scul)); */
+        *dv = v3_add(sum_v, scul);
     }
     if (N == -2) {
-        v3_t sum_c = vec_dot(1.0 / 12, dtheta_list[0]);
-        v3_t sum_s = vec_dot(1.0 / 12, dv_list[0]);
+        v3_t sum_c = v3_dot(1.0 / 12, dtheta_list[0]);
+        v3_t sum_s = v3_dot(1.0 / 12, dv_list[0]);
         /* ref Yan2016(P31:2.5-37) */
-        *dtheta = vec_add(dtheta_list[1], vec_cross(sum_c, dtheta_list[1]));
+        *dtheta = v3_add(dtheta_list[1], v3_cross(sum_c, dtheta_list[1]));
         /* ref Yan2016(P73:4.1-36,P76:4.1-55) */
-        v3_t scul = vec_add(
-            vec_cross(sum_c, dv_list[1]), vec_cross(sum_s, dtheta_list[1]));
+        v3_t scul = v3_add(
+            v3_cross(sum_c, dv_list[1]), v3_cross(sum_s, dtheta_list[1]));
         /* v3_t rot = vec_dot(0.5,vec_cross(dtheta_list[1],dv_list[1])); */
         /* *dv = vec_add(dv_list[1], vec_add(rot,scul)); */
-        *dv = vec_add(dv_list[1], scul);
+        *dv = v3_add(dv_list[1], scul);
     }
+    return 0;
+}
+
+int dblvec2att(const v3_t* vn1, const v3_t* vn2, const v3_t* vb1,
+    const v3_t* vb2, double* lat, m3_t* Cnb)
+{
+    v3_t vb1x =
     return 0;
 }

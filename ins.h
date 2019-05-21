@@ -73,21 +73,24 @@ int euler2dcm(const v3_t* euler, m3_t* dcm);
 
 /* 3D vector operation */
 int asymmetric_mat(const v3_t* v3, m3_t* mat);
-v3_t vec_cross(v3_t v1, v3_t v2);
-v3_t vec_add(v3_t v1, v3_t v2);
-v3_t vec_del(v3_t v1, v3_t v2);
-v3_t vec_dot(double s, v3_t v);
+v3_t v3_cross(v3_t v1, v3_t v2);
+v3_t v3_add(v3_t v1, v3_t v2);
+v3_t v3_del(v3_t v1, v3_t v2);
+v3_t v3_dot(double s, v3_t v);
+double v3_mul(v3_t v1, v3_t v2);
+m3_t v3_tmul(v3_t v1, v3_t v2);
+double v3_norm(v3_t v3);
 
 /* 3D matrix operator */
 m3_t m3_transpose(m3_t A);
 m3_t m3_mul(m3_t A, m3_t B);
-v3_t m3_mul_vec(m3_t A, v3_t B);
+v3_t m3_mul_v3(m3_t A, v3_t B);
 
 /* quaternion operation */
 int quat_normalize(quat_t* quat);
 int quat_inv(quat_t* quat);
 quat_t quat_mul(quat_t P, quat_t Q);
-v3_t quat_mul_vec(quat_t quat, v3_t vec);
+v3_t quat_mul_v3(quat_t quat, v3_t vec);
 
 /* coordinate transformantion */
 m3_t formCen_ned(double lat, double lon);
@@ -99,6 +102,8 @@ int gravity_ecef(const v3_t* r, v3_t* ge);
 
 /* INS Align */
 int align_static_base(imu_t *imu,double *lat);
+int dblvec2att(const v3_t *vn1, const v3_t *vn2,
+        const v3_t *vb1, const v3_t*vb2, double *lat, m3_t *Cnb);
 
 /* INS navgataion */
 int nav_equations_ecef(double dt, const v3_t* dtheta, const v3_t* dv,
