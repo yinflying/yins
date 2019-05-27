@@ -2,8 +2,10 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #define PI 3.14159265358979
+#define SQR(x) (x) * (x)
 
 extern v3_t v3_cross(v3_t v1, v3_t v2)
 {
@@ -28,6 +30,19 @@ extern v3_t v3_dot(double s, v3_t v)
 extern double v3_norm(v3_t v)
 {
     return sqrt(v.i * v.i + v.j * v.j + v.k * v.k);
+}
+extern double v3_mul_rxc(v3_t v1, v3_t v2)
+{
+    return v1.i * v2.i + v1.j * v2.j + v1.k * v2.k;
+}
+extern m3_t v3_mul_cxr(v3_t v1, v3_t v2)
+{
+    return (m3_t) { v1.i * v2.i, v1.i * v2.j, v1.i * v2.k, v1.j * v2.i,
+        v1.j * v2.j, v1.j * v2.k, v1.k * v2.i, v1.k * v2.j, v1.k * v2.k };
+}
+extern m3_t v3_diag(v3_t v)
+{
+    return (m3_t) {v.i, 0.0, 0.0,   0.0, v.j, 0.0,   0.0, 0.0, v.k};
 }
 
 extern m3_t m3_transpose(m3_t A)
@@ -61,12 +76,18 @@ v3_t m3_mul_v3(m3_t A, v3_t B)
     return C;
 }
 
-earth_t wgs84 = {
-    .wie = 7.292115E-5,
-    .R0 = 6378137,        /* WGS84 Equatorial radius in meters */
-    .mu = 3.986004418E14, /* WGS84 Earth gravitational constant (m^3 s^-2) */
-    .J2 = 1.082627E-3,    /* WGS84 Earth's second gravitational constant */
-    .e = 0.0818191908425  /* Eccentricity */
+v3_t m3_diag(m3_t A)
+{
+    return (v3_t){A.m11, A.m22, A.m33};
+}
+
+earth_t wgs84 = { .wie = 7.292115E-5,
+    .R0 = 6378137,
+    .RP= 6356752.31425,
+    .mu = 3.986004418E14,
+    .J2 = 1.082627E-3,
+    .e = 0.0818191908425,
+    .f = 1.0 / 298.257223563
 };
 
 int asymmetric_mat(const v3_t* v3, m3_t* mat)
@@ -75,6 +96,76 @@ int asymmetric_mat(const v3_t* v3, m3_t* mat)
     mat->m21 = v3->k, mat->m22 = 0, mat->m23 = -v3->i;
     mat->m31 = -v3->j, mat->m32 = v3->i, mat->m33 = 0;
     return 0;
+}
+
+/* convert calendar day/time to time -------------------------------------------
+ * convert calendar day/time to gtime_t struct
+ * args   : double *ep       I   day/time {year,month,day,hour,min,sec}
+ * return : gtime_t struct
+ * notes  : proper in 1970-2037 or 1970-2099 (64bit time_t)
+ *-----------------------------------------------------------------------------*/
+extern gtime_t ins_epoch2time(const double* ep)
+{
+    const int doy[] = { 1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335 };
+    gtime_t time = { 0 };
+    int days, sec, year = (int)ep[0], mon = (int)ep[1], day = (int)ep[2];
+
+    if (year < 1970 || 2099 < year || mon < 1 || 12 < mon)
+        return time;
+
+    /* leap year if year%4==0 in 1901-2099 */
+    days = (year - 1970) * 365 + (year - 1969) / 4 + doy[mon - 1] + day - 2
+        + (year % 4 == 0 && mon >= 3 ? 1 : 0);
+    sec = (int)floor(ep[5]);
+    time.time
+        = (time_t)days * 86400 + (int)ep[3] * 3600 + (int)ep[4] * 60 + sec;
+    time.sec = ep[5] - sec;
+    return time;
+}
+
+extern gtime_t ins_gpst2time(int week, double sec)
+{
+    const double gpst0[] = { 1980, 1, 6, 0, 0, 0 }; /* gps time reference */
+    gtime_t t = ins_epoch2time(gpst0);
+
+    if (sec < -1E9 || 1E9 < sec)
+        sec = 0.0;
+    t.time += (time_t)86400 * 7 * week + (int)sec;
+    t.sec = sec - (int)sec;
+    return t;
+}
+
+/* time to calendar day/time ---------------------------------------------------
+ * convert gtime_t struct to calendar day/time
+ * args   : gtime_t t        I   gtime_t struct
+ *          double *ep       O   day/time {year,month,day,hour,min,sec}
+ * return : none
+ * notes  : proper in 1970-2037 or 1970-2099 (64bit time_t)
+ *-----------------------------------------------------------------------------*/
+extern void ins_time2epoch(gtime_t t, double* ep)
+{
+    const int mday[] = { /* # of days in a month */
+        31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31, 28, 31, 30, 31, 30,
+        31, 31, 30, 31, 30, 31, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
+        31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+    };
+    int days, sec, mon, day;
+
+    /* leap year if year%4==0 in 1901-2099 */
+    days = (int)(t.time / 86400);
+    sec = (int)(t.time - (time_t)days * 86400);
+    for (day = days % 1461, mon = 0; mon < 48; mon++) {
+        if (day >= mday[mon])
+            day -= mday[mon];
+        else
+            break;
+    }
+    ep[0] = 1970 + days / 1461 * 4 + mon / 12;
+    ep[1] = mon % 12 + 1;
+    ep[2] = day + 1;
+    ep[3] = sec / 3600;
+    ep[4] = sec % 3600 / 60;
+    ep[5] = sec % 60 + t.sec;
 }
 
 extern int euler2quat(const v3_t* euler, quat_t* quat)
@@ -123,6 +214,7 @@ int dcm2euler(const m3_t* dcm, v3_t* euler)
     /* Pitch Angle limit to [-pi/2,pi/2], asin return value range */
     return 0;
 }
+
 int euler2dcm(const v3_t* euler, m3_t* dcm)
 {
     double sin_phi = sin(euler->i);
@@ -251,6 +343,7 @@ extern quat_t quat_mul(quat_t P, quat_t Q)
     qtmp.q3 = P.q0 * Q.q3 + P.q3 * Q.q0 + P.q1 * Q.q2 - P.q2 * Q.q1;
     return qtmp;
 }
+
 extern v3_t quat_mul_v3(quat_t quat, v3_t vec)
 {
     quat_t qtmp;
@@ -312,7 +405,7 @@ extern int ned2ecef(v3_t* pos, v3_t* vel, m3_t* dcm)
         if (vel != NULL)
             *vel = m3_mul_v3(Cne, *vel); /* Veb_n => Veb_e */
         if (dcm != NULL)
-            *dcm = m3_mul(Cne, *dcm); /* Cbn => Cbe */
+            *dcm = m3_mul(Cne, *dcm); /* Cb_n => Cb_e */
     }
     return 0;
 }
@@ -362,6 +455,11 @@ extern int ecef2ned(v3_t* pos, v3_t* vel, m3_t* dcm)
     return 0;
 }
 
+extern double ins_timediff(gtime_t t1, gtime_t t2)
+{
+    return difftime(t1.time, t2.time) + t1.sec - t2.sec;
+}
+
 int gravity_ecef(const v3_t* r, v3_t* ge)
 {
     double mag_r = sqrt(r->i * r->i + r->j * r->j + r->k * r->k);
@@ -380,6 +478,26 @@ int gravity_ecef(const v3_t* r, v3_t* ge)
         ge->j = g2 + wgs84.wie * wgs84.wie * r->j;
         ge->k = g3;
     }
+    return 0;
+}
+
+int gravity_ned(double lat, double hgt, v3_t* gn)
+{
+    double sinlat2 = sin(lat) * sin(lat);
+    double e2 = SQR(wgs84.e);
+
+    /* Calculate surface gravity using Somigliana model */
+    double g0 = 9.7803253359 * (1.0 + 0.001931853 * sinlat2)
+        / sqrt(1.0 - e2 * sinlat2);
+
+    gn->i = -8.08E-9 * hgt * sin(2.0 * lat); /* North */
+    gn->j = 0.0;                           /* East */
+    /* Down */
+    double tmp = 1.0 + wgs84.f * (1.0 - 2.0 * sinlat2)
+        + (SQR(wgs84.wie) * SQR(wgs84.R0) * wgs84.RP / wgs84.mu);
+    gn->k = g0 *
+        (1.0 - (2.0 / wgs84.R0) * tmp * hgt + (3.0 * SQR(hgt) / SQR(wgs84.R0)));
+
     return 0;
 }
 
@@ -469,9 +587,59 @@ extern int multisample(
     return 0;
 }
 
+/* Double vector to Atttitude
+ * Cnb => the matix tranform n-axis to b-axis(or attitude b-axis to n-axis)
+ * */
 int dblvec2att(const v3_t* vn1, const v3_t* vn2, const v3_t* vb1,
-    const v3_t* vb2, double* lat, m3_t* Cnb)
+    const v3_t* vb2, m3_t* Cnb)
 {
-    v3_t vb1x =
+    /* ref Yan2016(P143:6.1-7) */
+    v3_t vx = v3_dot(1.0 / v3_norm(*vb1), *vb1);
+    v3_t vtmp = v3_cross(*vb1, *vb2);
+    v3_t vy = v3_dot(1.0 / v3_norm(vtmp), vtmp);
+    vtmp = v3_cross(vtmp, *vb1);
+    v3_t vz = v3_dot(1.0 / v3_norm(vtmp), vtmp);
+    m3_t m3_b = { vx.i, vy.i, vz.i, vx.j, vy.j, vz.j, vx.k, vy.k, vz.k };
+
+    vx = v3_dot(1.0 / v3_norm(*vn1), *vn1);
+    vtmp = v3_cross(*vn1, *vn2);
+    vy = v3_dot(1.0 / v3_norm(vtmp), vtmp);
+    vtmp = v3_cross(vtmp, *vn1);
+    vz = v3_dot(1.0 / v3_norm(vtmp), vtmp);
+    m3_t m3_n = { vx.i, vx.j, vx.k, vy.i, vy.j, vy.k, vz.i, vz.j, vz.k };
+
+    *Cnb = m3_mul(m3_b, m3_n);
+    return 0;
+}
+
+int align_static_base(const imu_t* imu, double lat, m3_t Cnb)
+{
+    /* Fetch mean mean angular rate and specific force */
+    v3_t mean_wib_b = { 0 }, mean_fib_b = { 0 };
+    /* Start from the second(first epoch should not add in)*/
+    for (int i = 1; i < imu->n; ++i) {
+        mean_wib_b = v3_add(mean_wib_b, imu->data[i].gryo);
+        mean_fib_b = v3_add(mean_fib_b, imu->data[i].accel);
+    }
+    double T = ins_timediff(imu->data[imu->n - 1].time, imu->data[0].time);
+    mean_wib_b = v3_dot(1.0 / T, mean_wib_b);
+    mean_fib_b = v3_dot(1.0 / T, mean_fib_b);
+
+    /* Double Vector to Attitude */
+    v3_t gn; gravity_ned(lat,0.0,&gn);
+    v3_t wie_n = {wgs84.wie * cos(lat),0.0,- wgs84.wie * sin(lat)};
+    v3_t gib_b = v3_dot(-1.0,mean_fib_b);
+
+    printf("gn:   %G %G %G\n",gn.i,gn.j,gn.k);
+    printf("fib_b %G %G %G\n", mean_fib_b.i,mean_fib_b.j,mean_fib_b.k);
+    printf("wie_n: %G %G %G\n",wie_n.i,wie_n.j,wie_n.k);
+    printf("wib_b: %G %G %G\n",mean_wib_b.i,mean_wib_b.j,mean_wib_b.k);
+
+    dblvec2att(&gn,&wie_n,&gib_b,&mean_wib_b,&Cnb);
+    v3_t att;
+    dcm2euler(&Cnb,&att);
+    printf("Cen:\n %G %G %G\n %G %G %G\n %G %G %G\n",
+            Cnb.m11,Cnb.m12,Cnb.m13,Cnb.m21,Cnb.m22,Cnb.m23,Cnb.m31,Cnb.m32,Cnb.m33);
+    printf("att: %G %G %G \n",att.i,att.j,att.k);
     return 0;
 }

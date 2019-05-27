@@ -1,3 +1,16 @@
+/* NOTE:
+ * Cnb => C_n^b => trans matrix n-axis to b-axis(the same as qnb)
+ * g=>gps,gravity
+ * d=>data
+ * SHF=>Spherical Harmonics Function
+ * dbl=>double
+ * enu,ned=>East, North, Up, Down
+ * v3=> 3D vector
+ * m3=> 3D matrix
+ * _t => data type
+ * att=> attitude(could express by DCM,Quat,Euler)
+ * mul => multiply
+ * */
 #ifndef INS_H
 #define INS_H
 
@@ -8,11 +21,13 @@
 #include <time.h>
 
 typedef struct {
-    double wie;
-    double R0;
-    double mu;
-    double J2;
-    double e;
+    double wie; /* rotation rate(rad s^-1) */
+    double R0;  /* Equatorial radius(m) */
+    double RP;  /* Polar radius(m) */
+    double mu;  /* gravitational constant, GM(m^3 s^-2) */
+    double J2;  /* 2nd-order gravitational Spherical Harmonics Function coefficient */
+    double e;   /* Eccentricity */
+    double f;   /* Flattening */
 } earth_t;
 earth_t wgs84;
 
@@ -23,6 +38,10 @@ typedef struct { /* time struct */
     double sec;  /* fraction of second under 1 s */
 } gtime_t;
 #endif /* ifndef GTIME_T */
+double  ins_timediff (gtime_t t1, gtime_t t2);
+gtime_t ins_epoch2time(const double* ep);
+void ins_time2epoch(gtime_t t, double* ep);
+gtime_t ins_gpst2time(int week, double sec);
 
 typedef struct {
     double i, j, k;
@@ -77,14 +96,16 @@ v3_t v3_cross(v3_t v1, v3_t v2);
 v3_t v3_add(v3_t v1, v3_t v2);
 v3_t v3_del(v3_t v1, v3_t v2);
 v3_t v3_dot(double s, v3_t v);
-double v3_mul(v3_t v1, v3_t v2);
-m3_t v3_tmul(v3_t v1, v3_t v2);
 double v3_norm(v3_t v3);
+double v3_mul_rxc(v3_t v1, v3_t v2); /* row vector x column vector */
+m3_t v3_mul_cxr(v3_t v1, v3_t v2);  /* column vector x row vector */
+m3_t v3_diag(v3_t diag);
 
 /* 3D matrix operator */
 m3_t m3_transpose(m3_t A);
 m3_t m3_mul(m3_t A, m3_t B);
 v3_t m3_mul_v3(m3_t A, v3_t B);
+v3_t m3_diag(m3_t diag);
 
 /* quaternion operation */
 int quat_normalize(quat_t* quat);
@@ -98,12 +119,14 @@ int ned2ecef(v3_t* pos, v3_t* vel, m3_t* att);
 int ecef2ned(v3_t* pos, v3_t* vel, m3_t* att);
 
 /* Gravity model*/
-int gravity_ecef(const v3_t* r, v3_t* ge);
+int gravity_ecef(const v3_t *r, v3_t* ge);
+int gravity_ned(double lat, double hgt, v3_t* gn);
 
 /* INS Align */
-int align_static_base(imu_t *imu,double *lat);
-int dblvec2att(const v3_t *vn1, const v3_t *vn2,
-        const v3_t *vb1, const v3_t*vb2, double *lat, m3_t *Cnb);
+int align_static_base(const imu_t *imu, double lat, m3_t Cnb);
+
+int dblvec2att(const v3_t *vn1, const v3_t *vn2, const v3_t *vb1,
+        const v3_t*vb2, m3_t *Cnb);
 
 /* INS navgataion */
 int nav_equations_ecef(double dt, const v3_t* dtheta, const v3_t* dv,

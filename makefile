@@ -4,11 +4,11 @@ CLIB=-lm
 
 OBJ=pureins.bin
 $(OBJ): main.o ins.o insio.o
-	$(CC) main.o ins.o insio.o $(CLIB) -o $(OBJ)
+	$(CC) main.o ins.o insio.o $(CFLAGS) $(CLIB) -o $(OBJ)
 
 UT_OBJ=unittest.bin
-ut: unittest.o ins.o
-	$(CC) unittest.o ins.o -g -lm -lcriterion -o $(UT_OBJ)
+ut: unittest.o ins.o insio.o
+	$(CC) unittest.o ins.o insio.o $(CFLAGS) $(CLIB) -lcriterion -o $(UT_OBJ)
 	./$(UT_OBJ)
 
 unittest.o: unittest.c

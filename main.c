@@ -6,7 +6,7 @@
 #define DEG2RAD 0.0174532925199433
 #define RAD2DEG 57.2957795130823
 #define DPH2RPS 4.84813681109536e-06  /* deg/h to rad/s */
-#define MG2MPS 9.78046e-3             /* mg to m/s^2 */
+#define MG2MPS2 9.78046e-3             /* mg to m/s^2 */
 #define DPSH2RPSS 2.90888208665722e-4 /* deg/sqrt(h) to rad/sqrt(s) */
 
 void print_imu(const imu_t* imu)
@@ -95,14 +95,14 @@ void set_imu(imu_t* imus)
 {
     imus->initQr = (v3_t) { 10.0, 10.0, 10.0 };
     imus->initQv = (v3_t) { 1.0, 1.0, 1.0 };
-    imus->initQa = (v3_t) { 1.0 * DEG2RAD, 1.0 * DEG2RAD, 1.0 * DEG2RAD };
-    imus->initQab = (v3_t) { 20.0 * DPH2RPS, 20.0 * DPH2RPS, 20.0 * DPH2RPS };
-    imus->initQgb = (v3_t) { 50.0 * MG2MPS, 50.0 * MG2MPS, 50.0 * MG2MPS };
+    imus->initQa = (v3_t) { 2.0 * DEG2RAD, 2.0 * DEG2RAD, 2.0 * DEG2RAD };
+    imus->initQab = (v3_t) { 10.0 * MG2MPS2, 10.0 * MG2MPS2, 10.0 * MG2MPS2 };
+    imus->initQgb = (v3_t) { 10.0 * DPH2RPS, 10.0 * DPH2RPS, 10.0 * DPH2RPS };
     imus->arw = (v3_t) { 0.0667 * DPSH2RPSS, 0.0667 * DPSH2RPSS,
         0.0667 * DPSH2RPSS };
     imus->arrw = (v3_t) { 1e-6, 1e-6, 1e-6 };
     imus->vrw = (v3_t) { 200 * 9.8e-6, 200 * 9.8e-6, 200 * 9.8e-6 };
-    imus->vrrw = (v3_t) { 1e-3, 1e-3, 1e-3 };
+    imus->vrrw = (v3_t) { 1e-4, 1e-4, 1e-4 };
     imus->Ta = (v3_t) { 1000.0, 1000.0, 1000.0 };
     imus->Tg = (v3_t) { 1000.0, 1000.0, 1000.0 };
 }
