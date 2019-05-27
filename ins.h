@@ -68,6 +68,7 @@ typedef struct {
     v3_t initQa; /**< initial attitude uncertainty */
     v3_t initQgb; /**< initial gryo bias uncertainty */
     v3_t initQab; /**< initial accel bias uncertainty*/
+    v3_t lever_arm; /**< Reference position under imu frame */
 
     int n, nmax;   /**< number of data/allocated */
     imud_t* data;  /**< IMU observation data record */

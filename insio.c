@@ -236,6 +236,10 @@ extern int imu_trans_rnx(const imu_t* imu, const char* outfile)
     fprintf(fp, "%14.7G%14.7G%14.7G%-18s%-20s\n", imu->Tg.i, imu->Tg.j,
         imu->Tg.k, "", "GRYO CORR TIME");
 
+    /* Lever arm */
+    fprintf(fp, "%14.7G%14.7G%14.7G%-18s%-20s\n", imu->lever_arm.i,
+            imu->lever_arm.j, imu->lever_arm.k, "", "LEVER ARM");
+
     fprintf(fp, "%1s  %3i%4s%4s%4s%4s%4s%4s%30s%-20s\n", "U", 6, "A1X", "A1Y",
         "A1Z", "G1X", "G1Y", "G1Z", "", "SYS / # / OBS TYPES");
     fprintf(fp, "%-60s%-20s\n", "UNIT: GRYO(RAD) ACCEL(M/S)", "COMMENT");
