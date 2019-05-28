@@ -105,7 +105,7 @@ void set_imu(imu_t* imus)
     imus->vrrw = (v3_t) { 1e-4, 1e-4, 1e-4 };
     imus->Ta = (v3_t) { 1000.0, 1000.0, 1000.0 };
     imus->Tg = (v3_t) { 1000.0, 1000.0, 1000.0 };
-    imus->lever_arm = (v3_t) {0.1, 0.2, 0.3};
+    imus->lever_arm = (v3_t) {0.0, -0.18, -0.05};
 }
 
 int main()

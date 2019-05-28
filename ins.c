@@ -612,7 +612,7 @@ int dblvec2att(const v3_t* vn1, const v3_t* vn2, const v3_t* vb1,
     return 0;
 }
 
-int align_static_base(const imu_t* imu, double lat, m3_t Cnb)
+extern int align_static_base(const imu_t* imu, double lat, m3_t *Cnb)
 {
     /* Fetch mean mean angular rate and specific force */
     v3_t mean_wib_b = { 0 }, mean_fib_b = { 0 };
@@ -630,16 +630,6 @@ int align_static_base(const imu_t* imu, double lat, m3_t Cnb)
     v3_t wie_n = {wgs84.wie * cos(lat),0.0,- wgs84.wie * sin(lat)};
     v3_t gib_b = v3_dot(-1.0,mean_fib_b);
 
-    printf("gn:   %G %G %G\n",gn.i,gn.j,gn.k);
-    printf("fib_b %G %G %G\n", mean_fib_b.i,mean_fib_b.j,mean_fib_b.k);
-    printf("wie_n: %G %G %G\n",wie_n.i,wie_n.j,wie_n.k);
-    printf("wib_b: %G %G %G\n",mean_wib_b.i,mean_wib_b.j,mean_wib_b.k);
-
-    dblvec2att(&gn,&wie_n,&gib_b,&mean_wib_b,&Cnb);
-    v3_t att;
-    dcm2euler(&Cnb,&att);
-    printf("Cen:\n %G %G %G\n %G %G %G\n %G %G %G\n",
-            Cnb.m11,Cnb.m12,Cnb.m13,Cnb.m21,Cnb.m22,Cnb.m23,Cnb.m31,Cnb.m32,Cnb.m33);
-    printf("att: %G %G %G \n",att.i,att.j,att.k);
+    dblvec2att(&gn,&wie_n,&gib_b,&mean_wib_b,Cnb);
     return 0;
 }
