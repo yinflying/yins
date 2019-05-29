@@ -612,6 +612,7 @@ int dblvec2att(const v3_t* vn1, const v3_t* vn2, const v3_t* vb1,
     return 0;
 }
 
+/* Coarse align on the static base */
 extern int align_static_base(const imu_t* imu, double lat, m3_t *Cnb)
 {
     /* Fetch mean mean angular rate and specific force */

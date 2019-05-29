@@ -125,7 +125,6 @@ int gravity_ned(double lat, double hgt, v3_t* gn);
 
 /* INS Align */
 int align_static_base(const imu_t *imu, double lat, m3_t *Cnb);
-
 int dblvec2att(const v3_t *vn1, const v3_t *vn2, const v3_t *vb1,
         const v3_t*vb2, m3_t *Cnb);
 
