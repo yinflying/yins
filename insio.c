@@ -114,7 +114,7 @@ static int readimu_nvt(FILE* fp, imu_t* imu)
                 token = strtok(NULL, seps); /* skip header */
             gpsw = atoi(token);
             token = strtok(NULL, seps);
-            data.time = ins_gpst2time(gpsw, atof(token));
+            data.time = yins_gpst2time(gpsw, atof(token));
             for (int i = 0; i < 2; ++i)
                 token = strtok(NULL, seps); /* skip flag */
             /* velocity increment, m/s */
@@ -160,7 +160,7 @@ extern int addimudata(imu_t* imu, const imud_t* data)
 
 extern void freeimu(imu_t* imu) { free(imu->data); }
 
-extern int readimu_file(const char* infile, imu_t* imu, int FILETYPE)
+extern int yins_readimu(const char* infile, imu_t* imu, int FILETYPE)
 {
     FILE* fp;
     if (!(fp = fopen(infile, "r"))) {
@@ -185,7 +185,7 @@ static void fprintf_fixwidth(FILE* fp, double num, int fixwidth)
     fprintf(fp, "%s", buf);
 }
 
-extern int imu_trans_rnx(const imu_t* imu, const char* outfile)
+extern int yins_imu2rnx(const imu_t* imu, const char* outfile)
 {
     FILE* fp;
     double ep[6];
@@ -245,16 +245,16 @@ extern int imu_trans_rnx(const imu_t* imu, const char* outfile)
     fprintf(fp, "%-60s%-20s\n", "UNIT: GRYO(RAD) ACCEL(M/S)", "COMMENT");
 
     /* First&End epoch */
-    ins_time2epoch(imu->data[0].time, ep);
+    yins_time2epoch(imu->data[0].time, ep);
     fprintf(fp, "  %04.0f%6.0f%6.0f%6.0f%6.0f%13.7f     %-12s%-20s\n", ep[0],
         ep[1], ep[2], ep[3], ep[4], ep[5], "GPST", "TIME OF FIRST OBS");
-    ins_time2epoch(imu->data[imu->n - 1].time, ep);
+    yins_time2epoch(imu->data[imu->n - 1].time, ep);
     fprintf(fp, "  %04.0f%6.0f%6.0f%6.0f%6.0f%13.7f     %-12s%-20s\n", ep[0],
         ep[1], ep[2], ep[3], ep[4], ep[5], "GPST", "TIME OF LAST OBS");
     fprintf(fp, "%-60.60s%-20s\n", "", "END OF HEADER");
 
     for (int i = 0; i < imu->n; ++i) {
-        ins_time2epoch(imu->data[i].time, ep);
+        yins_time2epoch(imu->data[i].time, ep);
         fprintf(fp, "> %04.0f %2.0f %2.0f %2.0f %2.0f%11.7f  %d%3d%21s\n",
             ep[0], ep[1], ep[2], ep[3], ep[4], ep[5], 0, 1, "");
         fprintf(fp, "%1s%02i", "U", 1);

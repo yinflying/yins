@@ -1,5 +1,6 @@
 /* NOTE:
  * Cnb => C_n^b => trans matrix n-axis to b-axis(the same as qnb)
+ * Cnb = Qnb = Enb, trans from n-asix to b-axis(or attitude b-axis to n-axis)
  * g=>gps,gravity
  * d=>data
  * SHF=>Spherical Harmonics Function
@@ -10,6 +11,9 @@
  * _t => data type
  * att=> attitude(could express by DCM,Quat,Euler)
  * mul => multiply
+ * dcm,ctm => Direct Cosine Matrix, Coordiante Transform Matrix
+ * w: Omega, Rotation rate(wie_e mean w_ie^e, project to e-axis)
+ * rv: rotation vector
  * */
 #ifndef INS_H
 #define INS_H
@@ -38,10 +42,11 @@ typedef struct { /* time struct */
     double sec;  /* fraction of second under 1 s */
 } gtime_t;
 #endif /* ifndef GTIME_T */
-double  ins_timediff (gtime_t t1, gtime_t t2);
-gtime_t ins_epoch2time(const double* ep);
-void ins_time2epoch(gtime_t t, double* ep);
-gtime_t ins_gpst2time(int week, double sec);
+
+double  yins_timediff (gtime_t t1, gtime_t t2);
+gtime_t yins_epoch2time(const double* ep);
+void yins_time2epoch(gtime_t t, double* ep);
+gtime_t yins_gpst2time(int week, double sec);
 
 typedef struct {
     double i, j, k;
@@ -83,7 +88,7 @@ typedef struct {
 } m3_t;
 
 /* Attitude transformation */
-int dtheta2quat(const v3_t* dtheta, quat_t* quat);
+int rv2quat(const v3_t* dtheta, quat_t* quat);
 int euler2quat(const v3_t* euler, quat_t* quat);
 int quat2euler(const quat_t* quat, v3_t* euler);
 int dcm2quat(const m3_t* dcm, quat_t* quat);
@@ -104,6 +109,7 @@ m3_t v3_diag(v3_t diag);
 
 /* 3D matrix operator */
 m3_t m3_transpose(m3_t A);
+m3_t m3_dot(double alpha, m3_t A);
 m3_t m3_mul(m3_t A, m3_t B);
 v3_t m3_mul_v3(m3_t A, v3_t B);
 v3_t m3_diag(m3_t diag);
@@ -124,9 +130,10 @@ int gravity_ecef(const v3_t *r, v3_t* ge);
 int gravity_ned(double lat, double hgt, v3_t* gn);
 
 /* INS Align */
-int align_static_base(const imu_t *imu, double lat, m3_t *Cnb);
+int align_coarse_static_base(const imu_t *imu, double lat, m3_t *Cnb);
 int dblvec2att(const v3_t *vn1, const v3_t *vn2, const v3_t *vb1,
         const v3_t*vb2, m3_t *Cnb);
+int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb);
 
 /* INS navgataion */
 int nav_equations_ecef(double dt, const v3_t* dtheta, const v3_t* dv,
@@ -135,12 +142,11 @@ int multisample(const v3_t* dtheta_list, const v3_t* dv_list, int N,
     v3_t* dtheta, v3_t* dv);
 
 /* INS IO operation */
-int readimu_file(const char* infile, imu_t* imu, int FILETYPE);
-int imu_trans_rnx(const imu_t* imu, const char* outfile);
+int yins_readimu(const char* infile, imu_t* imu, int FILETYPE);
+int yins_imu2rnx(const imu_t* imu, const char* outfile);
 void freeimu(imu_t* imu);
 int addimudata(imu_t* imu, const imud_t* data);
 
-/* TODO INS Align */
 /* TODO NAV EQUATION BACKWARD */
 /* Static and dynamic judgement */
 

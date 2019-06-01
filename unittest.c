@@ -5,6 +5,8 @@
 
 #define EPS 1E-6
 #define PI 3.1415926
+#define DEG2RAD 0.0174532925199433
+#define RAD2DEG 57.2957795130823
 
 Test(ned2ecef, real)
 {
@@ -158,31 +160,50 @@ Test(dblvec2att, simple)
     cr_expect_float_eq(vb2t.k, vb2.k, EPS);
 }
 
-Test(align_static_base, simple)
+Test(align_coarse_static_base, simple)
 {
     imu_t imu;
     imud_t imud;
     imu.n = 0;
     imu.nmax = 0;
     double ep[6] = { 2019, 1, 1, 0, 0, 0.0 };
-    imud.time = ins_epoch2time(ep);
+    imud.time = yins_epoch2time(ep);
     imud.accel = (v3_t) { 4.8898352e-04, 4.89016111e-04, -9.792545188 };
     imud.gryo = (v3_t) { 6.31998667e-05, 4.863401409e-08, -3.650871198e-05 };
     for (int i = 0; i < 10; i++) {
         addimudata(&imu, &imud);
         ep[5] += 1.0;
-        imud.time = ins_epoch2time(ep);
+        imud.time = yins_epoch2time(ep);
     }
     double lat = 0.523598775598299;
     m3_t Cnb;
     v3_t Enb;
 
-    align_static_base(&imu, lat, &Cnb);
+    align_coarse_static_base(&imu, lat, &Cnb);
     dcm2euler(&Cnb, &Enb);
-    printf("%f %f %f\n",Enb.i,Enb.j,Enb.k);
+    printf("Align_coarse_static_base:simple %f %f %f\n",Enb.i,Enb.j,Enb.k);
 
     freeimu(&imu);
     cr_expect_float_eq(Enb.i, -4.994210169e-05, EPS);
     cr_expect_float_eq(Enb.j, 4.9942061337e-05, EPS);
     cr_expect_float_eq(Enb.k, 6.2824519208, 1E-3);
+}
+
+Test(align_coarse_inertial, simple)
+{
+    imu_t imus;
+    yins_readimu("./data/align_test_data.csv",&imus,FT_CSV);
+    double lat = 0.523598775598299;
+    m3_t Cnb; v3_t Enb;
+    int maxn = imus.n;
+    FILE *fid = fopen("./align.log","w");
+    align_coarse_inertial(&imus,lat,&Cnb);
+
+    dcm2euler(&Cnb, &Enb);
+    printf("Align_coarse_inertial:simple %f %f %f\n",Enb.i,Enb.j,Enb.k);
+
+    freeimu(&imus);
+    cr_expect_float_eq(Enb.i, -1.04880393840960e-05, 1E-5);
+    cr_expect_float_eq(Enb.j, 5.04490437057051e-05, 1E-5);
+    cr_expect_float_eq(Enb.k, 6.28242649768121, 1E-3);
 }

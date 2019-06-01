@@ -111,9 +111,9 @@ void set_imu(imu_t* imus)
 int main()
 {
     imu_t imu;
-    readimu_file("../testdata/20180416_rover_345_multi.ASC", &imu, FT_NVT);
+    yins_readimu("../testdata/20180416_rover_345_multi.ASC", &imu, FT_NVT);
     set_imu(&imu);
-    imu_trans_rnx(&imu, "../testdata/1_level_rnx3/IMU.rnx");
+    yins_imu2rnx(&imu, "../testdata/1_level_rnx3/IMU.rnx");
 
     v3_t r;
     v3_t v;

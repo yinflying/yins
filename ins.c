@@ -53,6 +53,14 @@ extern m3_t m3_transpose(m3_t A)
     dcm.m31 = A.m13, dcm.m32 = A.m23, dcm.m33 = A.m33;
     return dcm;
 }
+extern m3_t m3_dot(double alpha, m3_t A)
+{
+    m3_t mat;
+    mat.m11 = alpha * A.m11, mat.m12 = alpha * A.m12, mat.m13 = alpha * A.m13;
+    mat.m21 = alpha * A.m21, mat.m22 = alpha * A.m22, mat.m23 = alpha * A.m23;
+    mat.m31 = alpha * A.m31, mat.m32 = alpha * A.m32, mat.m33 = alpha * A.m33;
+    return mat;
+}
 extern m3_t m3_mul(m3_t A, m3_t B)
 {
     m3_t C;
@@ -104,7 +112,7 @@ int asymmetric_mat(const v3_t* v3, m3_t* mat)
  * return : gtime_t struct
  * notes  : proper in 1970-2037 or 1970-2099 (64bit time_t)
  *-----------------------------------------------------------------------------*/
-extern gtime_t ins_epoch2time(const double* ep)
+extern gtime_t yins_epoch2time(const double* ep)
 {
     const int doy[] = { 1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335 };
     gtime_t time = { 0 };
@@ -123,10 +131,10 @@ extern gtime_t ins_epoch2time(const double* ep)
     return time;
 }
 
-extern gtime_t ins_gpst2time(int week, double sec)
+extern gtime_t yins_gpst2time(int week, double sec)
 {
     const double gpst0[] = { 1980, 1, 6, 0, 0, 0 }; /* gps time reference */
-    gtime_t t = ins_epoch2time(gpst0);
+    gtime_t t = yins_epoch2time(gpst0);
 
     if (sec < -1E9 || 1E9 < sec)
         sec = 0.0;
@@ -142,7 +150,7 @@ extern gtime_t ins_gpst2time(int week, double sec)
  * return : none
  * notes  : proper in 1970-2037 or 1970-2099 (64bit time_t)
  *-----------------------------------------------------------------------------*/
-extern void ins_time2epoch(gtime_t t, double* ep)
+extern void yins_time2epoch(gtime_t t, double* ep)
 {
     const int mday[] = { /* # of days in a month */
         31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31, 28, 31, 30, 31, 30,
@@ -309,7 +317,7 @@ extern int quat_inv(quat_t* quat)
     return 0;
 }
 
-extern int dtheta2quat(const v3_t* dtheta, quat_t* quat)
+extern int rv2quat(const v3_t* dtheta, quat_t* quat)
 {
     const double F1 = 2 * 1; // define Fk = 2^k * k!
     const double F2 = F1 * 2 * 2;
@@ -507,15 +515,15 @@ extern int nav_equations_ecef(
     /* Attitude update */
     v3_t dtheta_ie = { 0, 0, -wgs84.wie * dt };
     quat_t q_earth;
-    dtheta2quat(&dtheta_ie, &q_earth);
+    rv2quat(&dtheta_ie, &q_earth);
     quat_t q_body;
-    dtheta2quat(dtheta, &q_body);
+    rv2quat(dtheta, &q_body);
     quat_t old_q = *q;
     *q = quat_mul(quat_mul(q_earth, old_q), q_body);
     quat_normalize(q);
     /* Specific force transform(velocity form) */
     v3_t dtheta_ie_half = { 0, 0, -wgs84.wie * dt / 2 };
-    dtheta2quat(&dtheta_ie_half, &q_earth);
+    rv2quat(&dtheta_ie_half, &q_earth);
     v3_t dv_rot = v3_dot(0.5, v3_cross(*dtheta, *dv));
     v3_t dv_e = quat_mul_v3(quat_mul(q_earth, old_q), v3_add(*dv, dv_rot));
     /* Velocity update */
@@ -531,8 +539,17 @@ extern int nav_equations_ecef(
     return 0;
 }
 
-extern int multisample(
-    const v3_t* dtheta_list, const v3_t* dv_list, int N, v3_t* dtheta, v3_t* dv)
+/**
+ * @brief Use multi-subsample to compensate the conning&scull error
+ * @param dtheta_list   I   Angular increment list,order by time,length:abs(N)
+ * @param dv_list       I   Velocity increment list,order by time,length:abs(N)
+ * @param N             I   Subsample number(1=<N<=5, -2: one-plus-previous)
+ * @param dtheta        O   Sum of angular increment with conning error compensation
+ * @param dv            O   Sum of velocity incrment with scull error compensation
+ * @return 0: No error    1: Error
+ */
+extern int multisample( const v3_t* dtheta_list, const v3_t* dv_list, int N,
+        v3_t* dtheta, v3_t* dv)
 {
     if (abs(N) == 1) {
         *dtheta = dtheta_list[0];
@@ -561,16 +578,13 @@ extern int multisample(
         }
         sum_w = v3_add(sum_w, dtheta_list[i]);
         sum_v = v3_add(sum_v, dv_list[i]);
-        /* coning error compensation for angular increment, ref Paul2013(5.97)
-         */
+        /* coning error compensation for angular increment, ref Paul2013(5.97) */
         *dtheta = v3_add(sum_w, v3_cross(sum_c, dtheta_list[i]));
-        /* sculling error compensation for velocity increment, ref
-         * Paul2013(5.98)*/
-        /* v3_t rot = v3_dot(0.5,v3_cross(sum_w,sum_v)); */
+        /* sculling error compensation for velocity increment, ref Paul2013(5.98)*/
         v3_t scul = v3_add(
             v3_cross(sum_c, dv_list[i]), v3_cross(sum_s, dtheta_list[i]));
-        /* *dv = v3_add(sum_v, v3_add(rot,scul)); */
         *dv = v3_add(sum_v, scul);
+        return 0;
     }
     if (N == -2) {
         v3_t sum_c = v3_dot(1.0 / 12, dtheta_list[0]);
@@ -578,13 +592,12 @@ extern int multisample(
         /* ref Yan2016(P31:2.5-37) */
         *dtheta = v3_add(dtheta_list[1], v3_cross(sum_c, dtheta_list[1]));
         /* ref Yan2016(P73:4.1-36,P76:4.1-55) */
-        v3_t scul = v3_add(
-            v3_cross(sum_c, dv_list[1]), v3_cross(sum_s, dtheta_list[1]));
-        /* v3_t rot = vec_dot(0.5,vec_cross(dtheta_list[1],dv_list[1])); */
-        /* *dv = vec_add(dv_list[1], vec_add(rot,scul)); */
+        v3_t scul = v3_add(v3_cross(sum_c, dv_list[1]),
+                v3_cross(sum_s, dtheta_list[1]));
         *dv = v3_add(dv_list[1], scul);
+        return 0;
     }
-    return 0;
+    return 1;
 }
 
 /* Double vector to Atttitude
@@ -612,8 +625,17 @@ int dblvec2att(const v3_t* vn1, const v3_t* vn2, const v3_t* vb1,
     return 0;
 }
 
-/* Coarse align on the static base */
-extern int align_static_base(const imu_t* imu, double lat, m3_t *Cnb)
+/**
+ * @brief Coarse align on the static base
+ * @param imu   I   static imu data
+ * @param lat   I   imu latitude [rad]
+ * @param Cnb   O   Output DCM attitude(a-axis refer to n-axis) on average
+ * @return 0: Ok
+ * @see align_coarse_inertial()
+ * @see dblvec2att()
+ * @note Yan Gongming, 捷联惯导算法与组合导航讲义, 2016, P144
+ */
+extern int align_coarse_static_base(const imu_t* imu, double lat, m3_t *Cnb)
 {
     /* Fetch mean mean angular rate and specific force */
     v3_t mean_wib_b = { 0 }, mean_fib_b = { 0 };
@@ -632,5 +654,71 @@ extern int align_static_base(const imu_t* imu, double lat, m3_t *Cnb)
     v3_t gib_b = v3_dot(-1.0,mean_fib_b);
 
     dblvec2att(&gn,&wie_n,&gib_b,&mean_wib_b,Cnb);
+    return 0;
+}
+
+/**
+ * @brief Coarse align under inertial fame(anti-vibration method)
+ * @param imu   I   (quasi-)static imu data(recommend imu->n/8 = 0)
+ * @param lat   I   imu latitude [rad]
+ * @param Cnb   O   Output DCM attitude(b-axis refer to n-axis) at last moment
+ * @return 0: OK
+ * @see align_coarse_static_base()
+ * @see dblvec2att()
+ * @note ref Qin Yunyuan, 惯性导航(2nd Edition), P319
+ */
+extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
+{
+    /* I-frame: inertial frame of e-axis at start moment */
+    /* B-frame: inertial frame of b-axis at start moment */
+
+    int sample_N = 4;
+    double ts = ins_timediff(imu->data[1].time,imu->data[0].time);
+    double nts = sample_N * ts;
+
+    double sin_lat = sin(lat), cos_lat = cos(lat);
+    v3_t gn; gravity_ned(lat,0.0,&gn);
+
+    /* Calculate vib_B1,vib_B2*/
+    v3_t dtheta[4],dv[4],sum_dtheta,sum_dv;
+    v3_t vib_B = {0.0}, vib_B1 = {0.0};
+    quat_t qb_B = {1.0, 0.0, 0.0, 0.0};   /* initial attitde*/
+    quat_t qk_k1; /* trans from k to k+1 */
+    int ind_mid = (imu->n/sample_N) / 2 * sample_N;
+    for (int i = 0; i <= imu->n - sample_N ; i += sample_N) {
+        for(int j = 0; j < sample_N; ++j){
+            dtheta[j] = imu->data[i+j].gryo;
+            dv[j] = imu->data[i+j].accel;
+        }
+        /* Calculate current fib_B */
+        multisample(dtheta,dv,sample_N,&sum_dtheta,&sum_dv);
+        vib_B = v3_add(vib_B,quat_mul_v3(qb_B, sum_dv));
+        /* qb_B attitude update uner inertial frame */
+        rv2quat(&sum_dtheta,&qk_k1);
+        qb_B = quat_mul(qb_B,qk_k1);
+
+        /* record middle vib_B */
+        if(i == ind_mid - sample_N) vib_B1 = vib_B;
+    }
+    /* Calculate vib_I1, vib_I2 */
+    double total_t = ts * ind_mid * 2;
+    double wie_dtheta = wgs84.wie * total_t;
+    double gcl_wie = gn.k * cos_lat / wgs84.wie;
+    v3_t vib_I1 = { gcl_wie * sin(wie_dtheta/2.0),
+        gcl_wie * (1-cos(wie_dtheta/2.0)), total_t/2.0 * gn.k * sin_lat};
+    v3_t vib_I2 = { gcl_wie * sin(wie_dtheta),
+        gcl_wie * (1-cos(wie_dtheta)), total_t * gn.k * sin_lat};
+
+    /* double vector to attitude */
+    m3_t CB_I; dblvec2att(&vib_B1,&vib_B,&vib_I1,&vib_I2,&CB_I);
+
+    /* Calculate Cnb */
+    double cos_wie = cos(wie_dtheta), sin_wie = sin(wie_dtheta);
+    m3_t CI_n = { -sin_lat * cos_wie, -sin_lat * sin_wie, cos_lat,
+        -sin_wie, cos_wie, 0.0,
+        -cos_lat * cos_wie, -cos_lat * sin_wie, -sin_lat };
+    m3_t Cb_B; quat2dcm(&qb_B,&Cb_B);
+    *Cnb = m3_transpose(m3_mul(m3_mul(CI_n,CB_I),Cb_B));
+
     return 0;
 }
