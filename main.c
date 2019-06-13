@@ -39,6 +39,8 @@ void nav_ins_ecef(const imu_t* imu, int N, v3_t r, v3_t v, quat_t q)
     v3_t dtheta_list[5], dv_list[5], dtheta, dv;
     double dt = imu->data[1].time.sec - imu->data[0].time.sec;
 
+    m3_t dcm; v3_t pos,veb_n,Enb;
+
     if (N < 0) /* update first abs(N)-1 when N<0*/
         for (int i = 0; i < abs(N) - 1; ++i) {
             nav_equations_ecef(
@@ -59,11 +61,13 @@ void nav_ins_ecef(const imu_t* imu, int N, v3_t r, v3_t v, quat_t q)
         }
         multisample(dtheta_list, dv_list, N, &dtheta, &dv);
         nav_equations_ecef(dt * nSample, &dtheta, &dv, &r, &v, &q);
+        quat2dcm(&q,&dcm); pos=r; veb_n = v;
+        ecef2ned(&pos,&veb_n,&dcm); dcm = m3_transpose(dcm); dcm2euler(&dcm,&Enb);
         fprintf(stdout, "%6.3f ", imu->data[i].time.sec);
-        fprintf(stdout, "%16.10f %16.10f %16.10f ", r.i, r.j, r.k);
-        fprintf(stdout, "%16.10f %16.10f %16.10f ", v.i, v.j, v.k);
+        fprintf(stdout, "%16.10f %16.10f %16.10f ", pos.i*RAD2DEG, pos.j*RAD2DEG, pos.k);
+        fprintf(stdout, "%16.10f %16.10f %16.10f ", veb_n.i, veb_n.j, veb_n.k);
         quat2euler(&q, &euler);
-        fprintf(stdout, "%16.10f %16.10f %16.10f\n", euler.i, euler.j, euler.k);
+        fprintf(stdout, "%16.10f %16.10f %16.10f\n", Enb.i*RAD2DEG, Enb.j*RAD2DEG, Enb.k*RAD2DEG);
     }
 }
 
@@ -108,21 +112,42 @@ void set_imu(imu_t* imus)
     imus->lever_arm = (v3_t) {0.0, -0.18, -0.05};
 }
 
-int main()
+void test1()
 {
     imu_t imu;
-    yins_readimu("../testdata/20180416_rover_345_multi.ASC", &imu, FT_NVT);
-    set_imu(&imu);
-    yins_imu2rnx(&imu, "../testdata/1_level_rnx3/IMU.rnx");
+    yins_readimu("./data/testIMUInter.csv",&imu,FT_CSV);
+    v3_t r,v;
+    v3_t att = {-0.5257575320*DEG2RAD, -2.1960440963*DEG2RAD, -123.503797619*DEG2RAD};
+    v = (v3_t){ 0.0160980, -0.0429563, -0.0189353 };
+    r = (v3_t){ (31+34/60.0+47.2719024/3600.0)*DEG2RAD,
+        (104 +27/60.0+ 27.1144676/3600)*DEG2RAD, 569.916321};
+    m3_t dcm; euler2dcm(&att,&dcm); dcm = m3_transpose(dcm); // Cnb => Cbn
+    ned2ecef(&r,&v,&dcm); //blh=>reb_e, veb_n=>veb_e, Cbn => Cbe
+    quat_t q; dcm2quat(&dcm,&q);
+    v = (v3_t){ 0.0160980, -0.0429563, -0.0189353 };
+    nav_ins_ecef(&imu,-2,r,v,q);
 
-    v3_t r;
-    v3_t v;
-    quat_t q;
-    // readimu_file("./data/ECEF_IMU_meas_1.csv",&imu,FT_CSV);
+    freeimu(&imu);
+}
+
+int main()
+{
+    //imu_t imu;
+    // yins_readimu("../testdata/20180416_rover_345_multi.ASC", &imu, FT_NVT);
+    // set_imu(&imu);
+    // yins_imu2rnx(&imu, "../testdata/1_level_rnx3/IMU.rnx");
+
+    //v3_t r;
+    //v3_t v;
+    //quat_t q;
+    // yins_readimu("./data/ECEF_IMU_meas_1.csv",&imu,FT_CSV);
     // print_imu(&imu);
     // get_init_para("./data/ECEF_trajectory_1.csv",&r,&v,&q);
     // nav_ins_ecef(&imu,-2, r, v, q);
+    //
 
-    freeimu(&imu);
+    //freeimu(&imu);
+
+    test1();
     return 0;
 }

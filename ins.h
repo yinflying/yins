@@ -23,6 +23,7 @@
 #define FT_RNX 2
 
 #include <time.h>
+#include <stdbool.h>
 
 typedef struct {
     double wie; /* rotation rate(rad s^-1) */
@@ -89,6 +90,7 @@ typedef struct {
 
 /* Attitude transformation */
 int rv2quat(const v3_t* dtheta, quat_t* quat);
+int rv2dcm(const v3_t *dtheta, m3_t * dcm);
 int euler2quat(const v3_t* euler, quat_t* quat);
 int quat2euler(const quat_t* quat, v3_t* euler);
 int dcm2quat(const m3_t* dcm, quat_t* quat);
@@ -106,13 +108,20 @@ double v3_norm(v3_t v3);
 double v3_mul_rxc(v3_t v1, v3_t v2); /* row vector x column vector */
 m3_t v3_mul_cxr(v3_t v1, v3_t v2);  /* column vector x row vector */
 m3_t v3_diag(v3_t diag);
+v3_t v3_pow(v3_t v, double order);
+bool v3_equal(const v3_t *v1, const v3_t *v2, double eps);
 
 /* 3D matrix operator */
 m3_t m3_transpose(m3_t A);
+m3_t m3_add(m3_t A, m3_t B);
+m3_t m3_del(m3_t A, m3_t B);
 m3_t m3_dot(double alpha, m3_t A);
 m3_t m3_mul(m3_t A, m3_t B);
 v3_t m3_mul_v3(m3_t A, v3_t B);
 v3_t m3_diag(m3_t diag);
+m3_t m3_pow(m3_t A, double order);
+int m3_svd(const m3_t *A, m3_t *U, v3_t *D, m3_t *V);
+bool m3_equal(const m3_t *A, const m3_t *B, double eps);
 
 /* quaternion operation */
 int quat_normalize(quat_t* quat);
@@ -134,6 +143,7 @@ int align_coarse_static_base(const imu_t *imu, double lat, m3_t *Cnb);
 int dblvec2att(const v3_t *vn1, const v3_t *vn2, const v3_t *vb1,
         const v3_t*vb2, m3_t *Cnb);
 int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb);
+int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n, m3_t *Cnb);
 
 /* INS navgataion */
 int nav_equations_ecef(double dt, const v3_t* dtheta, const v3_t* dv,

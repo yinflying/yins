@@ -8,6 +8,17 @@
 #define DEG2RAD 0.0174532925199433
 #define RAD2DEG 57.2957795130823
 
+static void m3_print(const m3_t *A)
+{
+    printf("-| %10.6f %10.6f %10.6f |-\n",A->m11,A->m12,A->m13);
+    printf(" | %10.6f %10.6f %10.6f |\n",A->m21,A->m22,A->m23);
+    printf("-| %10.6f %10.6f %10.6f |-\n",A->m31,A->m32,A->m33);
+}
+static void v3_print(const v3_t *V)
+{
+    printf("[ %10.6f %10.6f %10.6f ]\n",V->i,V->j,V->k);
+}
+
 Test(ned2ecef, real)
 {
     v3_t pos = { 1.0, 1.0, 5.0 };
@@ -206,4 +217,12 @@ Test(align_coarse_inertial, simple)
     cr_expect_float_eq(Enb.i, -1.04880393840960e-05, 1E-5);
     cr_expect_float_eq(Enb.j, 5.04490437057051e-05, 1E-5);
     cr_expect_float_eq(Enb.k, 6.28242649768121, 1E-3);
+}
+
+Test(m3_svd,simple){
+    m3_t A = {1.0, 2.0 ,3.0, 2.0, 3.0, 6.0, 2.0, 1.0, 3.0};
+    m3_t U, V; v3_t D;
+    m3_svd(&A,&U,&D,&V);
+    m3_t B = m3_mul(m3_mul(U,v3_diag(D)),m3_transpose(V));
+    cr_expect_eq(m3_equal(&A,&B,1E-14),true);
 }

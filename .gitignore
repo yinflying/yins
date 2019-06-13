@@ -4,3 +4,4 @@
 *.a
 .ycm_extra_conf.py
 Session.vim
+/data/tmp_*
