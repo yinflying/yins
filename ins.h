@@ -1,19 +1,23 @@
-/* NOTE:
- * Cnb => C_n^b => trans matrix n-axis to b-axis(the same as qnb)
- * Cnb = Qnb = Enb, trans from n-asix to b-axis(or attitude b-axis to n-axis)
- * g=>gps,gravity
- * d=>data
- * SHF=>Spherical Harmonics Function
- * dbl=>double
- * enu,ned=>East, North, Up, Down
- * v3=> 3D vector
- * m3=> 3D matrix
- * _t => data type
- * att=> attitude(could express by DCM,Quat,Euler)
- * mul => multiply
- * dcm,ctm => Direct Cosine Matrix, Coordiante Transform Matrix
- * w: Omega, Rotation rate(wie_e mean w_ie^e, project to e-axis)
- * rv: rotation vector
+/**
+ * @file ins.h
+ * @brief ins header file
+ * @author yinflying(yinflying@foxmail.com)
+ * @note  All abbreviation in code
+ * Cnb          C_n^b, trans matrix n-axis to b-axis(the same as qnb)
+ * Cnb,Qnb,Enb  trans from n-asix to b-axis(or attitude b-axis to n-axis)
+ * g            gps,gravity
+ * d            data
+ * SHF          Spherical Harmonics Function
+ * dbl          double
+ * enu,ned      East, North, Up, Down
+ * v3           3D vector
+ * m3           3D matrix
+ * _t           data type
+ * att          attitude(could express by DCM,Quat,Euler)
+ * mul          multiply
+ * dcm,ctm      Direct Cosine Matrix, Coordiante Transform Matrix
+ * w            Omega, Rotation rate(wie_e mean w_ie^e, project to e-axis)
+ * rv           rotation vector
  * */
 #ifndef INS_H
 #define INS_H
@@ -35,6 +39,9 @@ typedef struct {
     double f;   /* Flattening */
 } earth_t;
 earth_t wgs84;
+/* Earth functions */
+double earth_RN(const earth_t *eth, double lat);
+double earth_RE(const earth_t *eth, double lat);
 
 #ifndef GTIME_T
 #define GTIME_T
@@ -120,8 +127,12 @@ m3_t m3_mul(m3_t A, m3_t B);
 v3_t m3_mul_v3(m3_t A, v3_t B);
 v3_t m3_diag(m3_t diag);
 m3_t m3_pow(m3_t A, double order);
-int m3_svd(const m3_t *A, m3_t *U, v3_t *D, m3_t *V);
 bool m3_equal(const m3_t *A, const m3_t *B, double eps);
+void m3_swap_row(m3_t *A, int r1, int r2);
+void m3_swap_clm(m3_t *A, int c1, int c2);
+double m3_det(const m3_t *A);
+int m3_SVD(const m3_t *A, m3_t *U, v3_t *D, m3_t *V);
+int m3_LU(const m3_t *A, m3_t *L, m3_t *U, m3_t *P);
 
 /* quaternion operation */
 int quat_normalize(quat_t* quat);
@@ -143,7 +154,8 @@ int align_coarse_static_base(const imu_t *imu, double lat, m3_t *Cnb);
 int dblvec2att(const v3_t *vn1, const v3_t *vn2, const v3_t *vb1,
         const v3_t*vb2, m3_t *Cnb);
 int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb);
-int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n, m3_t *Cnb);
+int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n,
+        int Nveb_n, m3_t *Cnb);
 
 /* INS navgataion */
 int nav_equations_ecef(double dt, const v3_t* dtheta, const v3_t* dv,

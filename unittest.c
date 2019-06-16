@@ -8,15 +8,15 @@
 #define DEG2RAD 0.0174532925199433
 #define RAD2DEG 57.2957795130823
 
-static void m3_print(const m3_t *A)
+static void m3_print(const m3_t* A)
 {
-    printf("-| %10.6f %10.6f %10.6f |-\n",A->m11,A->m12,A->m13);
-    printf(" | %10.6f %10.6f %10.6f |\n",A->m21,A->m22,A->m23);
-    printf("-| %10.6f %10.6f %10.6f |-\n",A->m31,A->m32,A->m33);
+    printf("-| %10.6f %10.6f %10.6f |-\n", A->m11, A->m12, A->m13);
+    printf(" | %10.6f %10.6f %10.6f |\n", A->m21, A->m22, A->m23);
+    printf("-| %10.6f %10.6f %10.6f |-\n", A->m31, A->m32, A->m33);
 }
-static void v3_print(const v3_t *V)
+static void v3_print(const v3_t* V)
 {
-    printf("[ %10.6f %10.6f %10.6f ]\n",V->i,V->j,V->k);
+    printf("[ %10.6f %10.6f %10.6f ]\n", V->i, V->j, V->k);
 }
 
 Test(ned2ecef, real)
@@ -192,7 +192,7 @@ Test(align_coarse_static_base, simple)
 
     align_coarse_static_base(&imu, lat, &Cnb);
     dcm2euler(&Cnb, &Enb);
-    printf("Align_coarse_static_base:simple %f %f %f\n",Enb.i,Enb.j,Enb.k);
+    printf("Align_coarse_static_base:simple %f %f %f\n", Enb.i, Enb.j, Enb.k);
 
     freeimu(&imu);
     cr_expect_float_eq(Enb.i, -4.994210169e-05, EPS);
@@ -203,15 +203,16 @@ Test(align_coarse_static_base, simple)
 Test(align_coarse_inertial, simple)
 {
     imu_t imus;
-    yins_readimu("./data/align_test_data.csv",&imus,FT_CSV);
+    yins_readimu("./data/align_test_data.csv", &imus, FT_CSV);
     double lat = 0.523598775598299;
-    m3_t Cnb; v3_t Enb;
+    m3_t Cnb;
+    v3_t Enb;
     int maxn = imus.n;
-    FILE *fid = fopen("./align.log","w");
-    align_coarse_inertial(&imus,lat,&Cnb);
+    FILE* fid = fopen("./align.log", "w");
+    align_coarse_inertial(&imus, lat, &Cnb);
 
     dcm2euler(&Cnb, &Enb);
-    printf("Align_coarse_inertial:simple %f %f %f\n",Enb.i,Enb.j,Enb.k);
+    printf("Align_coarse_inertial:simple %f %f %f\n", Enb.i, Enb.j, Enb.k);
 
     freeimu(&imus);
     cr_expect_float_eq(Enb.i, -1.04880393840960e-05, 1E-5);
@@ -219,10 +220,106 @@ Test(align_coarse_inertial, simple)
     cr_expect_float_eq(Enb.k, 6.28242649768121, 1E-3);
 }
 
-Test(m3_svd,simple){
-    m3_t A = {1.0, 2.0 ,3.0, 2.0, 3.0, 6.0, 2.0, 1.0, 3.0};
-    m3_t U, V; v3_t D;
-    m3_svd(&A,&U,&D,&V);
-    m3_t B = m3_mul(m3_mul(U,v3_diag(D)),m3_transpose(V));
-    cr_expect_eq(m3_equal(&A,&B,1E-14),true);
+Test(align_coarse_wuhba, simple) { /* Here */ }
+
+Test(m3_SVD, simple)
+{
+    m3_t A = { 1.0, 2.0, 3.0, 2.0, 3.0, 6.0, 2.0, 1.0, 3.0 };
+    m3_t U, V;
+    v3_t D;
+    m3_SVD(&A, &U, &D, &V);
+    m3_t B = m3_mul(m3_mul(U, v3_diag(D)), m3_transpose(V));
+    cr_expect_eq(m3_equal(&A, &B, 1E-14), true);
+}
+
+Test(m3_swap_row, simple)
+{
+    m3_t A = { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0 };
+    m3_t orignA = A;
+    m3_swap_row(&A, 1, 2);
+    m3_swap_row(&A, 2, 1);
+    cr_expect(m3_equal(&A, &orignA, 1e-20) == true);
+
+    m3_swap_row(&A, 1, 3);
+    m3_swap_row(&A, 3, 1);
+    cr_expect(m3_equal(&A, &orignA, 1e-20) == true);
+
+    m3_swap_row(&A, 2, 3);
+    m3_swap_row(&A, 3, 2);
+    cr_expect(m3_equal(&A, &orignA, 1e-20) == true);
+
+    m3_swap_row(&A, 1, 2);
+    m3_swap_row(&A, 2, 3);
+    m3_swap_row(&A, 1, 2);
+    m3_t B = { 7.0, 8.0, 9.0, 4.0, 5.0, 6.0, 1.0, 2.0, 3.0 };
+    cr_expect(m3_equal(&A, &B, 1e-20) == true);
+}
+
+Test(m3_swap_clm, simple)
+{
+    m3_t A = { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0 };
+    m3_t orignA = A;
+    m3_swap_clm(&A, 1, 2);
+    m3_swap_clm(&A, 2, 1);
+    cr_expect(m3_equal(&A, &orignA, 1e-20) == true);
+
+    m3_swap_clm(&A, 1, 3);
+    m3_swap_clm(&A, 3, 1);
+    cr_expect(m3_equal(&A, &orignA, 1e-20) == true);
+
+    m3_swap_clm(&A, 2, 3);
+    m3_swap_clm(&A, 3, 2);
+    cr_expect(m3_equal(&A, &orignA, 1e-20) == true);
+
+    m3_swap_clm(&A, 1, 2);
+    m3_swap_clm(&A, 2, 3);
+    m3_swap_clm(&A, 1, 2);
+    m3_t B = { 3.0, 2.0, 1.0, 6.0, 5.0, 4.0, 9.0, 8.0, 7.0 };
+    cr_expect(m3_equal(&A, &B, 1e-20) == true);
+}
+
+Test(m3_LU, simple)
+{
+    m3_t L, U, P, LU, PA;
+    m3_t A = { 11.0, 2323.00, -3.343, 1e-3, 333.0, 1.0, 1.0, 3.0, 5.0 };
+    m3_LU(&A, &L, &U, &P);
+    cr_expect_float_eq(L.m12, 0.0, EPS);
+    cr_expect_float_eq(L.m13, 0.0, EPS);
+    cr_expect_float_eq(L.m23, 0.0, EPS);
+    cr_expect_float_eq(U.m21, 0.0, EPS);
+    cr_expect_float_eq(U.m31, 0.0, EPS);
+    cr_expect_float_eq(U.m32, 0.0, EPS);
+    LU = m3_mul(L, U);
+    PA = m3_mul(P, A);
+    cr_expect(m3_equal(&PA, &LU, EPS) == true);
+
+    A = (m3_t) { 1.0, 2.0, 3.0, 22, 333.0, 1.0, 4.0, 5.0, 6.0 };
+    m3_LU(&A, &L, &U, &P);
+    cr_expect_float_eq(L.m12, 0.0, EPS);
+    cr_expect_float_eq(L.m13, 0.0, EPS);
+    cr_expect_float_eq(L.m23, 0.0, EPS);
+    cr_expect_float_eq(U.m21, 0.0, EPS);
+    cr_expect_float_eq(U.m31, 0.0, EPS);
+    cr_expect_float_eq(U.m32, 0.0, EPS);
+    LU = m3_mul(L, U);
+    PA = m3_mul(P, A);
+    cr_expect(m3_equal(&PA, &LU, EPS) == true);
+
+    A = (m3_t) { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
+    m3_LU(&A, &L, &U, &P);
+    cr_expect_float_eq(L.m12, 0.0, EPS);
+    cr_expect_float_eq(L.m13, 0.0, EPS);
+    cr_expect_float_eq(L.m23, 0.0, EPS);
+    cr_expect_float_eq(U.m21, 0.0, EPS);
+    cr_expect_float_eq(U.m31, 0.0, EPS);
+    cr_expect_float_eq(U.m32, 0.0, EPS);
+    LU = m3_mul(L, U);
+    PA = m3_mul(P, A);
+    cr_expect(m3_equal(&PA, &LU, EPS) == true);
+}
+
+Test(m3_det, simple)
+{
+    m3_t A = { 1.0, 2.0, 3.0, 1.0, -3.0, 4.0, 1.0, 2.2, 77.0 };
+    cr_expect_float_eq(m3_det(&A), -370.2, 1e-14);
 }

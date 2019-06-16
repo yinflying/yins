@@ -1,3 +1,8 @@
+/**
+ * @file ins.c
+ * @brief ins core functions implementation
+ * @author yinflying(yinflying@foxmail.com)
+ */
 #include "ins.h"
 
 #include <math.h>
@@ -7,10 +12,13 @@
 #define PI 3.14159265358979
 #define SQR(x) (x) * (x)
 
+static const m3_t I3 = {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
+static const m3_t O3 = {0.0};
+
 /**
  * @brief Gravitational acceleration of Earth project to e-axis
- * @param r     I   postion under e-axis
- * @param ge    O   Gravitational acceleration under ECEF(m s^-2)
+ * @param[in]   r   postion under e-axis
+ * @param[out]  ge  Gravitational acceleration under ECEF(m s^-2)
  * @return 0: OK
  * @see gravity_ned()
  * @note Do not contain centrifugal force
@@ -38,9 +46,9 @@ int gravity_ecef(const v3_t* r, v3_t* ge)
 
 /**
  * @brief Acceleration of gravity under n-axis(NED)
- * @param lat   I   latitude [rad]
- * @param hgt   I   ellipsoidal height [m]
- * @param gn    O   acceleration of gravity [m s^-2]
+ * @param[in]   lat     latitude [rad]
+ * @param[in]   hgt     ellipsoidal height [m]
+ * @param[out]  gn      acceleration of gravity [m s^-2]
  * @return 0: OK
  * @see gravity_ecef()
  * @note gravity contains two part: gravitational and centrifugal accelration
@@ -67,12 +75,12 @@ int gravity_ned(double lat, double hgt, v3_t* gn)
 
 /**
  * @brief Strapdown-INS equations under ECEF frame
- * @param dt        I   Time interval [s]
- * @param dtheta    I   Angular increment [rad]
- * @param dv        I   Velocity increment [m/s]
- * @param r         IO  Start/End postion in ECEF [m]
- * @param v         IO  Start/End velocity in ECEF [m]
- * @param q         IO  Start/End attitude trans express by quaternion(qbe)
+ * @param[in]   dt      Time interval [s]
+ * @param[in]   dtheta  Angular increment [rad]
+ * @param[in]   dv      Velocity increment [m/s]
+ * @param[in,out]   r   Start/End postion in ECEF [m]
+ * @param[in,out]   v   Start/End velocity in ECEF [m]
+ * @param[in,out]   q   Start/End attitude trans express by quaternion(qbe)
  * @return 0: OK
  * @see multisample()
  * @note This function do not contain conning&sculling error compensation, so
@@ -113,11 +121,11 @@ extern int nav_equations_ecef(
 
 /**
  * @brief Use multi-subsample to compensate the conning&scull error
- * @param dtheta_list   I   Angular increment list,order by time,length:abs(N)
- * @param dv_list       I   Velocity increment list,order by time,length:abs(N)
- * @param N             I   Subsample number(1=<N<=5, -2: one-plus-previous)
- * @param dtheta        O   Sum of angular increment with conning error compensation
- * @param dv            O   Sum of velocity incrment with scull error compensation
+ * @param[in]   dtheta_list     Angular increment list,order by time,length:abs(N)
+ * @param[in]   dv_list         Velocity increment list,order by time,length:abs(N)
+ * @param[in]   N               Subsample number(1=<N<=5, -2: one-plus-previous)
+ * @param[out]  dtheta          Sum of angular increment with conning error compensation
+ * @param[out]  dv              Sum of velocity incrment with scull error compensation
  * @return 0: No error    1: Error
  */
 extern int multisample( const v3_t* dtheta_list, const v3_t* dv_list, int N,
@@ -199,9 +207,9 @@ int dblvec2att(const v3_t* vn1, const v3_t* vn2, const v3_t* vb1,
 
 /**
  * @brief Coarse align on the static base
- * @param imu   I   static imu data
- * @param lat   I   imu latitude [rad]
- * @param Cnb   O   Output DCM attitude(a-axis refer to n-axis) on average
+ * @param[in]   imu     static imu data
+ * @param[in]   lat     imu latitude [rad]
+ * @param[out]  Cnb     Output DCM attitude(a-axis refer to n-axis) on average
  * @return 0: Ok
  * @see align_coarse_inertial()
  * @see dblvec2att()
@@ -231,9 +239,9 @@ extern int align_coarse_static_base(const imu_t* imu, double lat, m3_t *Cnb)
 
 /**
  * @brief Coarse align under inertial fame(anti-vibration method)
- * @param imu   I   (quasi-)static imu data(recommend imu->n/8 = 0)
- * @param lat   I   imu latitude [rad]
- * @param Cnb   O   Output DCM attitude(b-axis refer to n-axis) at last moment
+ * @param[in]   imu     (quasi-)static imu data(recommend imu->n/8 = 0)
+ * @param[in]   lat     imu latitude [rad]
+ * @param[out]  Cnb     Output DCM attitude(b-axis refer to n-axis) at last moment
  * @return 0: OK
  * @see align_coarse_static_base()
  * @see dblvec2att()
@@ -297,64 +305,99 @@ extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
 
 /**
  * @brief Coarse Alignment by solving Wuhba problem under inertial frame
- * @param imu   I   Inertial IMU
- * @param lat   I   Imu latitude [rad]
- * @param veb_n I   Imu velocity uner n-frame
- * @param Cnb   O   Output DCM attitude
- * @return
+ * @param[in]   imu     Inertial IMU
+ * @param[in]   lat     Imu latitude [rad]
+ * @param[in]   veb_n   Imu velocity uner n-frame [m/s]
+ * @param[in]   Nveb_n  Imu velocity number
+ * @param[out]  Cnb     Output DCM attitude
+ * @return 0: Ok
+ * @note  Velocity
  */
 extern int align_coarse_wuhba(
-        const imu_t *imu, double lat, const v3_t *veb_n, m3_t *Cnb)
+        const imu_t *imu, double lat, const v3_t *veb_n, int Nveb_n, m3_t *Cnb)
 {
     /* N-frame: inertial frame of n-frame at start moment */
     /* B-frame: inertial frame of b-frame at start moment */
-
-    int sample_N = 4;
     double ts = yins_timediff(imu->data[1].time,imu->data[0].time);
-    double nts = sample_N * ts;
+    double nts = ((int)imu->n/Nveb_n) * ts;
 
     double sin_lat = sin(lat), cos_lat = cos(lat);
     v3_t gn; gravity_ned(lat,0.0,&gn);
+    v3_t wie_n = {wgs84.wie*cos_lat, 0.0, -wgs84.wie*sin_lat};
+    v3_t dtheta_ie_n = v3_dot(nts,wie_n);
 
-    /* Calculate vib_B1,vib_B2*/
-    v3_t dtheta[4],dv[4],sum_dtheta,sum_dv;
-    v3_t vib_B = {0.0}, vib_B1 = {0.0};
-    quat_t qb_B = {1.0, 0.0, 0.0, 0.0};   /* initial attitde*/
-    quat_t qk_k1; /* trans from k to k+1 */
-    int ind_mid = (imu->n/sample_N) / 2 * sample_N;
-    for (int i = 0; i <= imu->n - sample_N ; i += sample_N) {
-        for(int j = 0; j < sample_N; ++j){
-            dtheta[j] = imu->data[i+j].gryo;
-            dv[j] = imu->data[i+j].accel;
-        }
+    /* Calculate vib_B1,vib_B2 */
+    v3_t vib_B = {0.0}, vib_N = {0.0};
+    m3_t CbB = I3, CnN = I3;   /* initial attitde at start moment*/
+    m3_t Ck_k1; /* trans from k to k+1 */
+    int ind_mid = (imu->n) / 2;
+
+    v3_t *dv_N = (v3_t *)malloc(sizeof(v3_t) * (Nveb_n - 1));
+    v3_t *dv_B = (v3_t *)malloc(sizeof(v3_t) * (Nveb_n - 1));
+
+    /* TN, TN_last: wie_N x veb_N - gN */
+    v3_t veb_N, veb_N_last, TN, TN_last;
+    v3_t mean_v, wen_n, dtheta_Nn_n;
+
+    for (int i = 0, n = 0; i <= imu->n - 1 ; ++i) {
         /* Calculate current fib_B */
-        multisample(dtheta,dv,sample_N,&sum_dtheta,&sum_dv);
-        vib_B = v3_add(vib_B,quat_mul_v3(qb_B, sum_dv));
+        vib_B = v3_add(vib_B,m3_mul_v3(CbB, imu->data[i].accel));
         /* qb_B attitude update uner inertial frame */
-        rv2quat(&sum_dtheta,&qk_k1);
-        qb_B = quat_mul(qb_B,qk_k1);
+        rv2dcm(&imu->data[i].gryo,&Ck_k1);
+        CbB = m3_mul(CbB,Ck_k1);
 
-        /* record middle vib_B */
-        if(i == ind_mid - sample_N) vib_B1 = vib_B;
+        if(i%Nveb_n == 0 && i != 0){
+            /* save dv_B */
+            dv_B[n] = vib_B;
+
+            if(n == 0){
+                veb_N_last = veb_n[0];
+                TN_last = v3_del(v3_cross(wie_n,veb_n[0]),gn);
+            }
+            /* update CnN */
+            mean_v = v3_dot(0.5,v3_add(veb_n[n],veb_n[n+1]));
+            wen_n = (v3_t){ mean_v.j / wgs84.R0,  - mean_v.i / wgs84.R0,
+                - mean_v.j * tan(lat) / wgs84.R0};
+            dtheta_Nn_n = v3_add(dtheta_ie_n,v3_dot(nts, wen_n));
+            rv2dcm(&dtheta_Nn_n,&Ck_k1);
+            CnN = m3_mul(CnN,Ck_k1);
+            /* Calculate  dv_N  and save*/
+            veb_N = m3_mul_v3(CnN,veb_n[n+1]);
+            TN = v3_del(v3_cross(m3_mul_v3(CnN,wie_n), m3_mul_v3(CnN,veb_n[n+1])),
+                    m3_mul_v3(CnN,gn));
+            dv_N[n] = v3_add(v3_del(veb_N, veb_N_last),
+                    v3_dot(0.5*nts, v3_add(TN, TN_last)));
+
+            TN_last = TN; veb_N_last = veb_N;
+            n++;
+        }
     }
-    /* Calculate vib_I1, vib_I2 */
-    double total_t = ts * ind_mid * 2;
-    double wie_dtheta = wgs84.wie * total_t;
-    double gcl_wie = gn.k * cos_lat / wgs84.wie;
-    v3_t vib_I1 = { gcl_wie * sin(wie_dtheta/2.0),
-        gcl_wie * (1-cos(wie_dtheta/2.0)), total_t/2.0 * gn.k * sin_lat};
-    v3_t vib_I2 = { gcl_wie * sin(wie_dtheta),
-        gcl_wie * (1-cos(wie_dtheta)), total_t * gn.k * sin_lat};
 
-    /* double vector to attitude */
-    m3_t CB_I; dblvec2att(&vib_B1,&vib_B,&vib_I1,&vib_I2,&CB_I);
+    /* interleave accumulate */
+    int len_dv = Nveb_n / 2;
+    v3_t *dv_N_sum = (v3_t *)malloc(sizeof(v3_t) * (Nveb_n - len_dv));
+    v3_t *dv_B_sum = (v3_t *)malloc(sizeof(v3_t) * (Nveb_n - len_dv));
+    for(int i = 0; i < Nveb_n - len_dv; ++i){
+        dv_N_sum[i] = (v3_t){0.0};
+        dv_B_sum[i] = (v3_t){0.0};
+        for(int j = 0; j < len_dv; ++j){
+            dv_N_sum[i] = v3_add(dv_N_sum[i], dv_N[i+j]);
+            dv_B_sum[i] = v3_add(dv_B_sum[i], dv_B[i+j]);
+        }
+    }
 
-    /* Calculate Cnb */
-    double cos_wie = cos(wie_dtheta), sin_wie = sin(wie_dtheta);
-    m3_t CI_n = { -sin_lat * cos_wie, -sin_lat * sin_wie, cos_lat,
-        -sin_wie, cos_wie, 0.0,
-        -cos_lat * cos_wie, -cos_lat * sin_wie, -sin_lat };
-    m3_t Cb_B; quat2dcm(&qb_B,&Cb_B);
-    *Cnb = m3_transpose(m3_mul(m3_mul(CI_n,CB_I),Cb_B));
+    /* Solve wuhba problem using SVD solution*/
+    m3_t B = {0.0};
+    for(int i = 0; i < Nveb_n - len_dv; ++i){
+        B = m3_add(B,v3_mul_cxr(dv_N_sum[i],dv_B_sum[i]));
+    }
+    m3_t U,V; v3_t D;
+    m3_SVD(&B,&U,&D,&V);
+    double d = m3_det(&U) * m3_det(&V); /* d = +-1 */
+    m3_t CBN_opt = m3_mul(U,m3_mul(v3_diag((v3_t){1.0, 1.0, d}),m3_transpose(V)));
+
+    /* Caludate Cnb at last moment: Cbn = CNn * CBN * CbB */
+    *Cnb = m3_transpose(m3_mul(m3_mul(m3_transpose(CnN),CBN_opt),CbB));
+
     return 0;
 }

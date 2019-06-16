@@ -1,5 +1,32 @@
-#include "ins.h"
+/**
+ * @file inscmn.c
+ * @brief INS common functions, include basic vector,matrix,quaternion
+ *      operations.
+ * @author yinflying(yinfying@foxmail.com)
+ * @version 0.0.1
+ * @note
+ *  2019-06-11  Created Files
+ *  2019-06-14  Add earth_RN and earth_RE function
+ */
+/*
+ * Copyright (c) 2019 yinflying <yinflying@foxmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any
+ * later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see accompanying file LICENSE.txt
+ * or <http://www.gnu.org/licenses/>.
+ */
 
+#include "ins.h"
 #include <math.h>
 #include <stdlib.h>
 
@@ -136,13 +163,13 @@ extern bool m3_equal(const m3_t *A, const m3_t *B, double eps)
 /**
  * @brief Singular Value Decomposition(SVD) of 3D Matrix
  *          A = U * diag(D) * V'
- * @param A     I   3D matrix
- * @param U     O   3D unit othogonal matrix
- * @param D     O   3D vector
- * @param V     O   3D unit othogonal matrix
- * @return
+ * @param[in] A   3D matrix
+ * @param[out] U  3D unit othogonal matrix
+ * @param[out] D  3D vector
+ * @param[out] V  3D unit othogonal matrix
+ * @return 0: OK
  */
-extern int m3_svd(const m3_t *A, m3_t *U, v3_t *D, m3_t *V)
+extern int m3_SVD(const m3_t *A, m3_t *U, v3_t *D, m3_t *V)
 {
     m3_t B = m3_mul(m3_transpose(*A),*A);
     /* Jacobi iteration method to solve eigenvalue and eigenvector of B */
@@ -179,6 +206,104 @@ extern int m3_svd(const m3_t *A, m3_t *U, v3_t *D, m3_t *V)
     return 0;
 }
 
+/**
+ * @brief swap 3D matrix row
+ * @param[in,out]   A   Input and swap row matrix(swap row1 and row2)
+ * @param[in]       r1  row1, range: 1~3
+ * @param[in]       r2  row2, range: 1~3
+ */
+extern void m3_swap_row(m3_t *A, int r1, int r2)
+{
+    if(r1 == r2) return;
+    double *pA = (double *)A;
+    double tmp;
+    int rr1 = r1 - 1, rr2 = r2 - 1;
+    for(int i = 0; i < 3; ++i){
+        tmp = pA[rr1*3 + i];
+        pA[rr1*3 + i] = pA[rr2*3 +i];
+        pA[rr2*3 + i] = tmp;
+    }
+}
+
+/**
+ * @brief swap 3D matrix column
+ * @param[in,out]   A   Input and swap column matrix(swap column1 and column2)
+ * @param[in]       c1  column1, range: 1~3
+ * @param[in]       c2 column2, range: 1~3
+ */
+extern void m3_swap_clm(m3_t *A, int c1, int c2)
+{
+    if(c1 == c2) return;
+    double *pA = (double *)A;
+    double tmp;
+    int cc1 = c1 - 1, cc2 = c2 - 1;
+    for(int i = 0; i < 3; ++i){
+        tmp = pA[i*3 + cc1];
+        pA[i*3 + cc1] = pA[i*3 + cc2];
+        pA[i*3 + cc2] = tmp;
+    }
+}
+
+extern double m3_det(const m3_t *A)
+{
+    return A->m11 * A->m22 * A->m33 + A->m12 * A->m23 * A->m31
+        + A->m13 * A->m21 * A->m32 - A->m31 * A->m22 * A->m13
+        - A->m21 * A->m12 * A->m33 - A->m11 * A->m32 * A->m23;
+}
+
+/**
+ * @brief 3D matrix LU decomposition, express matrix A as the product of two
+ *      essentially triangular matrices, and satisfying the equation:
+ *      PA = LU, where L is lower triangular matrix, and U is Upper trianglur
+ *      matrix, P is the row permutation matrix.
+ * @param[in]   A   Input matrix
+ * @param[out]  L   Lower triangular matrix
+ * @param[out]  U   Upper triangular matrix
+ * @param[out]  P   Row permutation matrix
+ * @return 0: OK
+ * @note  LU decompostion by Elimination with Maximal Column Pivoting
+ */
+extern int m3_LU(const m3_t *A, m3_t *L, m3_t *U, m3_t *P)
+{
+    *L = I3; *U = *A; *P = I3;
+    double *pU = (double *)U, *pL = (double *)L;
+    for(int i = 0; i < 2; ++i){
+        /* choose the abs max column element as pivot */
+        if(i == 0){
+            if(fabs(U->m11) >= fabs(U->m12)){
+                if(fabs(U->m11) < fabs(U->m13)){
+                    m3_swap_row(U,1,3);
+                    m3_swap_row(P,1,3);
+                }
+            }else{
+                if(fabs(U->m12) >= fabs(U->m13)) {
+                    m3_swap_row(U,1,2);
+                    m3_swap_row(P,1,2);
+                }else{
+                    m3_swap_row(U,1,3);
+                    m3_swap_row(P,1,3);
+                }
+            }
+        }else if(i == 1){
+            if(fabs(U->m22) < fabs(U->m23)){
+                m3_swap_row(U,2,3);
+                m3_swap_row(P,2,3);
+            }
+        }
+        /* solve pivot element equal to zero */
+        if(fabs(pU[i*3 +i]) < 1E-64)
+            continue;
+        /* Gaussian elimination */
+        for(int j = i+1; j < 3; ++j){
+            pL[j*3 + i] = pU[j*3 + i] / pU[i*3 + i];
+            for(int k = 0; k < 3; ++k){
+                pU[j*3 + k] -= pL[j*3 + i] * pU[i*3 + k];
+            }
+        }
+    }
+    return 0;
+}
+
 earth_t wgs84 = { .wie = 7.292115E-5,
     .R0 = 6378137,
     .RP= 6356752.31425,
@@ -187,6 +312,38 @@ earth_t wgs84 = { .wie = 7.292115E-5,
     .e = 0.0818191908425,
     .f = 1.0 / 298.257223563
 };
+
+/**
+ * @brief Caculate meridian radius of curvature(from the north to south)
+ * @param[in] eth   earth parameters struct
+ * @param[in] lat   latitude [rad]
+ * @return meridian radius of curvature [m]
+ * @see earth_RE()
+ * @note
+ *      Ref: Paul D. Groves, Principles of GNSS, Inertial, and Multisensor
+ *          Integrated Navigation Systems(2nd Edition), 2013, P59
+ */
+extern double earth_RN(const earth_t *eth, double lat)
+{
+    double e2 = SQR(eth->e);
+    return eth->R0 * (1-e2) * pow(1 - e2*SQR(sin(lat)), -1.5);
+}
+/**
+ * @brief Caculate transverse radius of curvature(from the east to west)
+ * @param[in] eth   earth parameters struct
+ * @param[in] lat   latitude [rad]
+ * @return transverse radius of curvature [m]
+ * @see earth_RN()
+ * @note Also called nomal radius of curvature, or prime vertical radius of
+ *  curvature.
+ *
+ *      Ref: Paul D. Groves, Principles of GNSS, Inertial, and Multisensor
+ *          Integrated Navigation Systems(2nd Edition), 2013, P59
+ */
+extern double earth_RE(const earth_t *eth, double lat)
+{
+    return eth->R0 / sqrt(1 - SQR(eth->e) * SQR(sin(lat)));
+}
 
 int asymmetric_mat(const v3_t* v3, m3_t* mat)
 {
@@ -409,8 +566,8 @@ extern int quat_inv(quat_t* quat)
 /**
  * @brief Rotation vector(Angular increment) to quaternion attitude
  *      transformation(New to Old)
- * @param dtheta    I   Rotation vector(Angular increment) [rad]
- * @param quat      O   Quaternion attitude transformation
+ * @param[in]   dtheta  Rotation vector(Angular increment) [rad]
+ * @param[out]  quat    Quaternion attitude transformation
  * @return O: OK
  * @see rv2dcm()
  * @note Quaternion attitude transforman can be expressed as Qbi+_bi-, And
@@ -445,12 +602,14 @@ extern int rv2quat(const v3_t* dtheta, quat_t* quat)
 /**
  * @brief Rotation vector(Angular increment) to DCM attitude transformation
  *      (New to Old)
- * @param dtheta    I   Rotation vector(Angular increment) [rad]
- * @param dcm       O   DCM attitude transformation
+ * @param[in]   dtheta  Rotation vector(Angular increment) [rad]
+ * @param[out]  dcm     DCM attitude transformation
  * @return  0: OK
  * @see rv2quat()
  * @note DCM attitude transforman can be expressed as Cbi+_bi-, And  fellow the
  *      compluting: (Cbi+  = Cbi-  * Cbi+_bi- )
+ *      The DCM can also be expressed in "exp(skew-symmetric(dtheta))".
+ *
  *      Ref: Paul D. Groves, Principles of GNSS, Inertial, and Multisensor
  *          Integrated Navigation Systems(2nd Edition), 2013, P184
  */
