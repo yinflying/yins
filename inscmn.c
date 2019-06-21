@@ -7,6 +7,7 @@
  * @note
  *  2019-06-11  Created Files
  *  2019-06-14  Add earth_RN and earth_RE function
+ *  2019-06-21  Add v3_normalize
  */
 /*
  * Copyright (c) 2019 yinflying <yinflying@foxmail.com>
@@ -30,7 +31,8 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define PI 3.14159265358979
+#define PI  3.14159265358979
+#define EPS 1E-50
 #define SQR(x)  ((x) * (x))
 static const m3_t I3 = {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
 static const m3_t O3 = {0.0};
@@ -55,6 +57,23 @@ extern v3_t v3_dot(double s, v3_t v)
 {
     return (v3_t) { s * v.i, s * v.j, s * v.k };
 }
+
+/**
+ * @brief 3D vector normalize(to an unit vector)
+ * @param[in,out] v input & output vector
+ * @return  0: OK, 1: Input vector are zero vector
+ * @see v3_norm()
+ * @warning  if input vector length less than EPS(Zero determination threshold),
+ *      v3_normalize() will do nothing.
+ */
+extern int v3_normalize(v3_t *v){
+    double norm = v3_norm(*v);
+    if(fabs(norm) < EPS) return 1;
+    double fac = 1.0 / norm;
+    v->i *= fac; v->j *= fac; v->k *= fac;
+    return 0;
+}
+
 extern double v3_norm(v3_t v)
 {
     return sqrt(v.i * v.i + v.j * v.j + v.k * v.k);
@@ -97,15 +116,15 @@ extern m3_t m3_transpose(m3_t A)
 }
 extern m3_t m3_add(m3_t A, m3_t B)
 {
-    return (m3_t){A.m11 + A.m11, A.m12 + B.m12, A.m13 + B.m13,
-        A.m21 + A.m21, A.m22 + B.m22, A.m23 + B.m23,
-        A.m31 + A.m31, A.m32 + B.m32, A.m33 + B.m33};
+    return (m3_t){A.m11 + B.m11, A.m12 + B.m12, A.m13 + B.m13,
+        A.m21 + B.m21, A.m22 + B.m22, A.m23 + B.m23,
+        A.m31 + B.m31, A.m32 + B.m32, A.m33 + B.m33};
 }
 extern m3_t m3_del(m3_t A, m3_t B)
 {
-    return (m3_t){A.m11 - A.m11, A.m12 - B.m12, A.m13 - B.m13,
-        A.m21 - A.m21, A.m22 - B.m22, A.m23 - B.m23,
-        A.m31 - A.m31, A.m32 - B.m32, A.m33 - B.m33};
+    return (m3_t){A.m11 - B.m11, A.m12 - B.m12, A.m13 - B.m13,
+        A.m21 - B.m21, A.m22 - B.m22, A.m23 - B.m23,
+        A.m31 - B.m31, A.m32 - B.m32, A.m33 - B.m33};
 }
 extern m3_t m3_dot(double alpha, m3_t A)
 {

@@ -249,8 +249,8 @@ extern int align_coarse_static_base(const imu_t* imu, double lat, m3_t *Cnb)
  */
 extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
 {
-    /* I-frame: inertial frame of e-axis at start moment */
-    /* B-frame: inertial frame of b-axis at start moment */
+    /* N-frame: inertial frame of n-frame at start moment */
+    /* B-frame: inertial frame of b-frame at start moment */
 
     int sample_N = 4;
     double ts = yins_timediff(imu->data[1].time,imu->data[0].time);
@@ -306,12 +306,18 @@ extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
 /**
  * @brief Coarse Alignment by solving Wuhba problem under inertial frame
  * @param[in]   imu     Inertial IMU
- * @param[in]   lat     Imu latitude [rad]
- * @param[in]   veb_n   Imu velocity uner n-frame [m/s]
+ * @param[in]   lat     Imu latitude(Average Latitude) [rad]
+ * @param[in]   veb_n   Imu velocity uner n-frame, length: Nveb_n [m/s]
  * @param[in]   Nveb_n  Imu velocity number
- * @param[out]  Cnb     Output DCM attitude
+ * @param[out]  Cnb     Output DCM attitude at last moment
  * @return 0: Ok
- * @note  Velocity
+ * @warning     1. (imu->n - 1)/(Nveb_n - 1) should be an interger
+ *              2. Nveb_n >= 3(shouldn't be too small)
+ * @note Ref:
+ *  Peter M.G. Silson, Coarse Align of Ship's Strapdown Inertial Attitude
+ *  Reference System Using Velocity Loci, 2011
+ *  F. Landis Markley, Attitude Determination using Vector Observations and the
+ *  Singular Value Decompostion, 1988
  */
 extern int align_coarse_wuhba(
         const imu_t *imu, double lat, const v3_t *veb_n, int Nveb_n, m3_t *Cnb)
@@ -319,7 +325,8 @@ extern int align_coarse_wuhba(
     /* N-frame: inertial frame of n-frame at start moment */
     /* B-frame: inertial frame of b-frame at start moment */
     double ts = yins_timediff(imu->data[1].time,imu->data[0].time);
-    double nts = ((int)imu->n/Nveb_n) * ts;
+    int len_dv = (imu->n - 1) / (Nveb_n - 1);
+    double nts = len_dv * ts;
 
     double sin_lat = sin(lat), cos_lat = cos(lat);
     v3_t gn; gravity_ned(lat,0.0,&gn);
@@ -339,16 +346,16 @@ extern int align_coarse_wuhba(
     v3_t veb_N, veb_N_last, TN, TN_last;
     v3_t mean_v, wen_n, dtheta_Nn_n;
 
-    for (int i = 0, n = 0; i <= imu->n - 1 ; ++i) {
+    for (int i = 1, n = 0; i < imu->n; ++i) {
+        /* i start with 1: becase imu->data[0](first obs) should NOT be counted */
         /* Calculate current fib_B */
         vib_B = v3_add(vib_B,m3_mul_v3(CbB, imu->data[i].accel));
         /* qb_B attitude update uner inertial frame */
         rv2dcm(&imu->data[i].gryo,&Ck_k1);
         CbB = m3_mul(CbB,Ck_k1);
 
-        if(i%Nveb_n == 0 && i != 0){
-            /* save dv_B */
-            dv_B[n] = vib_B;
+        if(i%len_dv == 0){  /* Save vib_B and vib_N reset */
+            dv_B[n] = vib_B; vib_B = (v3_t){0.0,0.0,0.0};
 
             if(n == 0){
                 veb_N_last = veb_n[0];
@@ -361,7 +368,7 @@ extern int align_coarse_wuhba(
             dtheta_Nn_n = v3_add(dtheta_ie_n,v3_dot(nts, wen_n));
             rv2dcm(&dtheta_Nn_n,&Ck_k1);
             CnN = m3_mul(CnN,Ck_k1);
-            /* Calculate  dv_N  and save*/
+            /* Calculate  dv_N  and save */
             veb_N = m3_mul_v3(CnN,veb_n[n+1]);
             TN = v3_del(v3_cross(m3_mul_v3(CnN,wie_n), m3_mul_v3(CnN,veb_n[n+1])),
                     m3_mul_v3(CnN,gn));
@@ -374,7 +381,7 @@ extern int align_coarse_wuhba(
     }
 
     /* interleave accumulate */
-    int len_dv = Nveb_n / 2;
+    len_dv = Nveb_n / 2;
     v3_t *dv_N_sum = (v3_t *)malloc(sizeof(v3_t) * (Nveb_n - len_dv));
     v3_t *dv_B_sum = (v3_t *)malloc(sizeof(v3_t) * (Nveb_n - len_dv));
     for(int i = 0; i < Nveb_n - len_dv; ++i){
@@ -384,6 +391,9 @@ extern int align_coarse_wuhba(
             dv_N_sum[i] = v3_add(dv_N_sum[i], dv_N[i+j]);
             dv_B_sum[i] = v3_add(dv_B_sum[i], dv_B[i+j]);
         }
+        /* Nomalize to unit vector*/
+        v3_normalize(&dv_N_sum[i]);
+        v3_normalize(&dv_B_sum[i]);
     }
 
     /* Solve wuhba problem using SVD solution*/

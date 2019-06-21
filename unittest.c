@@ -43,6 +43,18 @@ Test(ned2ecef, real)
     cr_expect_float_eq(att.m33, -0.841470984807897, EPS);
 }
 
+Test(v3,simple)
+{
+    v3_t v1 = {1.0, 2.0, 3.0};
+    v3_t v2 = {-1.0, -2.0, -3.0};
+    v3_t vadd = v3_add(v1,v2);
+    v3_t vadd_result = {0.0};
+    cr_expect(v3_equal(&vadd,&vadd_result,1e-14) ==  true);
+    v3_t vdel = v3_del(v1,v2);
+    v3_t vdel_result = {2.0, 4.0, 6.0};
+    cr_expect(v3_equal(&vdel,&vdel_result,1e-14) == true);
+}
+
 Test(ecef2ned, real)
 {
     v3_t pos = { -1890789.0, 5194902.0, 3170398.0 };
@@ -208,7 +220,6 @@ Test(align_coarse_inertial, simple)
     m3_t Cnb;
     v3_t Enb;
     int maxn = imus.n;
-    FILE* fid = fopen("./align.log", "w");
     align_coarse_inertial(&imus, lat, &Cnb);
 
     dcm2euler(&Cnb, &Enb);
@@ -220,7 +231,31 @@ Test(align_coarse_inertial, simple)
     cr_expect_float_eq(Enb.k, 6.28242649768121, 1E-3);
 }
 
-Test(align_coarse_wuhba, simple) { /* Here */ }
+Test(align_coarse_wuhba, simple)
+{
+    imu_t imus;
+    yins_readimu("./data/align_test_data.csv", &imus, FT_CSV);
+    double lat = 0.523598775598299;
+    m3_t Cnb;
+    v3_t Enb;
+    int maxn = imus.n;
+
+    v3_t eb_n[100];
+    for(int i = 0; i < 100; ++i){
+        eb_n[i] = (v3_t){0.0, 0.0, 0.0};
+    }
+
+    align_coarse_wuhba(&imus, lat, eb_n, 100 , &Cnb);
+
+    dcm2euler(&Cnb, &Enb);
+    printf("Align_coarse_wuhba:simple %f %f %f\n", Enb.i, Enb.j, Enb.k);
+
+    freeimu(&imus);
+
+    cr_expect_float_eq(Enb.i, -1.04880393840960e-05, 1E-5);
+    cr_expect_float_eq(Enb.j, 5.04490437057051e-05, 1E-5);
+    cr_expect_float_eq(Enb.k, 6.28242649768121, 1E-3);
+}
 
 Test(m3_SVD, simple)
 {
@@ -322,4 +357,19 @@ Test(m3_det, simple)
 {
     m3_t A = { 1.0, 2.0, 3.0, 1.0, -3.0, 4.0, 1.0, 2.2, 77.0 };
     cr_expect_float_eq(m3_det(&A), -370.2, 1e-14);
+}
+
+Test(v3_normalize,simple)
+{
+    v3_t v = {3.0, 1e-10, -3};
+    int ret = v3_normalize(&v);
+    v3_t v_check = {0.707106781186548,2.35702260395516e-11,-0.707106781186548};
+    cr_expect(v3_equal(&v,&v_check,1e-14) == true);
+    cr_expect_eq(ret,0);
+
+    v = (v3_t){1e-60, 1e-80, -1e-90};
+    ret = v3_normalize(&v);
+    v_check = (v3_t){1e-60, 1e-80, -1e-90};
+    cr_expect(v3_equal(&v,&v_check,1e-14) == true);
+    cr_expect_eq(ret,1);
 }

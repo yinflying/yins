@@ -112,8 +112,9 @@ v3_t v3_add(v3_t v1, v3_t v2);
 v3_t v3_del(v3_t v1, v3_t v2);
 v3_t v3_dot(double s, v3_t v);
 double v3_norm(v3_t v3);
+int v3_normalize(v3_t *v3);
 double v3_mul_rxc(v3_t v1, v3_t v2); /* row vector x column vector */
-m3_t v3_mul_cxr(v3_t v1, v3_t v2);  /* column vector x row vector */
+m3_t v3_mul_cxr(v3_t v1, v3_t v2);   /* column vector x row vector */
 m3_t v3_diag(v3_t diag);
 v3_t v3_pow(v3_t v, double order);
 bool v3_equal(const v3_t *v1, const v3_t *v2, double eps);
