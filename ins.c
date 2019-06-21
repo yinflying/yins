@@ -2,7 +2,27 @@
  * @file ins.c
  * @brief ins core functions implementation
  * @author yinflying(yinflying@foxmail.com)
+ * @note
+ *  2019-05-21  Created
  */
+/*
+ * Copyright (c) 2019 yinflying <yinflying@foxmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any
+ * later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see accompanying file LICENSE.txt
+ * or <http://www.gnu.org/licenses/>.
+ */
+
 #include "ins.h"
 
 #include <math.h>
@@ -21,9 +41,9 @@ static const m3_t O3 = {0.0};
  * @param[out]  ge  Gravitational acceleration under ECEF(m s^-2)
  * @return 0: OK
  * @see gravity_ned()
- * @note Do not contain centrifugal force
+ * @note ge do NOT contain centrifugal force
  */
-int gravity_ecef(const v3_t* r, v3_t* ge)
+extern int gravity_ecef(const v3_t* r, v3_t* ge)
 {
     double mag_r = sqrt(r->i * r->i + r->j * r->j + r->k * r->k);
     if (mag_r == 0) {
@@ -53,7 +73,7 @@ int gravity_ecef(const v3_t* r, v3_t* ge)
  * @see gravity_ecef()
  * @note gravity contains two part: gravitational and centrifugal accelration
  */
-int gravity_ned(double lat, double hgt, v3_t* gn)
+extern int gravity_ned(double lat, double hgt, v3_t* gn)
 {
     double sinlat2 = sin(lat) * sin(lat);
     double e2 = SQR(wgs84.e);
@@ -78,12 +98,12 @@ int gravity_ned(double lat, double hgt, v3_t* gn)
  * @param[in]   dt      Time interval [s]
  * @param[in]   dtheta  Angular increment [rad]
  * @param[in]   dv      Velocity increment [m/s]
- * @param[in,out]   r   Start/End postion in ECEF [m]
- * @param[in,out]   v   Start/End velocity in ECEF [m]
+ * @param[in,out]   r   Start/End postion in ECEF(reb_e) [m]
+ * @param[in,out]   v   Start/End velocity in ECEF(veb_e) [m]
  * @param[in,out]   q   Start/End attitude trans express by quaternion(qbe)
  * @return 0: OK
  * @see multisample()
- * @note This function do not contain conning&sculling error compensation, so
+ * @note This function do not contain conning&sculling error compensation,
  *      so it should work with multisample() function.
  *
  *      Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
@@ -127,6 +147,10 @@ extern int nav_equations_ecef(
  * @param[out]  dtheta          Sum of angular increment with conning error compensation
  * @param[out]  dv              Sum of velocity incrment with scull error compensation
  * @return 0: No error    1: Error
+ * @note Ref:
+ *  1. Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ *      Integrated Navigation Systems(2nd Edition)
+ *  2. Yan Gongming, 捷联惯导算法与组合导航讲义, 2016
  */
 extern int multisample( const v3_t* dtheta_list, const v3_t* dv_list, int N,
         v3_t* dtheta, v3_t* dv)
@@ -180,13 +204,20 @@ extern int multisample( const v3_t* dtheta_list, const v3_t* dv_list, int N,
     return 1;
 }
 
-/* Double vector to Atttitude
- * Cnb => the matix tranform n-axis to b-axis(or attitude b-axis to n-axis)
- * */
-int dblvec2att(const v3_t* vn1, const v3_t* vn2, const v3_t* vb1,
+/**
+ * @brief Determinate attitude by using double vector
+ * @param[in] vn1   First vector under n-frame
+ * @param[in] vn2   Second vector under n-frame
+ * @param[in] vb1   First vector under b-frame
+ * @param[in] vb2   Second vector under b-frame
+ * @param[out] Cnb  Attitude transform from n-frame to b-frame(or Attitude
+ *      b-frame to n-frame)
+ * @return 0: OK
+ * @note Ref: Yan Gongming, 捷联惯导算法与组合导航讲义, 2016, P143:6.1-7
+ */
+extern int dblvec2att(const v3_t* vn1, const v3_t* vn2, const v3_t* vb1,
     const v3_t* vb2, m3_t* Cnb)
 {
-    /* ref Yan2016(P143:6.1-7) */
     v3_t vx = v3_dot(1.0 / v3_norm(*vb1), *vb1);
     v3_t vtmp = v3_cross(*vb1, *vb2);
     v3_t vy = v3_dot(1.0 / v3_norm(vtmp), vtmp);
@@ -249,7 +280,7 @@ extern int align_coarse_static_base(const imu_t* imu, double lat, m3_t *Cnb)
  */
 extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
 {
-    /* N-frame: inertial frame of n-frame at start moment */
+    /* I-frame: inertial frame of n-frame at start moment */
     /* B-frame: inertial frame of b-frame at start moment */
 
     int sample_N = 4;
@@ -313,6 +344,7 @@ extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
  * @return 0: Ok
  * @warning     1. (imu->n - 1)/(Nveb_n - 1) should be an interger
  *              2. Nveb_n >= 3(shouldn't be too small)
+ *              3. imu data should be uniform sampling
  * @note Ref:
  *  Peter M.G. Silson, Coarse Align of Ship's Strapdown Inertial Attitude
  *  Reference System Using Velocity Loci, 2011
@@ -354,7 +386,7 @@ extern int align_coarse_wuhba(
         rv2dcm(&imu->data[i].gryo,&Ck_k1);
         CbB = m3_mul(CbB,Ck_k1);
 
-        if(i%len_dv == 0){  /* Save vib_B and vib_N reset */
+        if(i%len_dv == 0){  /* Save vib_B and vib_N, then reset */
             dv_B[n] = vib_B; vib_B = (v3_t){0.0,0.0,0.0};
 
             if(n == 0){
@@ -391,7 +423,7 @@ extern int align_coarse_wuhba(
             dv_N_sum[i] = v3_add(dv_N_sum[i], dv_N[i+j]);
             dv_B_sum[i] = v3_add(dv_B_sum[i], dv_B[i+j]);
         }
-        /* Nomalize to unit vector*/
+        /* Normalize to unit vector*/
         v3_normalize(&dv_N_sum[i]);
         v3_normalize(&dv_B_sum[i]);
     }
