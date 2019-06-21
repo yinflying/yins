@@ -409,5 +409,7 @@ extern int align_coarse_wuhba(
     /* Caludate Cnb at last moment: Cbn = CNn * CBN * CbB */
     *Cnb = m3_transpose(m3_mul(m3_mul(m3_transpose(CnN),CBN_opt),CbB));
 
+    free(dv_N); free(dv_B); free(dv_N_sum); free(dv_B_sum);
+
     return 0;
 }
