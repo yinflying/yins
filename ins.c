@@ -336,7 +336,7 @@ extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
 
 /**
  * @brief Coarse Alignment by solving Wuhba problem under inertial frame
- * @param[in]   imu     Inertial IMU
+ * @param[in]   imu     IMU data
  * @param[in]   lat     Imu latitude(Average Latitude) [rad]
  * @param[in]   veb_n   Imu velocity uner n-frame, length: Nveb_n [m/s]
  * @param[in]   Nveb_n  Imu velocity number
@@ -351,8 +351,8 @@ extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
  *  F. Landis Markley, Attitude Determination using Vector Observations and the
  *  Singular Value Decompostion, 1988
  */
-extern int align_coarse_wuhba(
-        const imu_t *imu, double lat, const v3_t *veb_n, int Nveb_n, m3_t *Cnb)
+extern int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n,
+        int Nveb_n, m3_t *Cnb)
 {
     /* N-frame: inertial frame of n-frame at start moment */
     /* B-frame: inertial frame of b-frame at start moment */
@@ -380,9 +380,9 @@ extern int align_coarse_wuhba(
 
     for (int i = 1, n = 0; i < imu->n; ++i) {
         /* i start with 1: becase imu->data[0](first obs) should NOT be counted */
-        /* Calculate current fib_B */
+        /* fib_B integration, ref: Peter, 2011, eq.7 */
         vib_B = v3_add(vib_B,m3_mul_v3(CbB, imu->data[i].accel));
-        /* qb_B attitude update uner inertial frame */
+        /* CbB attitude update uner inertial frame */
         rv2dcm(&imu->data[i].gryo,&Ck_k1);
         CbB = m3_mul(CbB,Ck_k1);
 
@@ -393,10 +393,10 @@ extern int align_coarse_wuhba(
                 veb_N_last = veb_n[0];
                 TN_last = v3_del(v3_cross(wie_n,veb_n[0]),gn);
             }
-            /* update CnN */
             mean_v = v3_dot(0.5,v3_add(veb_n[n],veb_n[n+1]));
             wen_n = (v3_t){ mean_v.j / wgs84.R0,  - mean_v.i / wgs84.R0,
                 - mean_v.j * tan(lat) / wgs84.R0};
+            /* update CnN */
             dtheta_Nn_n = v3_add(dtheta_ie_n,v3_dot(nts, wen_n));
             rv2dcm(&dtheta_Nn_n,&Ck_k1);
             CnN = m3_mul(CnN,Ck_k1);
@@ -414,29 +414,50 @@ extern int align_coarse_wuhba(
 
     /* interleave accumulate */
     len_dv = Nveb_n / 2;
-    v3_t *dv_N_sum = (v3_t *)malloc(sizeof(v3_t) * (Nveb_n - len_dv));
-    v3_t *dv_B_sum = (v3_t *)malloc(sizeof(v3_t) * (Nveb_n - len_dv));
-    for(int i = 0; i < Nveb_n - len_dv; ++i){
+    int N_dvsum = Nveb_n - len_dv;  /* Number of vectors to determiate attitude */
+    v3_t *dv_N_sum = (v3_t *)malloc(sizeof(v3_t) * N_dvsum);
+    v3_t *dv_B_sum = (v3_t *)malloc(sizeof(v3_t) * N_dvsum);
+    for(int i = 0; i < N_dvsum; ++i){
         dv_N_sum[i] = (v3_t){0.0};
         dv_B_sum[i] = (v3_t){0.0};
         for(int j = 0; j < len_dv; ++j){
             dv_N_sum[i] = v3_add(dv_N_sum[i], dv_N[i+j]);
             dv_B_sum[i] = v3_add(dv_B_sum[i], dv_B[i+j]);
         }
-        /* Normalize to unit vector*/
+        /* Normalize to unit vector */
         v3_normalize(&dv_N_sum[i]);
         v3_normalize(&dv_B_sum[i]);
     }
 
-    /* Solve wuhba problem using SVD solution*/
+    /* Solve wuhba problem by using SVD solution */
     m3_t B = {0.0};
-    for(int i = 0; i < Nveb_n - len_dv; ++i){
+    for(int i = 0; i < N_dvsum; ++i){
         B = m3_add(B,v3_mul_cxr(dv_N_sum[i],dv_B_sum[i]));
     }
     m3_t U,V; v3_t D;
     m3_SVD(&B,&U,&D,&V);
     double d = m3_det(&U) * m3_det(&V); /* d = +-1 */
     m3_t CBN_opt = m3_mul(U,m3_mul(v3_diag((v3_t){1.0, 1.0, d}),m3_transpose(V)));
+
+    /* Calculate variance-covariance */
+    /* Beasue of sensors' bias, difference between CBN_opt and CBN_true is a
+     * systemic bias, could not evaluating by RMSE */
+    /* if(Q_Enb != NULL){
+        v3_t diff_dv = {0.0}, SS_diff_dv = {0.0};
+        m3_t AN = {0.0};
+        for(int i = 0; i < N_dvsum; ++i){
+            diff_dv = v3_del(dv_N_sum[i],m3_mul_v3(CBN_opt,dv_B_sum[i]));
+            SS_diff_dv = v3_add(SS_diff_dv, v3_pow(diff_dv,2.0));
+            AN = m3_add(AN,v3_mul_cxr(dv_N_sum[i],dv_N_sum[i]));
+        }
+        v3_t var_dv_v3 = v3_dot(1.0/(Nveb_n - len_dv),SS_diff_dv);
+        double var_dv = SQR(sqrt(var_dv_v3.i) + sqrt(var_dv_v3.j) + sqrt(var_dv_v3.k)) / 9.0;
+        AN = m3_dot(1.0/N_dvsum, AN);
+        AN.m11 = 1 - AN.m11; AN.m22 = 1 - AN.m22; AN.m33 = 1 - AN.m33;
+        m3_inv(&AN);
+        *Q_Enb = m3_dot(var_dv/N_dvsum, AN);
+        *Q_Enb = m3_transpose(m3_mul(m3_mul(m3_transpose(CnN),*Q_Enb),CnN));
+    }*/
 
     /* Caludate Cnb at last moment: Cbn = CNn * CBN * CbB */
     *Cnb = m3_transpose(m3_mul(m3_mul(m3_transpose(CnN),CBN_opt),CbB));

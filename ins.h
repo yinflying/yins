@@ -121,6 +121,7 @@ bool v3_equal(const v3_t *v1, const v3_t *v2, double eps);
 
 /* 3D matrix operator */
 m3_t m3_transpose(m3_t A);
+int m3_inv(m3_t *A);
 m3_t m3_add(m3_t A, m3_t B);
 m3_t m3_del(m3_t A, m3_t B);
 m3_t m3_dot(double alpha, m3_t A);

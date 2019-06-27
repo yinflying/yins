@@ -315,8 +315,9 @@ Test(m3_swap_clm, simple)
 
 Test(m3_LU, simple)
 {
-    m3_t L, U, P, LU, PA;
-    m3_t A = { 11.0, 2323.00, -3.343, 1e-3, 333.0, 1.0, 1.0, 3.0, 5.0 };
+    m3_t A, L, U, P, LU, PA;
+    /* common matrix test */
+    A = (m3_t) { 1.0, 2.0, 3.0, 22, 333.0, 1.0, 4.0, 5.0, 6.0 };
     m3_LU(&A, &L, &U, &P);
     cr_expect_float_eq(L.m12, 0.0, EPS);
     cr_expect_float_eq(L.m13, 0.0, EPS);
@@ -328,7 +329,33 @@ Test(m3_LU, simple)
     PA = m3_mul(P, A);
     cr_expect(m3_equal(&PA, &LU, EPS) == true);
 
-    A = (m3_t) { 1.0, 2.0, 3.0, 22, 333.0, 1.0, 4.0, 5.0, 6.0 };
+    /* U matrix test */
+    A = (m3_t) { 1.0, 2.0, 5.0, 0.0, 3.0, 1.0, 0.0, 0.0, 1.0 };
+    m3_LU(&A, &L, &U, &P);
+    cr_expect_float_eq(L.m12, 0.0, EPS);
+    cr_expect_float_eq(L.m13, 0.0, EPS);
+    cr_expect_float_eq(L.m23, 0.0, EPS);
+    cr_expect_float_eq(U.m21, 0.0, EPS);
+    cr_expect_float_eq(U.m31, 0.0, EPS);
+    cr_expect_float_eq(U.m32, 0.0, EPS);
+    LU = m3_mul(L, U);
+    PA = m3_mul(P, A);
+    cr_expect(m3_equal(&PA, &LU, EPS) == true);
+
+    /* L matrix test */
+    A = (m3_t) { 0.0, 0.0, 5.0, 0.0, 2.0, 7.0, 1.0, 3.0, 1.0 };
+    m3_LU(&A, &L, &U, &P);
+    cr_expect_float_eq(L.m12, 0.0, EPS);
+    cr_expect_float_eq(L.m13, 0.0, EPS);
+    cr_expect_float_eq(L.m23, 0.0, EPS);
+    cr_expect_float_eq(U.m21, 0.0, EPS);
+    cr_expect_float_eq(U.m31, 0.0, EPS);
+    cr_expect_float_eq(U.m32, 0.0, EPS);
+    LU = m3_mul(L, U);
+    PA = m3_mul(P, A);
+    cr_expect(m3_equal(&PA, &LU, EPS) == true);
+
+    A = (m3_t){ 11.0, 2323.00, -3.343, 1e-3, 333.0, 1.0, 1.0, 3.0, 5.0 };
     m3_LU(&A, &L, &U, &P);
     cr_expect_float_eq(L.m12, 0.0, EPS);
     cr_expect_float_eq(L.m13, 0.0, EPS);
@@ -351,6 +378,7 @@ Test(m3_LU, simple)
     LU = m3_mul(L, U);
     PA = m3_mul(P, A);
     cr_expect(m3_equal(&PA, &LU, EPS) == true);
+
 }
 
 Test(m3_det, simple)
@@ -372,4 +400,25 @@ Test(v3_normalize,simple)
     v_check = (v3_t){1e-60, 1e-80, -1e-90};
     cr_expect(v3_equal(&v,&v_check,1e-14) == true);
     cr_expect_eq(ret,1);
+}
+
+Test(m3_inv,simple)
+{
+    m3_t A, A_check;
+    A = (m3_t){1.2, 3, 2.5, -234, 1e-2, 0.0, 1.1, 2.2, 3.3};
+    m3_inv(&A);
+    A_check = (m3_t){3.20509053846590e-05, -0.00427345405128786, -2.4280988927771e-05,
+        0.749991186001019, 0.00117519986410416, -0.568175140909863,
+        -0.50000480763580, 0.00064101810769317, 0.681821823966521};
+    cr_expect(m3_equal(&A, &A_check, EPS) == true);
+
+    A = (m3_t){1.0, 2.0, 5.0, 0.0, 3.0, 1.0, 0.0, 0.0, 1.0};
+    A_check = A;
+    m3_inv(&A); m3_inv(&A);
+    cr_expect(m3_equal(&A, &A_check, EPS) == true);
+
+    A = (m3_t){1.0, 2.0, 5.0, 0.0, 3.0, 1.0, 5.0, 2.0, 1.0};
+    A_check = A;
+    m3_inv(&A); m3_inv(&A);
+    cr_expect(m3_equal(&A, &A_check, EPS) == true);
 }

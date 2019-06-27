@@ -95,6 +95,15 @@ extern v3_t v3_pow(v3_t v, double order)
 {
     return (v3_t){pow(v.i,order), pow(v.j, order), pow(v.k, order)};
 }
+/**
+ * @brief Check two 3D vector are equal or not
+ * @param[in] v1    Fisrt 3D vector
+ * @param[in] v2    Second 3D vector
+ * @param[in] eps   Zero threshold, e.g. 1E-10
+ * @return true: v1 eqaul to v2, false: v1 not equal to v2
+ * @note    two vector's corresponding elements difference should be less than
+ *  zero threshold, then function return true
+ */
 extern bool v3_equal(const v3_t *v1, const v3_t *v2, double eps)
 {
     double diff;
@@ -106,6 +115,11 @@ extern bool v3_equal(const v3_t *v1, const v3_t *v2, double eps)
     }
     return true;
 }
+/**
+ * @brief 3D matrix transposition
+ * @param[in] A Input 3D matrix
+ * @return transposition matrix of A
+ */
 extern m3_t m3_transpose(m3_t A)
 {
     m3_t dcm;
@@ -114,12 +128,44 @@ extern m3_t m3_transpose(m3_t A)
     dcm.m31 = A.m13, dcm.m32 = A.m23, dcm.m33 = A.m33;
     return dcm;
 }
+
+/**
+ * @brief 3D matrix inverse
+ * @param[in,out] A Input 3D matrix, output inverse matrix of A
+ * @return 0: OK
+ */
+extern int m3_inv(m3_t* A)
+{
+    /* PLU decomposition */
+    m3_t P, L, U;
+    if(!m3_LU(A,&L,&U,&P)){
+        /* inverse of L */
+        L.m21 = L.m21 / ( L.m22 * L.m11 );
+        L.m31 = L.m31 / ( L.m33 * L.m11 ) - L.m32 * L.m21 / L.m33;
+        L.m22 = - 1.0/L.m22;
+        L.m32 = - L.m32 * L.m22 / L.m33;
+        L.m11 = - 1.0/L.m11;
+        L.m33 = - 1.0/L.m33;
+
+        /* inverse of U */
+        U.m12 = U.m12 / ( U.m22 * U.m11 );
+        U.m13 = U.m13 / ( U.m33 * U.m11 ) - U.m23 * U.m12 / U.m33;
+        U.m22 = - 1.0/U.m22;
+        U.m23 = - U.m23 * U.m22 / U.m33;
+        U.m11 = - 1.0/U.m11;
+        U.m33 = - 1.0/U.m33;
+    }
+    *A = m3_mul(U,m3_mul(L,P));
+    return 0;
+}
+
 extern m3_t m3_add(m3_t A, m3_t B)
 {
     return (m3_t){A.m11 + B.m11, A.m12 + B.m12, A.m13 + B.m13,
         A.m21 + B.m21, A.m22 + B.m22, A.m23 + B.m23,
         A.m31 + B.m31, A.m32 + B.m32, A.m33 + B.m33};
 }
+
 extern m3_t m3_del(m3_t A, m3_t B)
 {
     return (m3_t){A.m11 - B.m11, A.m12 - B.m12, A.m13 - B.m13,
@@ -263,6 +309,11 @@ extern void m3_swap_clm(m3_t *A, int c1, int c2)
     }
 }
 
+/**
+ * @brief determinant value of a 3D matrix
+ * @param[in] A Input matrix
+ * @return determinant value
+ */
 extern double m3_det(const m3_t *A)
 {
     return A->m11 * A->m22 * A->m33 + A->m12 * A->m23 * A->m31
@@ -289,13 +340,13 @@ extern int m3_LU(const m3_t *A, m3_t *L, m3_t *U, m3_t *P)
     for(int i = 0; i < 2; ++i){
         /* choose the abs max column element as pivot */
         if(i == 0){
-            if(fabs(U->m11) >= fabs(U->m12)){
-                if(fabs(U->m11) < fabs(U->m13)){
+            if(fabs(U->m11) >= fabs(U->m21)){
+                if(fabs(U->m11) < fabs(U->m31)){
                     m3_swap_row(U,1,3);
                     m3_swap_row(P,1,3);
                 }
             }else{
-                if(fabs(U->m12) >= fabs(U->m13)) {
+                if(fabs(U->m21) >= fabs(U->m31)) {
                     m3_swap_row(U,1,2);
                     m3_swap_row(P,1,2);
                 }else{
@@ -304,9 +355,11 @@ extern int m3_LU(const m3_t *A, m3_t *L, m3_t *U, m3_t *P)
                 }
             }
         }else if(i == 1){
-            if(fabs(U->m22) < fabs(U->m23)){
+            if(fabs(U->m22) < fabs(U->m32)){
                 m3_swap_row(U,2,3);
                 m3_swap_row(P,2,3);
+                /* Should exchange the m31 and m21 of L */
+                double tmp = L->m31; L->m31 = L->m21; L->m21 = tmp;
             }
         }
         /* solve pivot element equal to zero */
