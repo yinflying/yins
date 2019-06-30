@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Check functions input/output to make sure works properly */
+#define STRICT_CHECK
+
 #define DEG2RAD 0.0174532925199433
 #define RAD2DEG 57.2957795130823
 #define DPH2RPS 4.84813681109536e-06  /* deg/h to rad/s */
@@ -132,22 +135,21 @@ void test1()
 
 int main()
 {
-    //imu_t imu;
+    imu_t imu;
     // yins_readimu("../testdata/20180416_rover_345_multi.ASC", &imu, FT_NVT);
     // set_imu(&imu);
     // yins_imu2rnx(&imu, "../testdata/1_level_rnx3/IMU.rnx");
 
-    //v3_t r;
-    //v3_t v;
-    //quat_t q;
-    // yins_readimu("./data/ECEF_IMU_meas_1.csv",&imu,FT_CSV);
-    // print_imu(&imu);
-    // get_init_para("./data/ECEF_trajectory_1.csv",&r,&v,&q);
-    // nav_ins_ecef(&imu,-2, r, v, q);
-    //
+    v3_t r;
+    v3_t v;
+    quat_t q;
+    yins_readimu("./data/ECEF_IMU_meas_1.csv",&imu,FT_CSV);
+    print_imu(&imu);
+    get_init_para("./data/ECEF_trajectory_1.csv",&r,&v,&q);
+    nav_ins_ecef(&imu,-2, r, v, q);
 
     //freeimu(&imu);
 
-    test1();
+    //test1();
     return 0;
 }

@@ -8,6 +8,7 @@
  *  2019-06-11  Created Files
  *  2019-06-14  Add earth_RN and earth_RE function
  *  2019-06-21  Add v3_normalize
+ *  2019-06-27  Add m3_inv
  */
 /*
  * Copyright (c) 2019 yinflying <yinflying@foxmail.com>
@@ -37,6 +38,12 @@
 static const m3_t I3 = {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
 static const m3_t O3 = {0.0};
 
+/**
+ * @brief vector outer product/cross product
+ * @param[in] v1    First vector
+ * @param[in] v2    Second vector
+ * @return cross product result of v1 and v2
+ */
 extern v3_t v3_cross(v3_t v1, v3_t v2)
 {
     v3_t v;
@@ -45,15 +52,33 @@ extern v3_t v3_cross(v3_t v1, v3_t v2)
     v.k = v1.i * v2.j - v1.j * v2.i;
     return v;
 }
+/**
+ * @brief Sum of the correspoding elements of two vector
+ * @param[in] v1    Fisrt vector
+ * @param[in] v2    Second vector
+ * @return sum of v1 and v2 (v1 + v2)
+ */
 extern v3_t v3_add(v3_t v1, v3_t v2)
 {
     return (v3_t) { v1.i + v2.i, v1.j + v2.j, v1.k + v2.k };
 }
+/**
+ * @brief Substraction of corresponding elements of two vector
+ * @param[in] v1    Fisrt vector
+ * @param[in] v2    Second vector
+ * @return Substraction of v1 and v2 ( v1 - v2 )
+ */
 extern v3_t v3_del(v3_t v1, v3_t v2)
 {
     return (v3_t) { v1.i - v2.i, v1.j - v2.j, v1.k - v2.k };
 }
-extern v3_t v3_dot(double s, v3_t v)
+/**
+ * @brief Scalar multiplication between number and vector
+ * @param[in] s     Input number
+ * @param[in] v     Input vector
+ * @return Scalar muliplication result of s and v ( s x v )
+ */
+extern v3_t v3_scalar(double s, v3_t v)
 {
     return (v3_t) { s * v.i, s * v.j, s * v.k };
 }
@@ -74,27 +99,60 @@ extern int v3_normalize(v3_t *v){
     return 0;
 }
 
+/**
+ * @brief L2-norm/Euclidean Metric/Euclidean Distance of vector
+ * @param[in] v Input vector
+ * @return L2-norm of v
+ * @note Ref: http://mathworld.wolfram.com/VectorNorm.html
+ */
 extern double v3_norm(v3_t v)
 {
     return sqrt(v.i * v.i + v.j * v.j + v.k * v.k);
 }
+
+/**
+ * @brief row vector multiply by column vector, also called vector dot product
+ * @param[in] v1    row vector
+ * @param[in] v2    column vector
+ * @see v3_mul_cxr()
+ * @return product result number of v1 and v2
+ */
 extern double v3_mul_rxc(v3_t v1, v3_t v2)
 {
     return v1.i * v2.i + v1.j * v2.j + v1.k * v2.k;
 }
+
+/**
+ * @brief column vector multiply by row vector
+ * @param[in] v1    column vector
+ * @param[in] v2    row vector
+ * @return product result matrix of v1 and v2
+ */
 extern m3_t v3_mul_cxr(v3_t v1, v3_t v2)
 {
     return (m3_t) { v1.i * v2.i, v1.i * v2.j, v1.i * v2.k, v1.j * v2.i,
         v1.j * v2.j, v1.j * v2.k, v1.k * v2.i, v1.k * v2.j, v1.k * v2.k };
 }
+/**
+ * @brief Form 3D diagonal matrix by using 3D vector
+ * @param[in] v Input vector
+ * @return  3D diagonal matrix
+ */
 extern m3_t v3_diag(v3_t v)
 {
     return (m3_t) {v.i, 0.0, 0.0,   0.0, v.j, 0.0,   0.0, 0.0, v.k};
 }
+/**
+ * @brief Power exponent of every elements in vector
+ * @param[in] v     Input vector
+ * @param[in] order Power order, e.g. 2.0 means square, 0.5 means root square
+ * @return Power exponent result vector
+ */
 extern v3_t v3_pow(v3_t v, double order)
 {
     return (v3_t){pow(v.i,order), pow(v.j, order), pow(v.k, order)};
 }
+
 /**
  * @brief Check two 3D vector are equal or not
  * @param[in] v1    Fisrt 3D vector
@@ -159,6 +217,12 @@ extern int m3_inv(m3_t* A)
     return 0;
 }
 
+/**
+ * @brief Sum of corresponding elements of two 3D matrix
+ * @param[in] A Fisrt matrix
+ * @param[in] B Second matrix
+ * @return Sum of A and B (A + B)
+ */
 extern m3_t m3_add(m3_t A, m3_t B)
 {
     return (m3_t){A.m11 + B.m11, A.m12 + B.m12, A.m13 + B.m13,
@@ -166,13 +230,26 @@ extern m3_t m3_add(m3_t A, m3_t B)
         A.m31 + B.m31, A.m32 + B.m32, A.m33 + B.m33};
 }
 
+/**
+ * @brief Substraction of corresponding elements of two matrix
+ * @param[in] A Frist 3D matrix
+ * @param[in] B Second 3D matrix
+ * @return A minus B result (A - B)
+ */
 extern m3_t m3_del(m3_t A, m3_t B)
 {
     return (m3_t){A.m11 - B.m11, A.m12 - B.m12, A.m13 - B.m13,
         A.m21 - B.m21, A.m22 - B.m22, A.m23 - B.m23,
         A.m31 - B.m31, A.m32 - B.m32, A.m33 - B.m33};
 }
-extern m3_t m3_dot(double alpha, m3_t A)
+
+/**
+ * @brief Scalar multiplication between number and 3D matrix
+ * @param[in] s     Input number
+ * @param[in] A     Input 3D matrix
+ * @return Scalar muliplication result of s and A ( s x v )
+ */
+extern m3_t m3_scalar(double alpha, m3_t A)
 {
     m3_t mat;
     mat.m11 = alpha * A.m11, mat.m12 = alpha * A.m12, mat.m13 = alpha * A.m13;
@@ -180,6 +257,13 @@ extern m3_t m3_dot(double alpha, m3_t A)
     mat.m31 = alpha * A.m31, mat.m32 = alpha * A.m32, mat.m33 = alpha * A.m33;
     return mat;
 }
+
+/**
+ * @brief matrix multiplication
+ * @param[in] A Fisrt 3D matrix
+ * @param[in] B Second 3D matrix
+ * @return matrix multiplication result of A and B (A * B)
+ */
 extern m3_t m3_mul(m3_t A, m3_t B)
 {
     m3_t C;
@@ -194,6 +278,13 @@ extern m3_t m3_mul(m3_t A, m3_t B)
     C.m33 = A.m31 * B.m13 + A.m32 * B.m23 + A.m33 * B.m33;
     return C;
 }
+
+/**
+ * @brief 3D matrix multiply 3D column vector
+ * @param[in] A     Input 3D matrix
+ * @param[in] B     Input 3D column vector
+ * @return result 3D vector (A * B)
+ */
 extern v3_t m3_mul_v3(m3_t A, v3_t B)
 {
     v3_t C;
@@ -203,17 +294,36 @@ extern v3_t m3_mul_v3(m3_t A, v3_t B)
     return C;
 }
 
+/**
+ * @biref main diagonal elements of a 3D matrix
+ * @param[in] A     Input 3D matrix
+ * @return 3D vector of main diagonal elements
+ */
 extern v3_t m3_diag(m3_t A)
 {
     return (v3_t){A.m11, A.m22, A.m33};
 }
 
+/**
+ * @brief Power exponent of every elements in vector
+ * @param[in] A     Input vector
+ * @param[in] order Power order, e.g. 2.0 means square, 0.5 means root square
+ * @return Power exponent result vector
+ */
 extern m3_t m3_pow(m3_t A, double order)
 {
     return (m3_t){pow(A.m11, order), pow(A.m12, order), pow(A.m13, order),
     pow(A.m21, order), pow(A.m22, order), pow(A.m23, order),
     pow(A.m31, order), pow(A.m32, order), pow(A.m33, order)};
 }
+
+/**
+ * @brief judge the two matrix if equal or not
+ * @param[in] A     First matrix
+ * @param[in] B     Second matrix
+ * @param[in] eps   the zero threshold e.g. 1e-20
+ * @return true: A == B, false: A != B
+ */
 extern bool m3_equal(const m3_t *A, const m3_t *B, double eps)
 {
     double diff;
@@ -225,6 +335,7 @@ extern bool m3_equal(const m3_t *A, const m3_t *B, double eps)
     }
     return true;
 }
+
 /**
  * @brief Singular Value Decomposition(SVD) of 3D Matrix
  *          A = U * diag(D) * V'
@@ -400,6 +511,7 @@ extern double earth_RN(const earth_t *eth, double lat)
     double e2 = SQR(eth->e);
     return eth->R0 * (1-e2) * pow(1 - e2*SQR(sin(lat)), -1.5);
 }
+
 /**
  * @brief Caculate transverse radius of curvature(from the east to west)
  * @param[in] eth   earth parameters struct
@@ -417,6 +529,12 @@ extern double earth_RE(const earth_t *eth, double lat)
     return eth->R0 / sqrt(1 - SQR(eth->e) * SQR(sin(lat)));
 }
 
+/**
+ * @brief  get anti-symmetric matrix of a 3D vector
+ * @param[in] v3    Input 3D vector
+ * @param[in] mat   result anti-symmetric matrix
+ * @return 0: OK
+ */
 int asymmetric_mat(const v3_t* v3, m3_t* mat)
 {
     mat->m11 = 0, mat->m12 = -v3->k, mat->m13 = v3->j;
@@ -427,7 +545,7 @@ int asymmetric_mat(const v3_t* v3, m3_t* mat)
 
 /**
  * @brief Convert calendar day/time to gtime_t struct
- * @param ep    I   day/time {year,month,day,hour,min,sec}
+ * @param[in] ep    day/time {year,month,day,hour,min,sec}
  * @return gtime_t struct
  * @note proper in 1970-2037 or 1970-2099 (64bit time_t)
  */
@@ -450,6 +568,13 @@ extern gtime_t yins_epoch2time(const double* ep)
     return time;
 }
 
+/**
+ * @brief Convert gps time struct to calendar day/time
+ * @param[in] week  gps week
+ * @param[in] sec   gps second of week[s]
+ * @return gtime_t struct
+ * @note proper in 1970-2037 or 1970-2099 (64bit time_t)
+ */
 extern gtime_t yins_gpst2time(int week, double sec)
 {
     const double gpst0[] = { 1980, 1, 6, 0, 0, 0 }; /* gps time reference */
@@ -464,8 +589,8 @@ extern gtime_t yins_gpst2time(int week, double sec)
 
 /**
  * @brief convert gtime_t struct to calendar day/time
- * @param t     I   gtime_t struct
- * @param ep    O   day/time {year,month,day,hour,min,sec}
+ * @param[in] t     gtime_t struct
+ * @param[out] ep   day/time {year,month,day,hour,min,sec}
  * @note Proper in 1970-2037 or 1970-2099 (64bit time_t)
  */
 extern void yins_time2epoch(gtime_t t, double* ep)
@@ -494,6 +619,12 @@ extern void yins_time2epoch(gtime_t t, double* ep)
     ep[5] = sec % 60 + t.sec;
 }
 
+/**
+ * @brief Convert Euler attitude to Quaternion attitude(Eab => Qab)
+ * @param[in] euler Input Euler attitude
+ * @param[out] quat Ouput Quaternion attitude
+ * @return 0: OK
+ */
 extern int euler2quat(const v3_t* euler, quat_t* quat)
 {
     double si = sin(euler->i / 2), ci = cos(euler->i / 2);
@@ -503,10 +634,16 @@ extern int euler2quat(const v3_t* euler, quat_t* quat)
     quat->q1 = si * cj * ck - ci * sj * sk;
     quat->q2 = ci * sj * ck + si * cj * sk;
     quat->q3 = ci * cj * sk - si * sj * ck;
-    quat_inv(quat);
+    quat_conj(quat);
     return 0;
 }
 
+/**
+ * @brief Convert Quaternion attitude to Euler attitude(Qab => Eab)
+ * @param[in]  quat     Input Quaternion attitude
+ * @param[out] euler    Output Euler attitue
+ * @return  0: OK
+ */
 extern int quat2euler(const quat_t* quat, v3_t* euler)
 {
     euler->i = atan2(2 * (-quat->q0 * quat->q1 + quat->q2 * quat->q3),
@@ -525,6 +662,12 @@ extern int quat2euler(const quat_t* quat, v3_t* euler)
     return 0;
 }
 
+/**
+ * @brief Convert DCM attitude to Euler attitude
+ * @param[in]   dcm     Input DCM attitude
+ * @param[out]  euler   Ouput Euler attitude
+ * @return  0: OK
+ */
 int dcm2euler(const m3_t* dcm, v3_t* euler)
 {
     euler->i = atan2(dcm->m23, dcm->m33);
@@ -541,6 +684,12 @@ int dcm2euler(const m3_t* dcm, v3_t* euler)
     return 0;
 }
 
+/**
+ * @brief Convert Euler to DCM attitude
+ * @param[in] euler     Input Euler attitude
+ * @param[out] dcm      Ouput DCM attitude
+ * @return  0: OK
+ */
 int euler2dcm(const v3_t* euler, m3_t* dcm)
 {
     double sin_phi = sin(euler->i);
@@ -563,6 +712,12 @@ int euler2dcm(const v3_t* euler, m3_t* dcm)
     return 0;
 }
 
+/**
+ * @brief Convert DCM attitude to Quaternion attitude
+ * @param[in]   dcm     DCM attitude
+ * @param[out]  quat    Quaternion attitude
+ * @return  O: OK
+ */
 extern int dcm2quat(const m3_t* dcm, quat_t* quat)
 {
     double qq4;
@@ -595,6 +750,12 @@ extern int dcm2quat(const m3_t* dcm, quat_t* quat)
     return 0;
 }
 
+/**
+ * @brief Convert Quaternion to DCM attitude
+ * @param[in]   quat    Input Quaternion attitude
+ * @param[out]  dcm     Oput DCM attitude
+ * @return 0: OK
+ */
 extern int quat2dcm(const quat_t* quat, m3_t* dcm)
 {
     double q11 = quat->q0 * quat->q0, q12 = quat->q0 * quat->q1,
@@ -610,14 +771,18 @@ extern int quat2dcm(const quat_t* quat, m3_t* dcm)
     return 0;
 }
 
+/**
+ * @brief Quaternion normalization and make first element large than zero
+ * @param[in,out] quat  Quaternion/unit Quaternion
+ * @return  O: OK
+ */
 extern int quat_normalize(quat_t* quat)
 {
-    double nq = sqrt(quat->q0 * quat->q0 + quat->q1 * quat->q1
-        + quat->q2 * quat->q2 + quat->q3 * quat->q3);
-    quat->q0 /= nq;
-    quat->q1 /= nq;
-    quat->q2 /= nq;
-    quat->q3 /= nq;
+    double nq = 1.0 / quat_norm(*quat);
+    quat->q0 *= nq;
+    quat->q1 *= nq;
+    quat->q2 *= nq;
+    quat->q3 *= nq;
     if (quat->q0 < 0) {
         quat->q0 = -quat->q0;
         quat->q1 = -quat->q1;
@@ -627,12 +792,97 @@ extern int quat_normalize(quat_t* quat)
     return 0;
 }
 
-extern int quat_inv(quat_t* quat)
+/**
+ * @brief Quaternion conjugation
+ * @param[in,out] quat  Quaternion/Quaternion conjugation
+ * @return 0: OK
+ * @see quat_inv()
+ * @note Unit Quaternion Conjugation is the same as inversion, but conjugation
+ *  is much faster
+ */
+extern int quat_conj(quat_t *quat)
 {
     quat->q1 = -quat->q1;
     quat->q2 = -quat->q2;
     quat->q3 = -quat->q3;
     return 0;
+}
+
+/**
+ * @brief Quaternion inversion
+ * @param[in,out] quat  Input Quaternion/Ouput Quaternion invertion
+ * @see quat_dot()
+ * @see quat_conj()
+ * @return 0: OK, 1: input Quaternion norm too small, less than sqrt(EPS)
+ * @note Unit Quaternion Conjugation is the same as inversion, but conjugation
+ *  is much faster
+ */
+extern int quat_inv(quat_t *quat)
+{
+    double inv = 1.0 / quat_dot(*quat, *quat);
+    if(fabs(inv) < EPS) return 1;
+
+    quat_conj(quat);
+    quat->q0 *= inv; quat->q1 *= inv; quat->q2 *= inv; quat->q3 *= inv;
+    return 0;
+}
+
+/**
+ * @brief Quaterion dot production, sum of corresponding elements product
+ * @param[in] P     Fisrt Quaternion
+ * @param[in] Q     Second Quaternion
+ * @return dot product result number
+ * @note dot production also called inner porduction
+ */
+extern double quat_dot(quat_t P, quat_t Q)
+{
+    return P.q0*Q.q0 + P.q1*Q.q1 + P.q2*Q.q2 + P.q3*Q.q3;
+}
+
+/**
+ * @brief Quaternion cross product, result of the vector cross procdut of two
+ *      quaternions' imaginary part(q1,q2,q3)
+ * @param[in] P     Fisrt quaternion
+ * @param[in] Q     Second quatenion
+ * @return Quaternion cross product result vector
+ */
+extern v3_t quat_cross(quat_t P, quat_t Q)
+{
+    return v3_cross((v3_t){P.q1,P.q2,P.q3},(v3_t){Q.q1,Q.q2,Q.q3});
+}
+
+/**
+ * @brief L2-norm of quaternion(also call modulus of quaternion)
+ * @param[in] P Input quaternion
+ * @return L2-norm of quaternion
+ */
+extern double quat_norm(quat_t P)
+{
+    return sqrt(P.q0*P.q0 + P.q1*P.q1 + P.q2*P.q2 + P.q3*P.q3);
+}
+
+/**
+ * @brief Check two quaternions are equal or not
+ * @param[in] P     Fisrt quaternion
+ * @param[in] Q     Second quaternion
+ * @param[in] eps   Zero threshold, e.g. 1E-10
+ * @return true: P eqaul to Q, false: P not equal to Q
+ * @warning minus quaternion do NOT equal to origin quaternion
+ * @note    two quaternions' corresponding elements difference should be less
+ *  than zero threshold, then function return true, however, minus quaterions
+ *  are the same as origin if quaternion represent attitude, but this function
+ *  can not identify.
+ */
+extern bool quat_equal(const quat_t *P, const quat_t *Q, double eps)
+{
+    double diff;
+    const double *pP = (double *)P;
+    const double *pQ = (double *)Q;
+    for(int i = 0; i < 3; ++i) {
+        if((diff = pP[i] - pQ[i]) > eps || diff < -eps)
+            return false;
+    }
+    return true;
 }
 
 /**
@@ -690,8 +940,8 @@ extern int rv2dcm(const v3_t* dtheta, m3_t* dcm)
     double norm_dtheta = v3_norm(*dtheta);
     m3_t Ax; asymmetric_mat(dtheta,&Ax);
     if(norm_dtheta > 1e-8){
-        m3_t m1 = m3_dot(sin(norm_dtheta)/norm_dtheta,Ax);
-        m3_t m2 = m3_dot((1-cos(norm_dtheta))/SQR(norm_dtheta),m3_mul(Ax,Ax));
+        m3_t m1 = m3_scalar(sin(norm_dtheta)/norm_dtheta,Ax);
+        m3_t m2 = m3_scalar((1-cos(norm_dtheta))/SQR(norm_dtheta),m3_mul(Ax,Ax));
         *dcm = m3_add(m3_add(I3, m1),m2);
     }else{
         *dcm = m3_add(I3, Ax);
@@ -699,6 +949,14 @@ extern int rv2dcm(const v3_t* dtheta, m3_t* dcm)
     return 0;
 }
 
+/**
+ * @brief Hamiton product, is determined by the products of the basis elements
+ *  and the ditributive law. Hamition product could represent the ratation
+ *  quaternions
+ * @param[in] P Fisrt quaternion
+ * @param[in] Q Second quaternion
+ * @return Hamiton product result quaternion (P * Q)
+ */
 extern quat_t quat_mul(quat_t P, quat_t Q)
 {
     quat_t qtmp;
@@ -709,6 +967,12 @@ extern quat_t quat_mul(quat_t P, quat_t Q)
     return qtmp;
 }
 
+/**
+ * @brief Rotate a 3D vector, to make (vn = Qbn * vb) work
+ * @param[in] quat  Input Quaternion
+ * @param[in] vec   Input 3D vector
+ * @return result of rotation 3D vector ( quat * vec )
+ */
 extern v3_t quat_mul_v3(quat_t quat, v3_t vec)
 {
     quat_t qtmp;

@@ -3,8 +3,9 @@
  * @brief ins header file
  * @author yinflying(yinflying@foxmail.com)
  * @note  All abbreviation in code
- * Cnb          C_n^b, trans matrix n-axis to b-axis(the same as qnb)
+ * Cnb          C_n^b, trans matrix n-axis to b-axis(the same as Qnb)
  * Cnb,Qnb,Enb  trans from n-asix to b-axis(or attitude b-axis to n-axis)
+ * euler        Euler attitude, [roll, pitch, yaw]
  * g            gps,gravity
  * d            data
  * SHF          Spherical Harmonics Function
@@ -110,7 +111,7 @@ int asymmetric_mat(const v3_t* v3, m3_t* mat);
 v3_t v3_cross(v3_t v1, v3_t v2);
 v3_t v3_add(v3_t v1, v3_t v2);
 v3_t v3_del(v3_t v1, v3_t v2);
-v3_t v3_dot(double s, v3_t v);
+v3_t v3_scalar(double s, v3_t v);
 double v3_norm(v3_t v3);
 int v3_normalize(v3_t *v3);
 double v3_mul_rxc(v3_t v1, v3_t v2); /* row vector x column vector */
@@ -122,9 +123,10 @@ bool v3_equal(const v3_t *v1, const v3_t *v2, double eps);
 /* 3D matrix operator */
 m3_t m3_transpose(m3_t A);
 int m3_inv(m3_t *A);
+double m3_det(const m3_t *A);
 m3_t m3_add(m3_t A, m3_t B);
 m3_t m3_del(m3_t A, m3_t B);
-m3_t m3_dot(double alpha, m3_t A);
+m3_t m3_scalar(double alpha, m3_t A);
 m3_t m3_mul(m3_t A, m3_t B);
 v3_t m3_mul_v3(m3_t A, v3_t B);
 v3_t m3_diag(m3_t diag);
@@ -132,15 +134,19 @@ m3_t m3_pow(m3_t A, double order);
 bool m3_equal(const m3_t *A, const m3_t *B, double eps);
 void m3_swap_row(m3_t *A, int r1, int r2);
 void m3_swap_clm(m3_t *A, int c1, int c2);
-double m3_det(const m3_t *A);
 int m3_SVD(const m3_t *A, m3_t *U, v3_t *D, m3_t *V);
 int m3_LU(const m3_t *A, m3_t *L, m3_t *U, m3_t *P);
 
 /* quaternion operation */
-int quat_normalize(quat_t* quat);
-int quat_inv(quat_t* quat);
+int quat_normalize(quat_t *quat);
+int quat_conj(quat_t *quat);
+int quat_inv(quat_t *quat);
+double quat_dot(quat_t P, quat_t Q);
+v3_t quat_cross(quat_t P, quat_t Q);
+double quat_norm(quat_t P);
 quat_t quat_mul(quat_t P, quat_t Q);
 v3_t quat_mul_v3(quat_t quat, v3_t vec);
+bool quat_equal(const quat_t *P, const quat_t *Q, double eps);
 
 /* coordinate transformantion */
 m3_t formCen_ned(double lat, double lon);

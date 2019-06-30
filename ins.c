@@ -124,7 +124,7 @@ extern int nav_equations_ecef(
     /* Specific force transform(velocity form) */
     v3_t dtheta_ie_half = { 0, 0, -wgs84.wie * dt / 2 };
     rv2quat(&dtheta_ie_half, &q_earth);
-    v3_t dv_rot = v3_dot(0.5, v3_cross(*dtheta, *dv));
+    v3_t dv_rot = v3_scalar(0.5, v3_cross(*dtheta, *dv));
     v3_t dv_e = quat_mul_v3(quat_mul(q_earth, old_q), v3_add(*dv, dv_rot));
     /* Velocity update */
     v3_t ge;
@@ -135,7 +135,7 @@ extern int nav_equations_ecef(
     v->k = old_v.k + dv_e.k + dt * ge.k;
     /* Position update */
     v3_t old_r = *r;
-    *r = v3_add(old_r, v3_dot(0.5 * dt, v3_add(old_v, *v)));
+    *r = v3_add(old_r, v3_scalar(0.5 * dt, v3_add(old_v, *v)));
     return 0;
 }
 
@@ -174,8 +174,8 @@ extern int multisample( const v3_t* dtheta_list, const v3_t* dv_list, int N,
         int i = 0;
         for (; i < N - 1; i++) {
             /* sum of cross_product factor */
-            sum_c = v3_add(sum_c, v3_dot(pcf[i], dtheta_list[i]));
-            sum_s = v3_add(sum_s, v3_dot(pcf[i], dv_list[i]));
+            sum_c = v3_add(sum_c, v3_scalar(pcf[i], dtheta_list[i]));
+            sum_s = v3_add(sum_s, v3_scalar(pcf[i], dv_list[i]));
             /* sum of angular increment and velocity increment */
             sum_w = v3_add(sum_w, dtheta_list[i]);
             sum_v = v3_add(sum_v, dv_list[i]);
@@ -191,8 +191,8 @@ extern int multisample( const v3_t* dtheta_list, const v3_t* dv_list, int N,
         return 0;
     }
     if (N == -2) {
-        v3_t sum_c = v3_dot(1.0 / 12, dtheta_list[0]);
-        v3_t sum_s = v3_dot(1.0 / 12, dv_list[0]);
+        v3_t sum_c = v3_scalar(1.0 / 12, dtheta_list[0]);
+        v3_t sum_s = v3_scalar(1.0 / 12, dv_list[0]);
         /* ref Yan2016(P31:2.5-37) */
         *dtheta = v3_add(dtheta_list[1], v3_cross(sum_c, dtheta_list[1]));
         /* ref Yan2016(P73:4.1-36,P76:4.1-55) */
@@ -218,18 +218,18 @@ extern int multisample( const v3_t* dtheta_list, const v3_t* dv_list, int N,
 extern int dblvec2att(const v3_t* vn1, const v3_t* vn2, const v3_t* vb1,
     const v3_t* vb2, m3_t* Cnb)
 {
-    v3_t vx = v3_dot(1.0 / v3_norm(*vb1), *vb1);
+    v3_t vx = v3_scalar(1.0 / v3_norm(*vb1), *vb1);
     v3_t vtmp = v3_cross(*vb1, *vb2);
-    v3_t vy = v3_dot(1.0 / v3_norm(vtmp), vtmp);
+    v3_t vy = v3_scalar(1.0 / v3_norm(vtmp), vtmp);
     vtmp = v3_cross(vtmp, *vb1);
-    v3_t vz = v3_dot(1.0 / v3_norm(vtmp), vtmp);
+    v3_t vz = v3_scalar(1.0 / v3_norm(vtmp), vtmp);
     m3_t m3_b = { vx.i, vy.i, vz.i, vx.j, vy.j, vz.j, vx.k, vy.k, vz.k };
 
-    vx = v3_dot(1.0 / v3_norm(*vn1), *vn1);
+    vx = v3_scalar(1.0 / v3_norm(*vn1), *vn1);
     vtmp = v3_cross(*vn1, *vn2);
-    vy = v3_dot(1.0 / v3_norm(vtmp), vtmp);
+    vy = v3_scalar(1.0 / v3_norm(vtmp), vtmp);
     vtmp = v3_cross(vtmp, *vn1);
-    vz = v3_dot(1.0 / v3_norm(vtmp), vtmp);
+    vz = v3_scalar(1.0 / v3_norm(vtmp), vtmp);
     m3_t m3_n = { vx.i, vx.j, vx.k, vy.i, vy.j, vy.k, vz.i, vz.j, vz.k };
 
     *Cnb = m3_mul(m3_b, m3_n);
@@ -256,13 +256,13 @@ extern int align_coarse_static_base(const imu_t* imu, double lat, m3_t *Cnb)
         mean_fib_b = v3_add(mean_fib_b, imu->data[i].accel);
     }
     double T = yins_timediff(imu->data[imu->n - 1].time, imu->data[0].time);
-    mean_wib_b = v3_dot(1.0 / T, mean_wib_b);
-    mean_fib_b = v3_dot(1.0 / T, mean_fib_b);
+    mean_wib_b = v3_scalar(1.0 / T, mean_wib_b);
+    mean_fib_b = v3_scalar(1.0 / T, mean_fib_b);
 
     /* Double Vector to Attitude */
     v3_t gn; gravity_ned(lat,0.0,&gn);
     v3_t wie_n = {wgs84.wie * cos(lat),0.0,- wgs84.wie * sin(lat)};
-    v3_t gib_b = v3_dot(-1.0,mean_fib_b);
+    v3_t gib_b = v3_scalar(-1.0,mean_fib_b);
 
     dblvec2att(&gn,&wie_n,&gib_b,&mean_wib_b,Cnb);
     return 0;
@@ -345,6 +345,8 @@ extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
  * @warning     1. (imu->n - 1)/(Nveb_n - 1) should be an interger
  *              2. Nveb_n >= 3(shouldn't be too small)
  *              3. imu data should be uniform sampling
+ * @see align_coarse_static_base()
+ * @see align_coarse_inertial()
  * @note Ref:
  *  Peter M.G. Silson, Coarse Align of Ship's Strapdown Inertial Attitude
  *  Reference System Using Velocity Loci, 2011
@@ -363,7 +365,7 @@ extern int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n,
     double sin_lat = sin(lat), cos_lat = cos(lat);
     v3_t gn; gravity_ned(lat,0.0,&gn);
     v3_t wie_n = {wgs84.wie*cos_lat, 0.0, -wgs84.wie*sin_lat};
-    v3_t dtheta_ie_n = v3_dot(nts,wie_n);
+    v3_t dtheta_ie_n = v3_scalar(nts,wie_n);
 
     /* Calculate vib_B1,vib_B2 */
     v3_t vib_B = {0.0}, vib_N = {0.0};
@@ -393,11 +395,11 @@ extern int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n,
                 veb_N_last = veb_n[0];
                 TN_last = v3_del(v3_cross(wie_n,veb_n[0]),gn);
             }
-            mean_v = v3_dot(0.5,v3_add(veb_n[n],veb_n[n+1]));
+            mean_v = v3_scalar(0.5,v3_add(veb_n[n],veb_n[n+1]));
             wen_n = (v3_t){ mean_v.j / wgs84.R0,  - mean_v.i / wgs84.R0,
                 - mean_v.j * tan(lat) / wgs84.R0};
             /* update CnN */
-            dtheta_Nn_n = v3_add(dtheta_ie_n,v3_dot(nts, wen_n));
+            dtheta_Nn_n = v3_add(dtheta_ie_n,v3_scalar(nts, wen_n));
             rv2dcm(&dtheta_Nn_n,&Ck_k1);
             CnN = m3_mul(CnN,Ck_k1);
             /* Calculate  dv_N  and save */
@@ -405,7 +407,7 @@ extern int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n,
             TN = v3_del(v3_cross(m3_mul_v3(CnN,wie_n), m3_mul_v3(CnN,veb_n[n+1])),
                     m3_mul_v3(CnN,gn));
             dv_N[n] = v3_add(v3_del(veb_N, veb_N_last),
-                    v3_dot(0.5*nts, v3_add(TN, TN_last)));
+                    v3_scalar(0.5*nts, v3_add(TN, TN_last)));
 
             TN_last = TN; veb_N_last = veb_N;
             n++;
@@ -450,12 +452,12 @@ extern int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n,
             SS_diff_dv = v3_add(SS_diff_dv, v3_pow(diff_dv,2.0));
             AN = m3_add(AN,v3_mul_cxr(dv_N_sum[i],dv_N_sum[i]));
         }
-        v3_t var_dv_v3 = v3_dot(1.0/(Nveb_n - len_dv),SS_diff_dv);
+        v3_t var_dv_v3 = v3_scalar(1.0/(Nveb_n - len_dv),SS_diff_dv);
         double var_dv = SQR(sqrt(var_dv_v3.i) + sqrt(var_dv_v3.j) + sqrt(var_dv_v3.k)) / 9.0;
-        AN = m3_dot(1.0/N_dvsum, AN);
+        AN = m3_scalar(1.0/N_dvsum, AN);
         AN.m11 = 1 - AN.m11; AN.m22 = 1 - AN.m22; AN.m33 = 1 - AN.m33;
         m3_inv(&AN);
-        *Q_Enb = m3_dot(var_dv/N_dvsum, AN);
+        *Q_Enb = m3_scalar(var_dv/N_dvsum, AN);
         *Q_Enb = m3_transpose(m3_mul(m3_mul(m3_transpose(CnN),*Q_Enb),CnN));
     }*/
 

@@ -240,21 +240,22 @@ Test(align_coarse_wuhba, simple)
     v3_t Enb;
     int maxn = imus.n;
 
-    v3_t eb_n[100];
-    for(int i = 0; i < 100; ++i){
+    const int N = 5;
+    v3_t eb_n[N];
+    for(int i = 0; i < N; ++i){
         eb_n[i] = (v3_t){0.0, 0.0, 0.0};
     }
 
-    align_coarse_wuhba(&imus, lat, eb_n, 100 , &Cnb);
+    align_coarse_wuhba(&imus, lat, eb_n, N, &Cnb);
 
     dcm2euler(&Cnb, &Enb);
     printf("Align_coarse_wuhba:simple %f %f %f\n", Enb.i, Enb.j, Enb.k);
 
     freeimu(&imus);
 
-    cr_expect_float_eq(Enb.i, -1.04880393840960e-05, 1E-5);
-    cr_expect_float_eq(Enb.j, 5.04490437057051e-05, 1E-5);
-    cr_expect_float_eq(Enb.k, 6.28242649768121, 1E-3);
+    cr_expect_float_eq(Enb.i, 0.0, 1E-2);
+    cr_expect_float_eq(Enb.j, 0.0, 1E-2);
+    cr_expect_float_eq(Enb.k, 6.28242649768121, 1E-2);
 }
 
 Test(m3_SVD, simple)
@@ -421,4 +422,37 @@ Test(m3_inv,simple)
     A_check = A;
     m3_inv(&A); m3_inv(&A);
     cr_expect(m3_equal(&A, &A_check, EPS) == true);
+}
+
+Test(quat, simple)
+{
+    quat_t P,Q;
+
+    P = (quat_t){1.0, 1.0, 4.0, 8.0};
+    quat_normalize(&P);
+    quat_t P_result = {0.1104, 0.1104, 0.4417, 0.8835};
+    cr_expect(quat_equal(&P,&P_result,1e-3) == true);
+
+    P = (quat_t){1.0, 1.0, 4.0, 8.0};
+    quat_conj(&P);
+    P_result = (quat_t){1.0, -1.0, -4.0,-8.0};
+    cr_expect(quat_equal(&P,&P_result,1e-3) == true);
+
+    P = (quat_t){1.0, 1.0, 4.0, 8.0};
+    quat_t P_inv = P; quat_inv(&P_inv);
+    P_result = quat_mul(P,P_inv);
+    quat_t P_expect = {1.0, 0.0, 0.0, 0.0};
+    cr_expect(quat_equal(&P_result,&P_expect,EPS));
+
+    P = (quat_t){1.0, 1.0, 4.0, 8.0};
+    Q = (quat_t){1.0, 3.0, 2.0, 9.0};
+    cr_expect_float_eq(quat_dot(P,Q),84,EPS);
+    cr_expect_float_eq(quat_norm(P),9.0554,1e-4);
+
+    P = (quat_t){1.0, 1.0, 4.0, 8.0};
+    Q = (quat_t){1.0, 3.0, 2.0, 9.0};
+    v3_t v_result = quat_cross(P, Q);
+    v3_t v_check = {20.0, 15.0, -10.0};
+    cr_expect(v3_equal(&v_result,&v_check,EPS) == true);
+
 }
