@@ -2,6 +2,7 @@
  * @file ins.h
  * @brief ins header file
  * @author yinflying(yinflying@foxmail.com)
+ * @version 0.0.1
  * @note  All abbreviation in code
  * Cnb          C_n^b, trans matrix n-axis to b-axis(the same as Qnb)
  * Cnb,Qnb,Enb  trans from n-asix to b-axis(or attitude b-axis to n-axis)
@@ -19,7 +20,33 @@
  * dcm,ctm      Direct Cosine Matrix, Coordiante Transform Matrix
  * w            Omega, Rotation rate(wie_e mean w_ie^e, project to e-axis)
  * rv           rotation vector
+ * lat          latitude
+ * lon          longitude
+ * hgt          height
+ * pos          position, most represent under geodetic postion, (lat,lon,hgt)
+ * xyz          position under ECEF
+ * rad          radius
+ * deg          degree, unit
  * */
+
+/*
+ * Copyright (c) 2019 yinflying <yinflying@foxmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any
+ * later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see accompanying file LICENSE.txt
+ * or <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef INS_H
 #define INS_H
 
@@ -164,6 +191,7 @@ int dblvec2att(const v3_t *vn1, const v3_t *vn2, const v3_t *vb1,
 int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb);
 int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n,
         int Nveb_n, m3_t *Cnb);
+/* TODO */
 
 /* INS navgataion */
 int nav_equations_ecef(double dt, const v3_t* dtheta, const v3_t* dv,
@@ -178,6 +206,7 @@ void freeimu(imu_t* imu);
 int addimudata(imu_t* imu, const imud_t* data);
 
 /* TODO NAV EQUATION BACKWARD */
+
 /* Static and dynamic judgement */
 
 #endif /* ifndef INS_H */

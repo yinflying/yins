@@ -9,6 +9,7 @@
  *  2019-06-14  Add earth_RN and earth_RE function
  *  2019-06-21  Add v3_normalize
  *  2019-06-27  Add m3_inv
+ *  2019-07-01  Full all functions' comments of the file
  */
 /*
  * Copyright (c) 2019 yinflying <yinflying@foxmail.com>
@@ -589,7 +590,7 @@ extern gtime_t yins_gpst2time(int week, double sec)
 
 /**
  * @brief convert gtime_t struct to calendar day/time
- * @param[in] t     gtime_t struct
+ * @param[in]  t    gtime_t struct
  * @param[out] ep   day/time {year,month,day,hour,min,sec}
  * @note Proper in 1970-2037 or 1970-2099 (64bit time_t)
  */
@@ -617,6 +618,17 @@ extern void yins_time2epoch(gtime_t t, double* ep)
     ep[3] = sec / 3600;
     ep[4] = sec % 3600 / 60;
     ep[5] = sec % 60 + t.sec;
+}
+
+/**
+ * @brief time differenece between two gtime_t struct
+ * @param[in] t1    First gtime_t struct
+ * @param[in] t2    Second gtime_t struct
+ * @return seconds of (t1 - t2)
+ */
+extern double yins_timediff(gtime_t t1, gtime_t t2)
+{
+    return difftime(t1.time, t2.time) + t1.sec - t2.sec;
 }
 
 /**
@@ -1007,6 +1019,14 @@ extern m3_t formCen_ned(double lat, double lon)
     return Cen;
 }
 
+/**
+ * @brief Convert n-frame(NED) position/velocity/attitude to e-frame(ECEF)
+ * @param[in,out] pos   Input (lat,lon,hgt)[rad,m] / Output ECEF position xyz[m]
+ * @param[in,out] vel   Input velocity(vN, vE, vD)[m/s] / Output velocity ECEF[m/s]
+ * @param[in,out] dcm   Input Cbn attitude / Ouput Cbe attitude
+ * @see ecef2ned()
+ * @return 0: OK
+ */
 extern int ned2ecef(v3_t* pos, v3_t* vel, m3_t* dcm)
 {
     double lat = pos->i, lon = pos->j, hgt = pos->k;
@@ -1039,6 +1059,17 @@ extern int ned2ecef(v3_t* pos, v3_t* vel, m3_t* dcm)
     return 0;
 }
 
+/**
+ * @brief Convert e-frame(ECEF) position/velocity/attitude to n-frame(NED)
+ * @param[in,out] pos   Output ECEF position xyz[m] / Input (lat,lon,hgt)[rad,m]
+ * @param[in,out] vel   Output velocity ECEF[m/s] / Input velocity(vN, vE, vD)[m/s]
+ * @param[in,out] dcm   Ouput Cbe attitude / Input Cbn attitude
+ * @see ned2ecef()
+ * @return 0: OK
+ * @note
+ *      Ref: Paul D. Groves, Principles of GNSS, Inertial, and Multisensor
+ *          Integrated Navigation Systems(2nd Edition), 2013, C.29-C.38
+ */
 extern int ecef2ned(v3_t* pos, v3_t* vel, m3_t* dcm)
 {
     /* ref Pual 2012, C.29 - C.38 */
@@ -1082,9 +1113,4 @@ extern int ecef2ned(v3_t* pos, v3_t* vel, m3_t* dcm)
             *dcm = m3_mul(Cen, *dcm); /* Cbe => Cbn */
     }
     return 0;
-}
-
-extern double yins_timediff(gtime_t t1, gtime_t t2)
-{
-    return difftime(t1.time, t2.time) + t1.sec - t2.sec;
 }

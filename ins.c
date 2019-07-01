@@ -2,9 +2,11 @@
  * @file ins.c
  * @brief ins core functions implementation
  * @author yinflying(yinflying@foxmail.com)
+ * @version 0.0.1
  * @note
  *  2019-05-21  Created
  */
+
 /*
  * Copyright (c) 2019 yinflying <yinflying@foxmail.com>
  *
@@ -343,7 +345,7 @@ extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
  * @param[out]  Cnb     Output DCM attitude at last moment
  * @return 0: Ok
  * @warning     1. (imu->n - 1)/(Nveb_n - 1) should be an interger
- *              2. Nveb_n >= 3(shouldn't be too small)
+ *              2. Nveb_n >= 4(shouldn't be too small)
  *              3. imu data should be uniform sampling
  * @see align_coarse_static_base()
  * @see align_coarse_inertial()
