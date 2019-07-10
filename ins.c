@@ -141,6 +141,12 @@ extern int nav_equations_ecef(
     return 0;
 }
 
+int nav_equations_ecef_back(double dt,const v3_t *dtheta, const v3_t *dv,
+    v3_t *r, v3_t *v, quat_t *q)
+{
+    return 0;
+}
+
 /**
  * @brief Use multi-subsample to compensate the conning&scull error
  * @param[in]   dtheta_list     Angular increment list,order by time,length:abs(N)
@@ -148,7 +154,7 @@ extern int nav_equations_ecef(
  * @param[in]   N               Subsample number(1=<N<=5, -2: one-plus-previous)
  * @param[out]  dtheta          Sum of angular increment with conning error compensation
  * @param[out]  dv              Sum of velocity incrment with scull error compensation
- * @return 0: No error    1: Error
+ * @return 0: OK    1: Error
  * @note Ref:
  *  1. Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
  *      Integrated Navigation Systems(2nd Edition)

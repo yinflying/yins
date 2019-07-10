@@ -8,7 +8,9 @@
  * Cnb,Qnb,Enb  trans from n-asix to b-axis(or attitude b-axis to n-axis)
  * euler        Euler attitude, [roll, pitch, yaw]
  * g            gps,gravity
- * d            data
+ * d            data, or DELTA, mean difference, e.g. dv, dtheta
+ * theta        angle
+ * v            velocity
  * SHF          Spherical Harmonics Function
  * dbl          double
  * enu,ned      East, North, Up, Down
@@ -23,10 +25,11 @@
  * lat          latitude
  * lon          longitude
  * hgt          height
- * pos          position, most represent under geodetic postion, (lat,lon,hgt)
- * xyz          position under ECEF
+ * pos          position, most represent under geodetic coordinate, (lat,lon,hgt)
+ * xyz          position under ECEF, Cartesian coordinate
  * rad          radius
  * deg          degree, unit
+ * nav          navigtaion
  * */
 
 /*
@@ -192,21 +195,22 @@ int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb);
 int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n,
         int Nveb_n, m3_t *Cnb);
 /* TODO */
+/* Static and dynamic judgement */
 
 /* INS navgataion */
 int nav_equations_ecef(double dt, const v3_t* dtheta, const v3_t* dv,
-    v3_t* r, v3_t* v, quat_t* q);
-int multisample(const v3_t* dtheta_list, const v3_t* dv_list, int N,
-    v3_t* dtheta, v3_t* dv);
+    v3_t *r, v3_t *v, quat_t *q);
+/* TODO NAV EQUATION BACKWARD */
+int nav_equations_ecef_back(double dt,const v3_t *dtheta, const v3_t *dv,
+    v3_t *r, v3_t *v, quat_t *q);
+int multisample(const v3_t *dtheta_list, const v3_t *dv_list, int N,
+    v3_t *dtheta, v3_t *dv);
 
 /* INS IO operation */
-int yins_readimu(const char* infile, imu_t* imu, int FILETYPE);
-int yins_imu2rnx(const imu_t* imu, const char* outfile);
-void freeimu(imu_t* imu);
-int addimudata(imu_t* imu, const imud_t* data);
+int yins_readimu(const char *infile, imu_t *imu, int FILETYPE);
+int yins_imu2rnx(const imu_t *imu, const char *outfile);
+void freeimu(imu_t *imu);
+int addimudata(imu_t *imu, const imud_t *data);
 
-/* TODO NAV EQUATION BACKWARD */
-
-/* Static and dynamic judgement */
 
 #endif /* ifndef INS_H */
