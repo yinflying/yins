@@ -38,7 +38,7 @@ static const m3_t I3 = {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
 static const m3_t O3 = {0.0};
 
 /**
- * @brief Gravitational acceleration of Earth project to e-axis
+ * @brief Gravitational acceleration of Earth project to e-frame
  * @param[in]   r   postion under e-axis
  * @param[out]  ge  Gravitational acceleration under ECEF(m s^-2)
  * @return 0: OK
@@ -85,7 +85,7 @@ extern int gravity_ned(double lat, double hgt, v3_t* gn)
         / sqrt(1.0 - e2 * sinlat2);
 
     gn->i = -8.08E-9 * hgt * sin(2.0 * lat); /* North */
-    gn->j = 0.0;                           /* East */
+    gn->j = 0.0;                             /* East */
     /* Down */
     double tmp = 1.0 + wgs84.f * (1.0 - 2.0 * sinlat2)
         + (SQR(wgs84.wie) * SQR(wgs84.R0) * wgs84.RP / wgs84.mu);
@@ -115,16 +115,14 @@ extern int nav_equations_ecef(
     double dt, const v3_t* dtheta, const v3_t* dv, v3_t* r, v3_t* v, quat_t* q)
 {
     /* Attitude update */
-    v3_t dtheta_ie = { 0, 0, -wgs84.wie * dt };
-    quat_t q_earth;
+    v3_t dtheta_ie = { 0.0, 0.0, -wgs84.wie * dt };
+    quat_t q_earth, q_body, old_q = *q;
     rv2quat(&dtheta_ie, &q_earth);
-    quat_t q_body;
     rv2quat(dtheta, &q_body);
-    quat_t old_q = *q;
     *q = quat_mul(quat_mul(q_earth, old_q), q_body);
     quat_normalize(q);
     /* Specific force transform(velocity form) */
-    v3_t dtheta_ie_half = { 0, 0, -wgs84.wie * dt / 2 };
+    v3_t dtheta_ie_half = { 0.0, 0.0, -wgs84.wie * dt / 2.0 };
     rv2quat(&dtheta_ie_half, &q_earth);
     v3_t dv_rot = v3_scalar(0.5, v3_cross(*dtheta, *dv));
     v3_t dv_e = quat_mul_v3(quat_mul(q_earth, old_q), v3_add(*dv, dv_rot));
@@ -144,6 +142,26 @@ extern int nav_equations_ecef(
 int nav_equations_ecef_back(double dt,const v3_t *dtheta, const v3_t *dv,
     v3_t *r, v3_t *v, quat_t *q)
 {
+    /* Attitude update */
+    v3_t dtheta_ie = { 0.0, 0.0, wgs84.wie * dt };
+    quat_t q_earth, q_body, old_q = *q;
+    rv2quat(&dtheta_ie, &q_earth);
+    rv2quat(dtheta,&q_body);
+    quat_conj(&q_body);
+    *q = quat_mul(quat_mul(q_earth, old_q), q_body);
+    /* Specific force transform(velocity form) */
+    v3_t dtheta_ie_half = { 0.0, 0.0, wgs84.wie * dt / 2.0 };
+    rv2quat(&dtheta_ie_half, &q_earth);
+    v3_t dv_rot = v3_scalar(-0.5, v3_cross(*dtheta, *dv));
+    v3_t dv_e = quat_mul_v3(quat_mul(q_earth, old_q), v3_add(*dv, dv_rot));
+    /* Velocity update */
+    v3_t ge;
+    gravity_ecef(r, &ge);
+    v3_t old_v = *v;
+    v->i = old_v.i + dv_e.i + dt * (ge.i + 2 * wgs84.wie * old_v.j);
+    v->j = old_v.j + dv_e.j + dt * (ge.j - 2 * wgs84.wie * old_v.i);
+    v->k = old_v.k + dv_e.k + dt * ge.k;
+
     return 0;
 }
 
