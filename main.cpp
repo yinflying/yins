@@ -36,7 +36,7 @@
 #define SQR(x) ((x)*(x))
 
 void test_ygm_insod(){
-#define WPATH "../qt_yins/yins_data/ygm_insod/"
+#define WPATH "../yins/yins_data/ygm_insod/"
 #define NAME  "ygm_circle_"
     /* open a file to record solution */
     FILE *fp_sol = fopen(WPATH NAME "sol.ycsv","w");
@@ -54,9 +54,6 @@ void test_ygm_insod(){
     yins_readf(WPATH NAME "od.txt", FT_YGM_OD, NULL, NULL, &od);
     /* read configure file */
     yins_readf(WPATH NAME "cfg.ycsv", FT_CFG_YCSV, &imu, NULL, NULL);
-
-    /* writt configure to file(to check configure reading correclty) */
-    yins_writef(WPATH NAME "cfg.ycsv", FT_CFG_YCSV, &imu, NULL, NULL);
 
     /* set kalman filter initial time and postion message */
     imu.property->tstart = pva.time[0];

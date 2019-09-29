@@ -2,8 +2,8 @@ CC 	= gcc
 CPP = g++
 AR  = ar
 
-CFLAGS = -std=c99
-CPPFLAGS = -std=c++98
+CFLAGS = -std=c99 -Wall
+CPPFLAGS = -std=c++98 -Wall
 CLINK = -static
 CPPLINK = -static
 

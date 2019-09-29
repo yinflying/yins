@@ -17,18 +17,19 @@ config_nmea2ycsv{
     SOURCES +=
 }
 
-config_UT{
-    TARGET = unittest
-    SOURCES += yins/unittest.c
-}
-
 config_main{
     TARGET = main
     SOURCES += main.cpp
 }
 
+config_UT{
+    TARGET = unittest
+    SOURCES += yins_core/unittest.c
+}
+
+
 HEADERS += \
-    yins/ins.h
+    yins_core/ins.h
 
 unix:!macx: LIBS += -lcriterion
 
