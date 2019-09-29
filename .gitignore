@@ -2,5 +2,5 @@
 *.o
 *.so
 *.a
-/yins_data/*yins.log
-/yins_data/*_sol.ycsv
+yins_data/*yins.log
+yins_data/*_sol.ycsv
