@@ -1,0 +1,7 @@
+<map id="yins_core/ins.h" name="yins_core/ins.h">
+<area shape="rect" id="node1" title="ins header file" alt="" coords="228,5,339,32"/>
+<area shape="rect" id="node2" href="$ins_8c.html" title="ins core functions implementation" alt="" coords="5,80,116,107"/>
+<area shape="rect" id="node3" href="$inscmn_8c.html" title="INS common functions, include basic vector,matrix,quaternion operations." alt="" coords="140,80,275,107"/>
+<area shape="rect" id="node4" href="$insio_8c.html" title="ins read and write function" alt="" coords="299,80,419,107"/>
+<area shape="rect" id="node5" href="$unittest_8c.html" title="ins.h functions unit tests" alt="" coords="444,80,579,107"/>
+</map>
