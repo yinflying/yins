@@ -73,14 +73,16 @@ void test_ygm_insod(){
     inskf_init(&inskf, imu.property);
     outsolins(fp_sol, inskf.sol, imu.property);
     for(unsigned int i = 1; i < imu.n; ++i){
-        /* Add od error */
+        /* update odometer increment */
         inskf_uditg_dS(&inskf, od.dS[i], NULL, NULL);
+        /* update kalman statue */
         inskf_udstate(&inskf, (imu.data+i), imu.property);
         /* update GNSS position and velocity every 0.2s */
         if(i % 20 == 0 && i != 0){
             if(fabs(timediff(pva.time[i], inskf.sol->time)) > 0.1){
                 LOG_FATAL("pva.time differ from  inskf.sol->time");
             }
+            /* measurement update of odometer increment */
             v3_t QitgdS = (v3_t){1e-2, 1e-2, 1e-2};
             inskf_udmeas_itgdS(&inskf, &QitgdS);
             inskf_feedback(&inskf, soltype_add(inskf.sol->status, SOL_DR));
@@ -92,12 +94,15 @@ void test_ygm_insod(){
 
             /* simulate GNSS lost after 300s */
             if(i < 100*300){
+                /* measure update of position */
                 inskf_udmeasr(&inskf, &pos, &Qr, &lever_arm);
                 v3_t wib_b = v3_scalar(imu.property->freq_imu, imu.data[i].gyro);
+                /* measure update of velocity */
                 inskf_udmeasv(&inskf, &vel, &Qv, &lever_arm, &wib_b);
                 inskf_feedback(&inskf, soltype_add(inskf.sol->status, SOL_SINGLE));
             }
         }
+        /* output solution to file */
         outsolins(fp_sol, inskf.sol, imu.property);
     }
     fclose(fp_sol);

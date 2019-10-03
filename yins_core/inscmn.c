@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file inscmn.c
  * @brief INS common functions, include basic vector,matrix,quaternion
  *      operations.
@@ -1759,17 +1759,12 @@ extern void cross3(const double *a, const double *b, double *c)
     c[1]=a[2]*b[0]-a[0]*b[2];
     c[2]=a[0]*b[1]-a[1]*b[0];
 }
-/* normalize 3d vector ---------------------------------------------------------
-* normalize 3d vector
-* args   : double *a        I   vector a (3 x 1)
-*          double *b        O   normlized vector (3 x 1) || b || = 1
-* return : status (1:ok,0:error)
-*-----------------------------------------------------------------------------*/
+
 /**
- * @brief normv3
- * @param[in] a
- * @param[in] b
- * @return
+ * @brief normailize 3D vector
+ * @param[in] 	a 	vector a (3x1)
+ * @param[out] 	b	normlized vector(3x1) || b || = 1
+ * @return status (1:ok, 0:error)
  */
 extern int normv3(const double *a, double *b)
 {
@@ -1780,19 +1775,13 @@ extern int normv3(const double *a, double *b)
     b[2]=a[2]/r;
     return 1;
 }
-/* copy matrix -----------------------------------------------------------------
-* copy matrix
-* args   : double *A        O   destination matrix A (n x m)
-*          double *B        I   source matrix B (n x m)
-*          int    n,m       I   number of rows and columns of matrix
-* return : none
-*-----------------------------------------------------------------------------*/
+
 /**
- * @brief matcpy
- * @param A
- * @param B
- * @param n
- * @param m
+ * @brief copy matrix
+ * @param[out] 	A	destination matrix A (n x m)
+ * @param[in] 	B	source matrix B (n x m)
+ * @param[in] 	n	number of rows of matrix
+ * @param[in] 	m	number of columns of matrix
  */
 extern void matcpy(double *A, const double *B, int n, int m)
 {
@@ -1801,17 +1790,19 @@ extern void matcpy(double *A, const double *B, int n, int m)
 /* matrix routines -----------------------------------------------------------*/
 
 #ifdef LAPACK /* with LAPACK/BLAS or MKL */
-
-/* multiply matrix (wrapper of blas dgemm) -------------------------------------
-* multiply matrix by matrix (C=alpha*A*B+beta*C)
-* args   : char   *tr       I  transpose flags ("N":normal,"T":transpose)
-*          int    n,k,m     I  size of (transposed) matrix A,B
-*          double alpha     I  alpha
-*          double *A,*B     I  (transposed) matrix A (n x m), B (m x k)
-*          double beta      I  beta
-*          double *C        IO matrix C (n x k)
-* return : none
-*-----------------------------------------------------------------------------*/
+/**
+ * @brief multiply matrix (wrapper of blas degmm)
+ * 		( C = alpha * A * B + beta * C )
+ * @param[in] 	tr		transpose flas ("N": normal, "T": transpose)
+ * @param[in]  	n		size of (transposed) matrix A, B
+ * @param[in] 	k		size of (transposed) matrix A, B
+ * @param[in] 	m		size of (transposed) matrix A, B
+ * @param[in] 	alpha	alpha
+ * @param[in] 	A		(transposd) matrix A (n x m)
+ * @param[in] 	B		(transposd) matrix B (m x k)
+ * @param[in] 	beta	beta
+ * @param[in,out] 	C	matrix C (n x k)
+ */
 extern void matmul(const char *tr, int n, int k, int m, double alpha,
                    const double *A, const double *B, double beta, double *C)
 {
@@ -1820,12 +1811,13 @@ extern void matmul(const char *tr, int n, int k, int m, double alpha,
     dgemm_((char *)tr,(char *)tr+1,&n,&k,&m,&alpha,(double *)A,&lda,(double *)B,
            &ldb,&beta,C,&n);
 }
-/* inverse of matrix -----------------------------------------------------------
-* inverse of matrix (A=A^-1)
-* args   : double *A        IO  matrix (n x n)
-*          int    n         I   size of matrix A
-* return : status (0:ok,0>:error)
-*-----------------------------------------------------------------------------*/
+
+/**
+ * @brief inverse of matrix, ( A = A^-1 )
+ * @param[in,out] 	A	matrix (n x n)
+ * @param[in] 		n	size of matrix A
+ * @return status (0: ok, >0: error)
+ */
 extern int matinv(double *A, int n)
 {
     double *work;
@@ -1837,17 +1829,19 @@ extern int matinv(double *A, int n)
     free(ipiv); free(work);
     return info;
 }
-/* solve linear equation -------------------------------------------------------
-* solve linear equation (X=A\Y or X=A'\Y)
-* args   : char   *tr       I   transpose flag ("N":normal,"T":transpose)
-*          double *A        I   input matrix A (n x n)
-*          double *Y        I   input matrix Y (n x m)
-*          int    n,m       I   size of matrix A,Y
-*          double *X        O   X=A\Y or X=A'\Y (n x m)
-* return : status (0:ok,0>:error)
-* notes  : matirix stored by column-major order (fortran convention)
-*          X can be same as Y
-*-----------------------------------------------------------------------------*/
+
+/**
+ * @brief solve linear equation ( X = A\Y or X = A'\Y )
+ * @param[in] 	tr	transpose flag( "N": normal, "T": transpose)
+ * @param[in] 	A	input matrix A (n x n)
+ * @param[in] 	Y	input matrix Y (n x n)
+ * @param[in] 	n	rows of matrix A, Y
+ * @param[in] 	m	columns of matrix A, Y
+ * @param[out] 	X	X = A\Y or X = A'\Y (n x m)
+ * @return status (0:ok, >0: error)
+ * @note matrix stored by column-major order(fortran convertion), X can be same
+ * 		as Y
+ */
 extern int solve(const char *tr, const double *A, const double *Y, int n,
                  int m, double *X)
 {
@@ -1963,17 +1957,18 @@ extern int solve(const char *tr, const double *A, const double *Y, int n,
 #endif
 /* end of matrix routines ----------------------------------------------------*/
 
-/* least square estimation -----------------------------------------------------
-* least square estimation by solving normal equation (x=(A*A')^-1*A*y)
-* args   : double *A        I   transpose of (weighted) design matrix (n x m)
-*          double *y        I   (weighted) measurements (m x 1)
-*          int    n,m       I   number of parameters and measurements (n<=m)
-*          double *x        O   estmated parameters (n x 1)
-*          double *Q        O   esimated parameters covariance matrix (n x n)
-* return : status (0:ok,0>:error)
-* notes  : for weighted least square, replace A and y by A*w and w*y (w=W^(1/2))
-*          matirix stored by column-major order (fortran convention)
-*-----------------------------------------------------------------------------*/
+/**
+ * @brief least square estimation by solving normal equation (x=(A*A')^-1*A*y)
+ * @param[in] 	A	transpose of (weighted) design matrix (n x m)
+ * @param[in] 	y 	(weighted) measurements (m x 1)
+ * @param[in]	n 	number of parameters(n<=m)
+ * @param[in] 	m	number of measurements(n<=m)
+ * @param[out] 	x 	estmated parameters (n x 1)
+ * @param[out] 	Q 	esimated parameters covariance matrix (n x n)
+ * @return status (0: ok, >0: error)
+ * @note for weighted least square, replace A and y by A*w and w*y (w=W^(1/2))
+ *          matirix stored by column-major order (fortran convention)
+ */
 extern int lsq(const double *A, const double *y, int n, int m, double *x,
                double *Q)
 {
@@ -1988,23 +1983,24 @@ extern int lsq(const double *A, const double *y, int n, int m, double *x,
     free(Ay);
     return info;
 }
-/* kalman filter ---------------------------------------------------------------
-* kalman filter state update as follows:
-*
-*   K=P*H*(H'*P*H+R)^-1, xp=x+K*v, Pp=(I-K*H')*P
-*
-* args   : double *x        I   states vector (n x 1)
-*          double *P        I   covariance matrix of states (n x n)
-*          double *H        I   transpose of design matrix (n x m)
-*          double *v        I   innovation (measurement - model) (m x 1)
-*          double *R        I   covariance matrix of measurement error (m x m)
-*          int    n,m       I   number of states and measurements
-*          double *xp       O   states vector after update (n x 1)
-*          double *Pp       O   covariance matrix of states after update (n x n)
-* return : status (0:ok,<0:error)
-* notes  : matirix stored by column-major order (fortran convention)
-*          if state x[i]==0.0, not updates state x[i]/P[i+i*n]
-*-----------------------------------------------------------------------------*/
+
+/**
+ * @brief kalman filter
+ * @details kalman filter state update as follows:
+ *   		K=P*H*(H'*P*H+R)^-1, x=x+K*v, P=(I-K*H')*P
+ * @param[in] 		x 	states vector (n x 1)
+ * @param[in] 		P 	covariance matrix of states (n x n)
+ * @param[in] 		H 	transpose of design matrix (n x m)
+ * @param[in] 		v 	innovation (measurement - model) (m x 1)
+ * @param[in] 		R 	covariance matrix of measurement error (m x m)
+ * @param[in] 		n 	number of states
+ * @param[in] 		m	number of measurements
+ * @param[out] 		xp 	states vector after update (n x 1)
+ * @param[out] 		Pp 	covariance matrix of states after update (n x n)
+ * @return status (0:ok,<0:error)
+ * @note  : matirix stored by column-major order (fortran convention)
+ *          if state x[i]==0.0, not updates state x[i]/P[i+i*n]
+ */
 static int filter_(const double *x, const double *P, const double *H,
                    const double *v, const double *R, int n, int m,
                    double *xp, double *Pp)
@@ -2025,16 +2021,21 @@ static int filter_(const double *x, const double *P, const double *H,
     free(F); free(Q); free(K); free(I);
     return info;
 }
+
 /**
- * @brief
- * @param x
- * @param P
- * @param H
- * @param v
- * @param R
- * @param n
- * @param m
- * @return int
+ * @brief kalman filter
+ * @details kalman filter state update as follows:
+ *   		K=P*H*(H'*P*H+R)^-1, x=x+K*v, P=(I-K*H')*P
+ * @param[in,out] 	x 	states vector (n x 1)
+ * @param[in,out] 	P 	covariance matrix of states (n x n)
+ * @param[in] 		H 	transpose of design matrix (n x m)
+ * @param[in] 		v 	innovation (measurement - model) (m x 1)
+ * @param[in] 		R 	covariance matrix of measurement error (m x m)
+ * @param[in] 		n 	number of states
+ * @param[in] 		m	number of measurements
+ * @return status (0:ok,<0:error)
+ * @note matirix stored by column-major order (fortran convention)
+ *       if state x[i]==0.0, not updates state x[i]/P[i+i*n]
  */
 extern int filter(double *x, double *P, const double *H, const double *v,
                   const double *R, int n, int m)
@@ -2060,22 +2061,21 @@ extern int filter(double *x, double *P, const double *H, const double *v,
     free(ix); free(x_); free(xp_); free(P_); free(Pp_); free(H_);
     return info;
 }
-/* smoother --------------------------------------------------------------------
-* combine forward and backward filters by fixed-interval smoother as follows:
-*
-*   xs=Qs*(Qf^-1*xf+Qb^-1*xb), Qs=(Qf^-1+Qb^-1)^-1)
-*
-* args   : double *xf       I   forward solutions (n x 1)
-* args   : double *Qf       I   forward solutions covariance matrix (n x n)
-*          double *xb       I   backward solutions (n x 1)
-*          double *Qb       I   backward solutions covariance matrix (n x n)
-*          int    n         I   number of solutions
-*          double *xs       O   smoothed solutions (n x 1)
-*          double *Qs       O   smoothed solutions covariance matrix (n x n)
-* return : status (0:ok,0>:error)
-* notes  : see reference [4] 5.2
-*          matirix stored by column-major order (fortran convention)
-*-----------------------------------------------------------------------------*/
+
+/**
+ * @brief combine forward and backward filters by fixed-interval smoother
+ * 	as follows:
+*   		xs=Qs*(Qf^-1*xf+Qb^-1*xb), Qs=(Qf^-1+Qb^-1)^-1)
+ * @param[in] 	xf 		forward solutions (n x 1)
+ * @param[in] 	Qf 		forward solutions covariance matrix (n x n)
+ * @param[in] 	xb 		backward solutions (n x 1)
+ * @param[in] 	Qb		backward solutions covariance matrix (n x n)
+ * @param[in] 	n 		number of solutions
+ * @param[out] 	xs 		smoothed solutions (n x 1)
+ * @param[out] 	Qs 		smoothed solutions covariance matrix (n x n)
+ * @return status (0:ok,0>:error)
+ * @note matirix stored by column-major order (fortran convention)
+ */
 extern int smoother(const double *xf, const double *Qf, const double *xb,
                     const double *Qb, int n, double *xs, double *Qs)
 {
@@ -2095,15 +2095,17 @@ extern int smoother(const double *xf, const double *Qf, const double *xb,
     free(invQf); free(invQb); free(xx);
     return info;
 }
-/* print matrix ----------------------------------------------------------------
-* print matrix to stdout
-* args   : double *A        I   matrix A (n x m)
-*          int    n,m       I   number of rows and columns of A
-*          int    p,q       I   total columns, columns under decimal point
-*         (FILE  *fp        I   output file pointer)
-* return : none
-* notes  : matirix stored by column-major order (fortran convention)
-*-----------------------------------------------------------------------------*/
+
+/**
+ * @brief print matrix to file
+ * @param[in] 	A		matrix A (n x m)
+ * @param[in] 	n 		number of rows of A
+ * @param[in] 	m 		number of columns of A
+ * @param[in] 	p 		total columns, columns under decimal point
+ * @param[in] 	q 		total columns, columns under decimal point
+ * @param[in] 	fp 		output file pointer
+ * @note  matirix stored by column-major order (fortran convention)
+ */
 static void matfprint(const double A[], int n, int m, int p, int q, FILE *fp)
 {
     int i,j;
@@ -2115,19 +2117,26 @@ static void matfprint(const double A[], int n, int m, int p, int q, FILE *fp)
 }
 
 /**
- * @brief
- *
- * @param A[]
- * @param n
- * @param m
- * @param p
- * @param q
+ * @brief print matrix to file
+ * @param[in] 	A		matrix A (n x m)
+ * @param[in] 	n 		number of rows of A
+ * @param[in] 	m 		number of columns of A
+ * @param[in] 	p 		total columns, columns under decimal point
+ * @param[in] 	q 		total columns, columns under decimal point
+ * @param[in] 	fp 		output file pointer
+ * @note  matirix stored by column-major order (fortran convention)
  */
 extern void matprint(const double A[], int n, int m, int p, int q)
 {
     matfprint(A,n,m,p,q,stdout);
 }
 
+/**
+ * @brief symmetrize matrix
+ * @param[in,out] 	A	matrix A (n x )
+ * @param[in] 		n 	size of matrix A
+ * @return 0: OK
+ */
 extern int mat_symmetry(double *A, int n)
 {
     for(int i =1; i < n; ++i ){
@@ -2139,7 +2148,6 @@ extern int mat_symmetry(double *A, int n)
     return 0;
 }
 #endif  /* RTKLIB */
-
 
 enum LOG_LEVEL FILE_LOG_LEVEL = LEVEL_TRACE;    /**< default file log level */
 enum LOG_LEVEL STDOUT_LOG_LEVEL = LEVEL_DEBUG;  /**< default stdout log level */

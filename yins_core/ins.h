@@ -552,7 +552,7 @@ int inskf_init(kf_t *inskf, const imup_t *imup);
 int inskf_udstate(kf_t *inskf, const imud_t *imud, const imup_t *imup);
 int inskf_udmeasr(kf_t *inskf, const v3_t *reg_e, const m3_t *Qreg_e, const v3_t *lever_arm_gps);
 int inskf_udmeasv(kf_t *inskf, const v3_t *veg_e, const m3_t *Qveg_e, const v3_t *lever_arm_gps, const v3_t *wib_b);
-int inskf_udmeas_vod(kf_t *inskf, const solins_t *last_sol, double vod, double Qvod);
+int inskf_udmeas_vod(kf_t *inskf, double vod, const v3_t *vod_std);
 int inskf_constraint_yaw(kf_t *inskf, const v3_t *wib_b, const imup_t *imup);
 int inskf_MC_car(kf_t *inskf, const v3_t * wib_b, const v3_t *lever_arm_car, double std_vy, double std_vz);
 int inskf_ZST_pos(kf_t *inskf, const solins_t *last_sol);
@@ -567,12 +567,6 @@ int inskf_uditg_dS(kf_t *inskf, double dS, const v3_t *lever_arm_car, const v3_t
 int inskf_udmeas_itgdS(kf_t *inskf, const v3_t *QitgdS);
 int inskf_feedback(kf_t *inskf, unsigned int SOL_TYPE);
 int inskf_norm_innov(kf_t *inskf, const double *R, const double *dz, double *ndz);
-
-/**
- * @brief inskf_close this is to close ins kalman filter
- * @param inskf
- * @return
- */
 int inskf_close(kf_t *inskf);
 
 /* logging */

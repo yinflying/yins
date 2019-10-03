@@ -7,6 +7,7 @@ QMAKE_CFLAGS += -std=c99
 QMAKE_CXXFLAGS += -std=c++98
 
 SOURCES += \
+        main.c \
         yins_core/ins.c \
         yins_core/inscmn.c \
         yins_core/insio.c \
@@ -19,7 +20,7 @@ config_nmea2ycsv{
 
 config_main{
     TARGET = main
-    SOURCES += main.cpp
+    SOURCES +=
 }
 
 config_UT{

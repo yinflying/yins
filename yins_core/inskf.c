@@ -1,4 +1,11 @@
-﻿/*
+﻿/**
+ * @file inskf.c
+ * @brief ins kalman filter related function
+ * @author yinflying(yinflying@foxmail.com)
+ * @note
+ *  2019-05-21 Created
+ */
+/*
  * Copyright (c) 2019 yinflying <yinflying@foxmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -77,6 +84,15 @@ static void kf_copyQ2sol(kf_t *inskf)
     #undef GETSTD
 }
 
+/**
+ * @brief form transfer noise matrix of kalman matrix
+ * 			P = F * P * F' + Q
+ * @param[out] 	Q			transer noise matrix
+ * @param[in] 	Cbe			Attitude transformation from b to e
+ * @param[in] 	dt_zoom		time interval[s] x zoom
+ * @param[in] 	imup		imu property struct
+ * @return status(0: OK)
+ */
 static int
 kf_formQ(double *Q, const m3_t *Cbe, double dt_zoom, const imup_t *imup)
 {
@@ -117,11 +133,10 @@ kf_formQ(double *Q, const m3_t *Cbe, double dt_zoom, const imup_t *imup)
 }
 
 /**
- * @brief
- * @param
- * @param
- * @return
- * @note [att, vel, pos, ba, bg]
+ * @brief initial ins kalman filter
+ * @param[in,out] 	inskf	kalman filter of ins
+ * @param[in] 		imup 	imu property sturct
+ * @return status(0: OK)
  */
 extern int inskf_init(kf_t *inskf, const imup_t *imup)
 {
@@ -322,7 +337,14 @@ extern int inskf_init(kf_t *inskf, const imup_t *imup)
     return 0;
 }
 
-
+/**
+ * @brief kalman filter update state
+ * 		x = Fx,   P = F * P * F' +  Q, and full state transfer
+ * @param[in] inskf		kalman filter
+ * @param[in] imud		imu data struct
+ * @param[in] imup		imu property struct
+ * @return status(0:OK)
+ */
 extern int inskf_udstate(kf_t *inskf, const imud_t *imud, const imup_t *imup)
 {
     gtime_t cur_time = imud->time;
@@ -399,11 +421,11 @@ extern int inskf_udstate(kf_t *inskf, const imud_t *imud, const imup_t *imup)
 //    fflush(stdout);
 
     /* x = F*x */
-//    if((double)cfg.feedratio < 1.0){
-//        double *_x = mat(inskf->nx, 1);
-//        matmul("NN", inskf->nx, 1, inskf->nx, 1.0, inskf->F, inskf->x, 0.0, _x);
-//        matcpy(inskf->x, _x, inskf->nx, 1);
-//    }
+    if((double)cfg.feedratio < 1.0){
+        double *_x = mat(inskf->nx, 1);
+        matmul("NN", inskf->nx, 1, inskf->nx, 1.0, inskf->F, inskf->x, 0.0, _x);
+        matcpy(inskf->x, _x, inskf->nx, 1);
+    }
 
     /* update var-covarinace: P = F*P*F' + Q */
     double *FP = mat(inskf->nx, inskf->nx);
@@ -453,6 +475,14 @@ extern int inskf_udstate(kf_t *inskf, const imud_t *imud, const imup_t *imup)
     return 0;
 }
 
+/**
+ * @brief kalman filter position measment update
+ * @param[in,out] 	inskf		ins kalman filter struct
+ * @param[in] 		reg_e		(gnss) position under e-frame[m]
+ * @param[in] 		Qreg_e		(gnss) position variance matrix
+ * @param[in] 		lever_arm	lever arm of (gnss) postion(under b-frame)
+ * @return	status(0: OK)
+ */
 extern int inskf_udmeasr(kf_t *inskf, const v3_t *reg_e, const m3_t *Qreg_e,
                       const v3_t *lever_arm)
 {
@@ -473,19 +503,18 @@ extern int inskf_udmeasr(kf_t *inskf, const v3_t *reg_e, const m3_t *Qreg_e,
     inskf->H[cfg.IPOS+1+1*inskf->nx] = -1.0;
     inskf->H[cfg.IPOS+2+2*inskf->nx] = -1.0;
 
-//    double ndz_r[3];
-//    inskf_norm_innov(inskf, (const double *)&dz_r,(const double *)Qreg_e,
-//                     ndz_r);
-//    LOG_TRACE("ndz_rx %f, ndz_ry %f, ndz_rz %f", ndz_r[0], ndz_r[1], ndz_r[2]);
-//    for(unsigned int i = 0; i < ny; ++i){
-//        if(fabs(ndz_r[i]) > 20.0){
-//            const double *pdz_r = (const double *)&dz_r;
-//            LOG_WARN("%s: disabled, too small noise(%f m) or too large "
-//                     "innovations(%f m)",
-//                     __FUNCTION__, pdz_r[i]/ndz_r[i], pdz_r[i]);
-//            return 1;
-//        }
-//    }
+    /* innovtaion check */
+    double ndz_r[3];
+    inskf_norm_innov(inskf, (const double *)&dz_r,(const double *)Qreg_e,
+                     ndz_r);
+    LOG_TRACE("ndz_rx %f, ndz_ry %f, ndz_rz %f", ndz_r[0], ndz_r[1], ndz_r[2]);
+    for(unsigned int i = 0; i < inskf->ny; ++i){
+        if(fabs(ndz_r[i]) > 5.0){
+            const double *pdz_r = (const double *)&dz_r;
+            LOG_WARN("%s: too small noise(%f m) or too large innovations(%f m)",
+                     __FUNCTION__, pdz_r[i]/ndz_r[i], pdz_r[i]);
+        }
+    }
 
     /* note: Qreg_e is sysmmetry matrix */
     KF_FILTER(inskf, (const double *)&dz_r, (const double *)Qreg_e);
@@ -493,6 +522,15 @@ extern int inskf_udmeasr(kf_t *inskf, const v3_t *reg_e, const m3_t *Qreg_e,
     return 0;
 }
 
+/**
+ * @brief kalman filter velocity update
+ * @param[in,out] 	inskf		ins kalman filter struct
+ * @param[in] 		veg_e		(gnss) velocity under e-frame[m/s]
+ * @param[in] 		Qveg_e		(gnss) velocity variance matrix
+ * @param[in] 		lever_arm	lever arm of (gnss) position(unber b-frame)
+ * @param[in]		wib_b		angular rate of imu
+ * @return status(0: OK)
+ */
 extern int inskf_udmeasv(kf_t *inskf, const v3_t *veg_e, const m3_t *Qveg_e,
                       const v3_t *lever_arm, const v3_t *wib_b)
 {
@@ -520,20 +558,18 @@ extern int inskf_udmeasv(kf_t *inskf, const v3_t *veg_e, const m3_t *Qveg_e,
     inskf->H[cfg.IVEL+1+1*inskf->nx] = -1.0;
     inskf->H[cfg.IVEL+2+2*inskf->nx] = -1.0;
 
-//    double ndz_v[3];
-//    inskf_norm_innov(inskf, (const double *)&dz_v, (const double *)Qveg_e,
-//                     ndz_v);
-//    for(unsigned int i = 0; i < ny; ++i){
-//        if(fabs(ndz_v[i]) > 10.0){
-//            const double *pdz_v = (const double *)&dz_v;
-//            LOG_WARN("%s: disabled, too small noise(%f m/s) or "
-//                     "too large innovations(%f m/s)",
-//                     __FUNCTION__, pdz_v[i]/ndz_v[i], pdz_v[i]);
-//            return 1;
-//        }
-//    }
-
-//    LOG_TRACE("ndz_rx %f, ndz_ry %f, ndz_rz %f", ndz_v[0], ndz_v[1], ndz_v[2]);
+    double ndz_v[3];
+    inskf_norm_innov(inskf, (const double *)&dz_v, (const double *)Qveg_e,
+                     ndz_v);
+    LOG_TRACE("ndz_rx %f, ndz_ry %f, ndz_rz %f", ndz_v[0], ndz_v[1], ndz_v[2]);
+    for(unsigned int i = 0; i < inskf->ny; ++i){
+        if(fabs(ndz_v[i]) > 5.0){
+            const double *pdz_v = (const double *)&dz_v;
+            LOG_WARN("%s: too small noise(%f m/s) or too large "
+                     "innovations(%f m/s)",
+                     __FUNCTION__, pdz_v[i]/ndz_v[i], pdz_v[i]);
+        }
+    }
 
     KF_FILTER(inskf, (const double *)&dz_v, (const double *)Qveg_e);
 //    matprint(inskf->x, 1, inskf->nx, 8, 5);
@@ -542,6 +578,13 @@ extern int inskf_udmeasv(kf_t *inskf, const v3_t *veg_e, const m3_t *Qveg_e,
     return 0;
 }
 
+/**
+ * @brief kalman filter yaw angle measument update
+ * @param[in,out] 	inskf	ins kalman fitler struct
+ * @param[in] 		yaw		yaw angle measuremnt(Enb.k) [rad]
+ * @param[in] 		Qyaw   	uncertainty of yaw [rad^2]
+ * @return status(0: OK, 1: failed)
+ */
 extern int inskf_udmeas_yaw(kf_t *inskf, double yaw, double Qyaw)
 {
     KF_HINIT(inskf, 1);
@@ -558,17 +601,27 @@ extern int inskf_udmeas_yaw(kf_t *inskf, double yaw, double Qyaw)
     double ndz_yaw;
     inskf_norm_innov(inskf, &dz_yaw, &Qyaw, &ndz_yaw);
 
-//    LOG_TRACE("dz_yaw %f, ndz_yaw %f", dz_yaw*RAD2DEG, ndz_yaw);
-//    if(fabs(ndz_yaw) > 10.0){
-//        LOG_WARN("%s: disabled, too small yaw noise(%f deg) or large innovations(%f deg)",
-//                 __FUNCTION__, (dz_yaw/ndz_yaw)*RAD2DEG, dz_yaw*RAD2DEG);
-//        return 1;
-//    }
+    LOG_TRACE("dz_yaw %f, ndz_yaw %f", dz_yaw*RAD2DEG, ndz_yaw);
+    if(fabs(ndz_yaw) > 5.0){
+        LOG_WARN("%s: disabled, too small yaw noise(%f deg) or large "
+                 "innovations(%f deg)",
+                 __FUNCTION__, (dz_yaw/ndz_yaw)*RAD2DEG, dz_yaw*RAD2DEG);
+        return 1;
+    }
 
     KF_FILTER(inskf, &dz_yaw, &Qyaw);
     return 0;
 }
 
+/**
+ * @brief ins kalman filter Zero Angular Update
+ * @param[in,out] 	inskf	ins kalman filter struct
+ * @param[in] 		yaw	 	yaw measment at start of static moment[rad]
+ * @param[in] 		Qyaw	uncertainty of yaw[rad^2]
+ * @return status(0: OK, 1: failed, current momoent may be not static)
+ * @note this function nearly the same as inskf_udmeas_yaw(), but do not have
+ * 		same function.
+ */
 extern int inskf_ZAU(kf_t *inskf, double yaw, double Qyaw)
 {
     KF_HINIT(inskf, 1);
@@ -596,6 +649,13 @@ extern int inskf_ZAU(kf_t *inskf, double yaw, double Qyaw)
     return 0;
 }
 
+/**
+ * @brief ins kalman filter update attitude measment.
+ * @param[in,out] 	inskf	ins kalman filter struct
+ * @param[in] 		Cbe		DCM from b-frame to e-frame
+ * @param[in] 		QEbe  	uncertainty of Ebe. [rad^2]
+ * @return status(0: OK)
+ */
 extern int inskf_udmeas_Cbe(kf_t *inskf, const m3_t *Cbe, const m3_t *QEbe)
 {
 
@@ -619,6 +679,12 @@ extern int inskf_udmeas_Cbe(kf_t *inskf, const m3_t *Cbe, const m3_t *QEbe)
     return 0;
 }
 
+/**
+ * @brief ins kalman filter feedback (move inskf->x to inskf.sol)
+ * @param[in,out] 	inskf		ins kalman filter
+ * @param[in] 		SOL_TYPE	solution type, see enum SOL
+ * @return status(0: OK)
+ */
 extern int inskf_feedback(kf_t *inskf, unsigned int SOL_TYPE)
 {
     if(cfg.feedratio < 1)
@@ -726,6 +792,11 @@ extern int inskf_feedback(kf_t *inskf, unsigned int SOL_TYPE)
     return 0;
 }
 
+/**
+ * @brief close ins kalman filter,  free all variable memory
+ * @param[in] 	inskf	ins kalman filter struct
+ * @return status(0: OK)
+ */
 extern int inskf_close(kf_t *inskf)
 {
     LOG_INFO("kalman filter closed");
@@ -742,11 +813,12 @@ extern int inskf_close(kf_t *inskf)
 }
 
 /**
- * @brief ins_kf_constraint_yaw
- * @param[in,out]   inskf
- * @param[in]       wib_b
- * @param[in]       imup
- * @return
+ * @brief constraint yaw by velocity(Use velocity to caculate yaw, and
+ * 		then update)
+ * @param[in,out]   inskf	ins kalman filter struct
+ * @param[in]       wib_b	currnet imu output angular rate
+ * @param[in]       imup 	imu property struct
+ * @return status(0: OK)
  * @warning make sure all necessary imu proerties are well setted.
  * @note related imu property:
  *  imup->phi_install.z         imu install yaw angel error[rad]
@@ -801,6 +873,14 @@ int inskf_constraint_yaw(kf_t *inskf, const v3_t *wib_b, const imup_t *imup)
     return 0;
 }
 
+/**
+ * @brief  Zero angular rate update for ins kalman filter
+ * @param[in] 	inskf		ins kalman filter struct
+ * @param[in] 	last_qbe	last quaternion
+ * @param[in] 	dt			time interval[s]
+ * @param[in] 	Qweb_b		uncertainty of three axis angle
+ * @return status(0: OK)
+ */
 int inskf_ZRAU(kf_t *inskf, const quat_t *last_qbe, double dt,
                 const m3_t *Qweb_b)
 {
@@ -835,6 +915,12 @@ int inskf_ZRAU(kf_t *inskf, const quat_t *last_qbe, double dt,
     return 0;
 }
 
+/**
+ * @brief Zero velocity update of ins kalman filter
+ * @param[in,out] 	inskf	ins kalman filter struct
+ * @param[in] 		Qveb_e	uncerainty of zero speed
+ * @return Status(0: OK)
+ */
 extern int inskf_ZUPT(kf_t *inskf, const m3_t *Qveb_e)
 {
     KF_HINIT(inskf,3);
@@ -848,6 +934,14 @@ extern int inskf_ZUPT(kf_t *inskf, const m3_t *Qveb_e)
     return 0;
 }
 
+/**
+ * @brief ins kalman filter of update integral varables of odomemter
+ * @param[in,out] 	inskf	ins kalman filter struct
+ * @param[in] 	dS 		distance increment[s]
+ * @param[in] 	lever_arm_car 	ref point uner b-frame
+ * @param[in] 	wib_b	imu output angular rate
+ * @return status(0: OK)
+ */
 extern int inskf_uditg_dS(kf_t *inskf, double dS, const v3_t *lever_arm_car,
                              const v3_t *wib_b)
 {
@@ -890,7 +984,13 @@ extern int inskf_uditg_dS(kf_t *inskf, double dS, const v3_t *lever_arm_car,
     return 0;
 }
 
-extern int inskf_udmeas_itgdS(kf_t *inskf, const v3_t *QitgdS)
+/**
+ * @brief ins kalman filter, use odometer's integral variables as measument
+ * @param[in,out] 	inskf	ins kalman filter struct
+ * @param[in] 		itgdS_std 	odometer's velocity intetral's stanadard error.
+ * @return status(0: OK)
+ */
+extern int inskf_udmeas_itgdS(kf_t *inskf, const v3_t *itgdS_std)
 {
     if(!cfg.is_odincre){
         LOG_FATAL("%s: cfg.is_odincre = false, confilcted", __FUNCTION__);
@@ -970,7 +1070,7 @@ extern int inskf_udmeas_itgdS(kf_t *inskf, const v3_t *QitgdS)
     }else if(norm(inskf->itg+cfg.ITGVEL_OD, 3) < 1e-4){  /* Zero speed */
         Qdz = m3_scalar(SQR(1.58e-3), I3);
     }else{
-        Qdz = v3_diag(v3_pow(*QitgdS,2.0));
+        Qdz = v3_diag(v3_pow(*itgdS_std,2.0));
         Qdz = m3_mul(inskf->sol->dcm, m3_mul(Qdz, m3_T(inskf->sol->dcm)));
     }
     LOG_TRACE("Rx1 %f, Rx2 %f, Rx3 %f", sqrt(inskf->R[cfg.IR_itgdS]),
@@ -1001,12 +1101,20 @@ extern int inskf_udmeas_itgdS(kf_t *inskf, const v3_t *QitgdS)
     return 0;
 }
 
-int inskf_udmeas_vod(kf_t *inskf, const solins_t *last_sol, double vod, double Qvod)
+/**
+ * @brief ins kalman filter, use odometer output velocity as measurement
+ * @param[in,out] 	inskf		ins kalman filter struct
+ * @param[in] 		vod			odometer output velocity[m/s]
+ * @param[in] 		vod_std		odometer output velocity uncertainty[m/s]
+ * @return status(0: OK)
+ * @note vod_std.x is vod uncertainty, vod_std.y and vod_std.z is the Zero
+ * 		velocity noise
+ */
+int inskf_udmeas_vod(kf_t *inskf, double vod, const v3_t *vod_std)
 {
     KF_HINIT(inskf, 3);
     double vod_correct = vod * inskf->sol->kod;
-    m3_t ave_Cbe = m3_scalar(0.5, m3_add(inskf->sol->dcm, last_sol->dcm));
-    m3_t Cce = m3_mul(ave_Cbe, m3_T(inskf->sol->Cbc));
+    m3_t Cce = m3_mul(inskf->sol->dcm, m3_T(inskf->sol->Cbc));
     v3_t vec_e  = m3_mul_v3(Cce, (v3_t){vod_correct, 0.0, 0.0});
 
     m3_t mat = m3_T(v3_askew(v3_scalar(-1.0, vec_e)));
@@ -1032,11 +1140,10 @@ int inskf_udmeas_vod(kf_t *inskf, const solins_t *last_sol, double vod, double Q
         inskf->H[cfg.IEPITCH + 2*inskf->nx] =  -inskf->sol->dcm.m33*vod_correct;
     }
 
-    v3_t ave_vel = v3_scalar(0.5, v3_add(inskf->sol->vel, last_sol->vel));
-    v3_t dz = v3_del(ave_vel, vec_e);
+    v3_t dz = v3_del(inskf->sol->vel, vec_e);
     LOG_TRACE("dz_vodx %f, dz_vody %f, dz_vodz %f", dz.x, dz.y, dz.z);
 
-    m3_t Qdz = v3_diag((v3_t){0.1, 0.1, 0.1});
+    m3_t Qdz = v3_diag(v3_pow(*vod_std, 2.0));
     Qdz = m3_mul(m3_mul(inskf->sol->dcm, Qdz), m3_T(inskf->sol->dcm));
 
     m3_t QQ = Qdz;
@@ -1051,6 +1158,15 @@ int inskf_udmeas_vod(kf_t *inskf, const solins_t *last_sol, double vod, double Q
     return 0;
 }
 
+/**
+ * @brief ins kalman filter of car's motion constraint
+ * @param[in,out] 	inskf	ins kalman filter struct
+ * @param[in] 	wib_b		imu output angular rate[rad/s]
+ * @param[in] 	lever_arm_car car ref point under b-frame[m]
+ * @param[in] 	std_vy		zero velocity around y-axis under c-frame[m/s]
+ * @param[in] 	std_vz		zero veloctiy around z-axis under c-frame[m/s]
+ * @return status(0: OK)
+ */
 extern int inskf_MC_car(kf_t *inskf, const v3_t * wib_b,
     const v3_t *lever_arm_car, double std_vy, double std_vz)
 {
@@ -1108,10 +1224,10 @@ extern int inskf_MC_car(kf_t *inskf, const v3_t * wib_b,
 }
 
 /**
- * @brief insod_kf_ZST_pos
- * @param inskf
- * @param last_sol
- * @return  0:  Failed   1:  Sucessed  -1: can not determinate
+ * @brief Zero speed test by postion difference
+ * @param[in] 	inskf		ins kalman filter struct
+ * @param[in] 	last_sol 	last solution
+ * @return 0: kinematic  1: static  -1: can not be determniated
  */
 extern int inskf_ZST_pos(kf_t *inskf, const solins_t *last_sol)
 {
@@ -1153,6 +1269,13 @@ static int imu_mean_var_dv(const kf_t *inskf, double *mean_dv, double *var_dv)
     return 0;
 }
 
+/**
+ * @brief ins kalman filter to Zero Speed Test by imu data
+ * @param[in,out] 	inskf 	ins kalman filter struct
+ * @param[in] 	mean_dv		mean of a list imu dv output
+ * @param[in] 	std_dv		stanadard error of a list of imu dv output
+ * @return true: static, false: kinematic
+ */
 extern bool inskf_ZST_imu(kf_t *inskf, double mean_dv, double std_dv)
 {
     if(cfg.nZST == 0){
@@ -1192,14 +1315,22 @@ extern bool inskf_ZST_imu(kf_t *inskf, double mean_dv, double std_dv)
     return false;
 }
 
-extern bool inskf_ZST_auto(kf_t *inskf, const solins_t *last_pos,
+/**
+ * @brief  Zero Speed Test automatically
+ * @param[in,out] 	inskf	ins kalman filter struct
+ * @param[in]	last_sol	last solution(to check by position difference)
+ * @param[in,out] 	mean_dv		mean of a list imu dv output
+ * @param[in,out] 	std_dv		stanadard error of a list of imu dv output
+ * @return true: static, false: kinematic
+ */
+extern bool inskf_ZST_auto(kf_t *inskf, const solins_t *last_sol,
                               double *mean_dv, double *std_dv)
 {
     double mean_dv_cur, var_dv_cur;
     double fac_mean = 1.0/100;
     double fac_var = 1.0/1000;
     LOG_TRACE("mean_dv_thres %f, std_dv_thres %f", *mean_dv, *std_dv);
-    switch (inskf_ZST_pos(inskf, last_pos)) {
+    switch (inskf_ZST_pos(inskf, last_sol)) {
     case 0:     /* determinate dynamic by pos */
         // inskf_ZST_imu(inskf, *mean_dv, *std_dv);
         inskf->ZST_count = 0;

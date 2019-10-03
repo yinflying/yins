@@ -37,15 +37,16 @@
 #define SQR(x) ((x) * (x))
 
 /** safe to call realloc */
-#define REALLOC(pointer, type, sz)                                           \
-    if(!((pointer) = (type *)realloc((pointer), ((unsigned long)sz)*sizeof(type)))){        \
-        LOG_FATAL(#pointer " memeory realloc failed");                       \
+#define REALLOC(pointer, type, sz)                                           	\
+    if(!((pointer) = 												         	\
+        (type *)realloc((pointer), ((unsigned long)sz)*sizeof(type)))){      	\
+        LOG_FATAL(#pointer " memeory realloc failed");                       	\
     }
 
 /** safe to call malloc */
-#define MALLOC(pointer, type, sz)                                            \
-    if(!((pointer) = (type *)malloc(((unsigned long)sz)*sizeof(type)))){                    \
-        LOG_FATAL(#pointer " memory allocation failed");                     \
+#define MALLOC(pointer, type, sz)                                            	\
+    if(!((pointer) = (type *)malloc(((unsigned long)sz)*sizeof(type)))){     	\
+        LOG_FATAL(#pointer " memory allocation failed");                     	\
     }
 
 /** safe to free pointer */
