@@ -4,14 +4,14 @@ AR  = ar
 
 CFLAGS = -std=c99 -O2
 CPPFLAGS = -std=c++98 -O2
-CLINK = -static
-CPPLINK = -static
+CLINK = -static -lm
+CPPLINK = -static 
 
 yins_bin: main.o libyins.a
-	$(CPP) $(CPPLINK) main.o -o yins_bin -L. -lyins
+	$(CC) main.o -o yins_bin -L. -lyins $(CLINK)
 
-main.o: main.cpp yins_core/ins.h
-	$(CPP) $(CPPFLAGS) -c main.cpp -o main.o
+main.o: main.c yins_core/ins.h
+	$(CC) $(CFLAGS) -c main.c -o main.o
 
 static: libyins.a
 
