@@ -37,16 +37,16 @@
 #define SQR(x) ((x) * (x))
 
 /** safe to call realloc */
-#define REALLOC(pointer, type, sz)                                           	\
-    if(!((pointer) = 												         	\
-        (type *)realloc((pointer), ((unsigned long)sz)*sizeof(type)))){      	\
-        LOG_FATAL(#pointer " memeory realloc failed");                       	\
+#define REALLOC(pointer, type, sz)                                              \
+    if(!((pointer) =                                                            \
+        (type *)realloc((pointer), ((unsigned long)sz)*sizeof(type)))){         \
+        LOG_FATAL(#pointer " memeory realloc failed");                          \
     }
 
 /** safe to call malloc */
-#define MALLOC(pointer, type, sz)                                            	\
-    if(!((pointer) = (type *)malloc(((unsigned long)sz)*sizeof(type)))){     	\
-        LOG_FATAL(#pointer " memory allocation failed");                     	\
+#define MALLOC(pointer, type, sz)                                               \
+    if(!((pointer) = (type *)malloc(((unsigned long)sz)*sizeof(type)))){        \
+        LOG_FATAL(#pointer " memory allocation failed");                        \
     }
 
 /** safe to free pointer */
@@ -396,13 +396,13 @@ static int reads_nmea_GPGGA(char *buff, double *sec, v3_t *pos,
         }
         if((token = strtok(NULL, seps)) && status != NULL){
             switch(*token) {
-            case '0': *status = SOL_NONE; break;    /* invalid */
-            case '1': *status = SOL_SINGLE; break;  /* SPS fix */
-            case '2': *status = SOL_DGNSS; break;   /* DGPS fix */
-            case '3': *status = SOL_SINGLE; break;  /* PPS fix */
-            case '4': *status = SOL_FIXED; break;
-            case '5': *status = SOL_FLOAT; break;
-            case '6': *status = SOL_DR; break;
+            case '0': *status = SOL_NONE;   break;      /* invalid */
+            case '1': *status = SOL_SINGLE; break;      /* SPS fix */
+            case '2': *status = SOL_DGNSS;  break;      /* DGPS fix */
+            case '3': *status = SOL_SINGLE; break;      /* PPS fix */
+            case '4': *status = SOL_FIXED;  break;
+            case '5': *status = SOL_FLOAT;  break;
+            case '6': *status = SOL_DR;     break;
             case '7': *status = SOL_MANUAL; break;
             default:
                 LOG_ERROR("%s: Can not recognize GPS staus: %s", __FUNCTION__,
@@ -410,10 +410,10 @@ static int reads_nmea_GPGGA(char *buff, double *sec, v3_t *pos,
                 return -1;
             }
         }
-        if((token = strtok(NULL, seps))){}     /* number of satellites */
-        if((token = strtok(NULL, seps))){}     /* HDOP */
+        if((token = strtok(NULL, seps))){}      /* number of satellites */
+        if((token = strtok(NULL, seps))){}      /* HDOP */
         if((token = strtok(NULL, seps))){
-            pos->z = atof(token);          /* altitude(above sea level) */
+            pos->z = atof(token);               /* altitude(above sea level) */
             if((token = strtok(NULL, seps)) && strcmp(token, "M"))
                 LOG_ERROR("%s: unit of altitude can not be identified",
                          __FUNCTION__);
@@ -591,9 +591,9 @@ static int reads_ycsv_header(char *buff, imup_t *imup)
 static int readf_ycsv_header(FILE *fp, imup_t *imup){
     char buff[MAXLINELEN];
     while (fgets(buff, MAXLINELEN, fp)) {
-        if(buff[0] == '>') break;
-        if(buff[0] == '#') continue;
-        reads_ycsv_header(buff, imup);
+        if(buff[0] == '>') break;       /* skip comment */
+        if(buff[0] == '#') continue;    /* skip comment */
+        reads_ycsv_header(buff, imup);  /*
     }
     return 0;
 }

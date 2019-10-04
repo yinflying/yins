@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file ins.c
  * @brief ins core functions implementation
  * @author yinflying(yinflying@foxmail.com)
@@ -313,7 +313,7 @@ extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
     /* I-frame: inertial frame of n-frame at start moment */
     /* B-frame: inertial frame of b-frame at start moment */
 
-    int sample_N = 4;
+    unsigned int sample_N = 4;
     double ts = timediff(imu->data[1].time,imu->data[0].time);
     /* double nts = sample_N * ts; */
 
@@ -325,21 +325,21 @@ extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
     v3_t vib_B = {0.0, 0.0, 0.0}, vib_B1 = {0.0, 0.0, 0.0};
     quat_t qb_B = {1.0, 0.0, 0.0, 0.0};   /* initial attitde*/
     quat_t qk_k1; /* trans from k to k+1 */
-    int ind_mid = (imu->n/sample_N) / 2 * sample_N;
+    unsigned int ind_mid = (imu->n/sample_N) / 2 * sample_N;
     for (unsigned int i = 0; i <= imu->n - sample_N ; i += sample_N) {
-        for(int j = 0; j < sample_N; ++j){
+        for(unsigned int j = 0; j < sample_N; ++j){
             dtheta[j] = imu->data[i+j].gyro;
             dv[j] = imu->data[i+j].accel;
         }
         /* Calculate current fib_B */
-        multisample(dtheta,dv,sample_N,&sum_dtheta,&sum_dv);
+        multisample(dtheta,dv,(int)sample_N,&sum_dtheta,&sum_dv);
         vib_B = v3_add(vib_B,quat_mul_v3(qb_B, sum_dv));
         /* qb_B attitude update uner inertial frame */
         rv2quat(&sum_dtheta,&qk_k1);
         qb_B = quat_mul(qb_B,qk_k1);
 
         /* record middle vib_B */
-        if((int)i == ind_mid - sample_N) vib_B1 = vib_B;
+        if(i == ind_mid - sample_N) vib_B1 = vib_B;
     }
     /* Calculate vib_I1, vib_I2 */
     double total_t = ts * ind_mid * 2;
@@ -384,12 +384,12 @@ extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
  *  Singular Value Decompostion, 1988
  */
 extern int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n,
-        int Nveb_n, m3_t *Cnb)
+        unsigned int Nveb_n, m3_t *Cnb)
 {
     /* N-frame: inertial frame of n-frame at start moment */
     /* B-frame: inertial frame of b-frame at start moment */
     double ts = timediff(imu->data[1].time,imu->data[0].time);
-    int len_dv = (imu->n - 1) / (Nveb_n - 1);
+    unsigned int len_dv = (imu->n - 1) / (unsigned int)(Nveb_n - 1);
     double nts = len_dv * ts;
 
     double sin_lat = sin(lat), cos_lat = cos(lat);
@@ -446,13 +446,13 @@ extern int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n,
 
     /* interleave accumulate */
     len_dv = Nveb_n / 2;
-    int N_dvsum = Nveb_n - len_dv;  /* Number of vectors to determiate attitude */
+    unsigned int N_dvsum = Nveb_n - len_dv;  /* Number of vectors to determiate attitude */
     v3_t *dv_N_sum = (v3_t *)malloc(sizeof(v3_t) * N_dvsum);
     v3_t *dv_B_sum = (v3_t *)malloc(sizeof(v3_t) * N_dvsum);
-    for(int i = 0; i < N_dvsum; ++i){
+    for(unsigned int i = 0; i < N_dvsum; ++i){
         dv_N_sum[i] = (v3_t){0.0, 0.0, 0.0};
         dv_B_sum[i] = (v3_t){0.0, 0.0, 0.0};
-        for(int j = 0; j < len_dv; ++j){
+        for(unsigned int j = 0; j < len_dv; ++j){
             dv_N_sum[i] = v3_add(dv_N_sum[i], dv_N[i+j]);
             dv_B_sum[i] = v3_add(dv_B_sum[i], dv_B[i+j]);
         }
@@ -463,7 +463,7 @@ extern int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n,
 
     /* Solve wuhba problem by using SVD solution */
     m3_t B = O3;
-    for(int i = 0; i < N_dvsum; ++i){
+    for(unsigned int i = 0; i < N_dvsum; ++i){
         B = m3_add(B,v3_mul_cxr(dv_N_sum[i],dv_B_sum[i]));
     }
     m3_t U,V; v3_t D;
@@ -505,6 +505,9 @@ extern int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n,
  * @param[in]   dt  time interval[s]
  * @return O: OK
  * @note This function relate to the earth rotation rate, use wgs84 parameter.
+ *
+ *      Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ *      Integrated Navigation Systems(2nd Edition), P583, 14.48
  */
 extern inline int jacobi_trans_Ebe2Ebe(m3_t *F, double dt)
 {
@@ -515,12 +518,16 @@ extern inline int jacobi_trans_Ebe2Ebe(m3_t *F, double dt)
     F->m11 += 1; F->m22 += 1; F->m33 += 1;
     return 0;
 }
+
 /**
  * @brief Form state transformation jacobi matrix from Ebe to gryo bias
  * @param[out]  F   Jacobi matrix
  * @param[in]   dt  Time interval
  * @param[in]   Cbe Current average attitude
  * @return 0: OK
+ * @note
+ *      Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ *      Integrated Navigation Systems(2nd Edition), P583, 14.48
  */
 extern inline int jacobi_trans_Ebe2bg(m3_t *F, double dt, const m3_t *Cbe)
 {
@@ -528,12 +535,16 @@ extern inline int jacobi_trans_Ebe2bg(m3_t *F, double dt, const m3_t *Cbe)
     *F = m3_scalar(-dt, *Cbe);
     return 0;
 }
+
 /**
  * @brief Form state transformation jacobi matrix from veb_e to Ebe
  * @param[out]  F   Jacobi matrix
  * @param[in]   Cbe Current average attitude.
  * @param[in]   dv  Velocity increment[m/s]
  * @return 0: OK
+ * @note
+ *      Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ *      Integrated Navigation Systems(2nd Edition), P583, 14.48
  */
 extern inline int
 jacobi_trans_veb_e2Ebe(m3_t *F, const m3_t *Cbe, const v3_t *dv)
@@ -549,6 +560,9 @@ jacobi_trans_veb_e2Ebe(m3_t *F, const m3_t *Cbe, const v3_t *dv)
  * @param[out]  F   Jacobi matrix
  * @param[in]   dt  Time interval[s]
  * @return 0: OK
+ * @note
+ *      Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ *      Integrated Navigation Systems(2nd Edition), P583, 14.48
  */
 extern inline int jacobi_trans_veb_e2veb_e(m3_t *F, double dt)
 {
@@ -566,6 +580,9 @@ extern inline int jacobi_trans_veb_e2veb_e(m3_t *F, double dt)
  * @param[in]   dt      Time interval[s]
  * @param[in]   reb_e   ecef position[m]
  * @return 0: OK
+ * @note
+ *      Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ *      Integrated Navigation Systems(2nd Edition), P583, 14.48
  */
 extern inline int
 jacobi_trans_veb_e2reb_e(m3_t *F, double dt, const v3_t *reb_e)
@@ -582,12 +599,16 @@ jacobi_trans_veb_e2reb_e(m3_t *F, double dt, const v3_t *reb_e)
     *F = v3_mul_cxr(ge, *reb_e);
     return 0;
 }
+
 /**
  * @brief Form state transformation jacobi matrix from veb_e to ba
  * @param[out]  F       Jacobi matrix
  * @param[in]   dt      Time interval[s]
  * @param[in]   Cbe     Current average attitude over time[m]
- * @return
+ * @return 0: OK
+ * @note
+ *      Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ *      Integrated Navigation Systems(2nd Edition), P583, 14.48
  */
 extern inline int jacobi_trans_veb_e2ba(m3_t *F, double dt, const m3_t *Cbe)
 {
@@ -599,7 +620,10 @@ extern inline int jacobi_trans_veb_e2ba(m3_t *F, double dt, const m3_t *Cbe)
  * @brief Form state transformation jacobi matrix from reb_e to veb_e
  * @param[out]  F   Jacobi matrix
  * @param[in]   dt  Time interval[s]
- * @return
+ * @return 0: OK
+ * @note
+ *      Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ *      Integrated Navigation Systems(2nd Edition), P583, 14.48
  */
 extern inline int jacobi_trans_reb_e2veb_e(m3_t *F, double dt) {
     F->m11 = dt; F->m12 = 0.0; F->m13 = 0.0;
@@ -611,10 +635,13 @@ extern inline int jacobi_trans_reb_e2veb_e(m3_t *F, double dt) {
 /**
  * @brief Form state transformation jacobi matrix of
  *      1st order markov/random walk process
- * @param[in]   F   Jacobi matrix
- * @param
+ * @param[out]   F      Jacobi matrix
+ * @param[in]   dt      Time interval[s]
+ * @param[in]   T       correlation time[s]
+ * @warning dt should far less than T(dt << T)
+ * @note if T == V0, this function will return random walk process factor(I3)
+ *  markov process should not used if you can not comprehend what really it is.
  */
-/* TODO: markov process have problems */
 extern inline int jacobi_trans_markov(m3_t *F, double dt, const v3_t *T)
 {
     F->m11 = T->x == 0.0 ? 1.0 : 1.0 - dt / T->x;
@@ -627,53 +654,68 @@ extern inline int jacobi_trans_markov(m3_t *F, double dt, const v3_t *T)
 }
 
 /**
- * @brief Form state transformation jacobi matrix of 1st order markov/random
- *  walk process
- * @param[out]  F           Jacobi matrix
+ * @brief Form measurement jacobi matrix from reb_e to Ebe
+ * @param[out]  H           Jacobi matrix
  * @param[in]   Cbe         Current average attitude
- * @param[in]   lever_arm   gnss to imu lever arm
- * @return
+ * @param[in]   lever_arm   gnss to imu lever arm[m]
+ * @return status(0: OK)
+ * @note
+ *      Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ *      Integrated Navigation Systems(2nd Edition), P600, 14.111
  */
-extern int jacobi_meas_reb_e2Ebe(m3_t *F, const m3_t *Cbe, const v3_t *lever_arm)
+extern int jacobi_meas_reb_e2Ebe(m3_t *H, const m3_t *Cbe, const v3_t *lever_arm)
 {
     v3_t v = m3_mul_v3(*Cbe, *lever_arm);
-    asymmetric_mat(&v, F);
+    asymmetric_mat(&v, H);
     return 0;
 }
 
 /**
- * @brief jacobi_meas_veb_e2Ebe
- * @param[out]  F
- * @param[in]   Cbe
- * @param[in]   wib_b
- * @param[in]   lever_arm
- * @return
+ * @brief Form measurement jacobi matrix from veb_e to Ebe
+ * @param[out]  H			Jacobi matrix
+ * @param[in]   Cbe			Current average attitude
+ * @param[in]   wib_b		imu output angluar rate[rad/s]
+ * @param[in]   lever_arm	gnss to imu lever arm[m]
+ * @return status(0: OK)
+ * @note
+ *      Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ *      Integrated Navigation Systems(2nd Edition), P600, 14.111
  */
-extern int jacobi_meas_veb_e2Ebe(m3_t *F, const m3_t *Cbe, const v3_t *wib_b,
+extern int jacobi_meas_veb_e2Ebe(m3_t *H, const m3_t *Cbe, const v3_t *wib_b,
     const v3_t *lever_arm)
 {
     v3_t v1 = m3_mul_v3(*Cbe, v3_cross(*wib_b, *lever_arm));
     v3_t wie_e = {0.0, 0.0, wgs84.wie};
     v3_t v2 = v3_cross(wie_e, m3_mul_v3(*Cbe, *lever_arm));
     v3_t v = v3_del(v1, v2);
-    asymmetric_mat(&v, F);
+    asymmetric_mat(&v, H);
     return 0;
 }
 
 /**
- * @brief jacobi_meas_veb_e2bg
- * @param F
- * @param Cbe
- * @param lever_arm
- * @return
+ * @brief Form measurement jacobi matrix from veb_e to bg
+ * @param[out] 		H			Jacobi matrix
+ * @param[in] 		Cbe			Current average attitude
+ * @param[in] 		lever_arm	gnss lever arm[m]
+ * @return status(0: 0K)
+ * @note
+ *      Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ *      Integrated Navigation Systems(2nd Edition), P600, 14.111
  */
-extern int jacobi_meas_veb_e2bg(m3_t *F, const m3_t *Cbe, const v3_t *lever_arm)
+extern int jacobi_meas_veb_e2bg(m3_t *H, const m3_t *Cbe, const v3_t *lever_arm)
 {
     m3_t lx; asymmetric_mat(lever_arm, &lx);
-    *F = m3_mul(*Cbe, lx);
+    *H = m3_mul(*Cbe, lx);
     return 0;
 }
 
+/**
+ * @brief Form state transformation matrix from veb_e to ka.x
+ * @param[out] 	F		Jacobi matrix
+ * @param[in] 	Cbe		current average attitude
+ * @param[in] 	dv		imu output velocity increment
+ * @return status(0: OK)
+ */
 extern inline int
 jacobi_trans_veb_e2kax(double *F, const m3_t *Cbe, const v3_t *dv)
 {
@@ -683,6 +725,13 @@ jacobi_trans_veb_e2kax(double *F, const m3_t *Cbe, const v3_t *dv)
     return 0;
 }
 
+/**
+ * @brief Form state transformation matrix from veb_e to ka.y
+ * @param[out] 	F		Jacobi matrix
+ * @param[in] 	Cbe		current avearge attitude
+ * @param[in] 	dv		imu output velocity increment
+ * @return status(0: OK)
+ */
 extern inline int
 jacobi_trans_veb_e2kay(double *F, const m3_t *Cbe, const v3_t *dv)
 {
@@ -692,6 +741,13 @@ jacobi_trans_veb_e2kay(double *F, const m3_t *Cbe, const v3_t *dv)
     return 0;
 }
 
+/**
+ * @brief Form state transformation matrix from veb_e to ka.z
+ * @param[out] 	F		Jacobi matrix
+ * @param[in] 	Cbe		current average attitude
+ * @param[in] 	dv		imu output velocity increment
+ * @return status(0: OK)
+ */
 extern inline int
 jacobi_trans_veb_e2kaz(double *F, const m3_t *Cbe, const v3_t *dv)
 {
@@ -701,6 +757,13 @@ jacobi_trans_veb_e2kaz(double *F, const m3_t *Cbe, const v3_t *dv)
     return 0;
 }
 
+/**
+ * @brief Form state transformation matrix from veb_e to kg.x
+ * @param[out] 	F		Jacobi matrix
+ * @param[in] 	Cbe		current average attitude
+ * @param[in] 	dtheta	imu output angular increment
+ * @return status(0: OK)
+ */
 extern inline int
 jacobi_trans_Ebe2kgx(double *F, const m3_t *Cbe, const v3_t *dtheta)
 {
@@ -709,6 +772,14 @@ jacobi_trans_Ebe2kgx(double *F, const m3_t *Cbe, const v3_t *dtheta)
     F[cfg.IATT+2+cfg.IKGx*cfg.nx] = Cbe->m31 * dtheta->x;
     return 0;
 }
+
+/**
+ * @brief Form state transformation matrix from veb_e to kg.y
+ * @param[out] 	F		Jacobi matrix
+ * @param[in] 	Cbe		current average attitude
+ * @param[in] 	dtheta	imu output angular increment
+ * @return status(0: OK)
+ */
 extern inline int
 jacobi_trans_Ebe2kgy(double *F, const m3_t *Cbe, const v3_t *dtheta)
 {
@@ -717,6 +788,14 @@ jacobi_trans_Ebe2kgy(double *F, const m3_t *Cbe, const v3_t *dtheta)
     F[cfg.IATT+2+cfg.IKGy*cfg.nx] = Cbe->m32 * dtheta->y;
     return 0;
 }
+
+/**
+ * @brief Form state transformation matrix from veb_e to kg.z
+ * @param[out] 	F		Jacobi matrix
+ * @param[in] 	Cbe		current average attitude
+ * @param[in] 	dtheta	imu output angular increment
+ * @return status(0: OK)
+ */
 extern inline int
 jacobi_trans_Ebe2kgz(double *F, const m3_t *Cbe, const v3_t *dtheta)
 {
@@ -733,7 +812,7 @@ jacobi_trans_Ebe2kgz(double *F, const m3_t *Cbe, const v3_t *dtheta)
  * @param[in] dS        distance increment in the time interval dt [m]
  * @param[in,out] r     last/current position under e-frame[m]
  * @param[in,out] q     last/current attitude exepress by quaternion(Qbe)
- * @return 0: OK
+ * @return status(0: OK)
  */
 extern int dr_nav_ecef(double dt, const v3_t* dtheta, double dS, v3_t *r,
                        quat_t *q)

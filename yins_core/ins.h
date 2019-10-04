@@ -492,7 +492,7 @@ int align_coarse_static_base(const imu_t *imu, double lat, m3_t *Cnb);
 int dblvec2att(const v3_t *vn1, const v3_t *vn2, const v3_t *vb1, const v3_t*vb2, m3_t *Cnb);
 int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb);
 int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n,
-        int Nveb_n, m3_t *Cnb);
+                       unsigned int Nveb_n, m3_t *Cnb);
 
 /* TODO: Static and dynamic judgment */
 

@@ -86,11 +86,11 @@ static void kf_copyQ2sol(kf_t *inskf)
 
 /**
  * @brief form transfer noise matrix of kalman matrix
- * 			P = F * P * F' + Q
- * @param[out] 	Q			transer noise matrix
- * @param[in] 	Cbe			Attitude transformation from b to e
- * @param[in] 	dt_zoom		time interval[s] x zoom
- * @param[in] 	imup		imu property struct
+ *          P = F * P * F' + Q
+ * @param[out]  Q           transer noise matrix
+ * @param[in]   Cbe         Attitude transformation from b to e
+ * @param[in]   dt_zoom     time interval[s] x zoom
+ * @param[in]   imup        imu property struct
  * @return status(0: OK)
  */
 static int
@@ -134,8 +134,8 @@ kf_formQ(double *Q, const m3_t *Cbe, double dt_zoom, const imup_t *imup)
 
 /**
  * @brief initial ins kalman filter
- * @param[in,out] 	inskf	kalman filter of ins
- * @param[in] 		imup 	imu property sturct
+ * @param[in,out]   inskf   kalman filter of ins
+ * @param[in]       imup    imu property sturct
  * @return status(0: OK)
  */
 extern int inskf_init(kf_t *inskf, const imup_t *imup)
@@ -339,10 +339,10 @@ extern int inskf_init(kf_t *inskf, const imup_t *imup)
 
 /**
  * @brief kalman filter update state
- * 		x = Fx,   P = F * P * F' +  Q, and full state transfer
- * @param[in] inskf		kalman filter
- * @param[in] imud		imu data struct
- * @param[in] imup		imu property struct
+ *      x = Fx,   P = F * P * F' +  Q, and full state transfer
+ * @param[in] inskf     kalman filter
+ * @param[in] imud      imu data struct
+ * @param[in] imup      imu property struct
  * @return status(0:OK)
  */
 extern int inskf_udstate(kf_t *inskf, const imud_t *imud, const imup_t *imup)
@@ -477,11 +477,11 @@ extern int inskf_udstate(kf_t *inskf, const imud_t *imud, const imup_t *imup)
 
 /**
  * @brief kalman filter position measment update
- * @param[in,out] 	inskf		ins kalman filter struct
- * @param[in] 		reg_e		(gnss) position under e-frame[m]
- * @param[in] 		Qreg_e		(gnss) position variance matrix
- * @param[in] 		lever_arm	lever arm of (gnss) postion(under b-frame)
- * @return	status(0: OK)
+ * @param[in,out]   inskf       ins kalman filter struct
+ * @param[in]       reg_e       (gnss) position under e-frame[m]
+ * @param[in]       Qreg_e      (gnss) position variance matrix
+ * @param[in]       lever_arm   lever arm of (gnss) postion(under b-frame)
+ * @return  status(0: OK)
  */
 extern int inskf_udmeasr(kf_t *inskf, const v3_t *reg_e, const m3_t *Qreg_e,
                       const v3_t *lever_arm)
@@ -524,11 +524,11 @@ extern int inskf_udmeasr(kf_t *inskf, const v3_t *reg_e, const m3_t *Qreg_e,
 
 /**
  * @brief kalman filter velocity update
- * @param[in,out] 	inskf		ins kalman filter struct
- * @param[in] 		veg_e		(gnss) velocity under e-frame[m/s]
- * @param[in] 		Qveg_e		(gnss) velocity variance matrix
- * @param[in] 		lever_arm	lever arm of (gnss) position(unber b-frame)
- * @param[in]		wib_b		angular rate of imu
+ * @param[in,out]   inskf       ins kalman filter struct
+ * @param[in]       veg_e       (gnss) velocity under e-frame[m/s]
+ * @param[in]       Qveg_e      (gnss) velocity variance matrix
+ * @param[in]       lever_arm   lever arm of (gnss) position(unber b-frame)
+ * @param[in]       wib_b       angular rate of imu
  * @return status(0: OK)
  */
 extern int inskf_udmeasv(kf_t *inskf, const v3_t *veg_e, const m3_t *Qveg_e,
@@ -580,9 +580,9 @@ extern int inskf_udmeasv(kf_t *inskf, const v3_t *veg_e, const m3_t *Qveg_e,
 
 /**
  * @brief kalman filter yaw angle measument update
- * @param[in,out] 	inskf	ins kalman fitler struct
- * @param[in] 		yaw		yaw angle measuremnt(Enb.k) [rad]
- * @param[in] 		Qyaw   	uncertainty of yaw [rad^2]
+ * @param[in,out]   inskf   ins kalman fitler struct
+ * @param[in]       yaw     yaw angle measuremnt(Enb.k) [rad]
+ * @param[in]       Qyaw    uncertainty of yaw [rad^2]
  * @return status(0: OK, 1: failed)
  */
 extern int inskf_udmeas_yaw(kf_t *inskf, double yaw, double Qyaw)
@@ -615,12 +615,12 @@ extern int inskf_udmeas_yaw(kf_t *inskf, double yaw, double Qyaw)
 
 /**
  * @brief ins kalman filter Zero Angular Update
- * @param[in,out] 	inskf	ins kalman filter struct
- * @param[in] 		yaw	 	yaw measment at start of static moment[rad]
- * @param[in] 		Qyaw	uncertainty of yaw[rad^2]
+ * @param[in,out]   inskf   ins kalman filter struct
+ * @param[in]       yaw     yaw measment at start of static moment[rad]
+ * @param[in]       Qyaw    uncertainty of yaw[rad^2]
  * @return status(0: OK, 1: failed, current momoent may be not static)
  * @note this function nearly the same as inskf_udmeas_yaw(), but do not have
- * 		same function.
+ *      same function.
  */
 extern int inskf_ZAU(kf_t *inskf, double yaw, double Qyaw)
 {
@@ -651,9 +651,9 @@ extern int inskf_ZAU(kf_t *inskf, double yaw, double Qyaw)
 
 /**
  * @brief ins kalman filter update attitude measment.
- * @param[in,out] 	inskf	ins kalman filter struct
- * @param[in] 		Cbe		DCM from b-frame to e-frame
- * @param[in] 		QEbe  	uncertainty of Ebe. [rad^2]
+ * @param[in,out]   inskf   ins kalman filter struct
+ * @param[in]       Cbe     DCM from b-frame to e-frame
+ * @param[in]       QEbe    uncertainty of Ebe. [rad^2]
  * @return status(0: OK)
  */
 extern int inskf_udmeas_Cbe(kf_t *inskf, const m3_t *Cbe, const m3_t *QEbe)
@@ -681,8 +681,8 @@ extern int inskf_udmeas_Cbe(kf_t *inskf, const m3_t *Cbe, const m3_t *QEbe)
 
 /**
  * @brief ins kalman filter feedback (move inskf->x to inskf.sol)
- * @param[in,out] 	inskf		ins kalman filter
- * @param[in] 		SOL_TYPE	solution type, see enum SOL
+ * @param[in,out]   inskf       ins kalman filter
+ * @param[in]       SOL_TYPE    solution type, see enum SOL
  * @return status(0: OK)
  */
 extern int inskf_feedback(kf_t *inskf, unsigned int SOL_TYPE)
@@ -794,7 +794,7 @@ extern int inskf_feedback(kf_t *inskf, unsigned int SOL_TYPE)
 
 /**
  * @brief close ins kalman filter,  free all variable memory
- * @param[in] 	inskf	ins kalman filter struct
+ * @param[in]   inskf   ins kalman filter struct
  * @return status(0: OK)
  */
 extern int inskf_close(kf_t *inskf)
@@ -814,10 +814,10 @@ extern int inskf_close(kf_t *inskf)
 
 /**
  * @brief constraint yaw by velocity(Use velocity to caculate yaw, and
- * 		then update)
- * @param[in,out]   inskf	ins kalman filter struct
- * @param[in]       wib_b	currnet imu output angular rate
- * @param[in]       imup 	imu property struct
+ *      then update)
+ * @param[in,out]   inskf   ins kalman filter struct
+ * @param[in]       wib_b   currnet imu output angular rate
+ * @param[in]       imup    imu property struct
  * @return status(0: OK)
  * @warning make sure all necessary imu proerties are well setted.
  * @note related imu property:
@@ -875,10 +875,10 @@ int inskf_constraint_yaw(kf_t *inskf, const v3_t *wib_b, const imup_t *imup)
 
 /**
  * @brief  Zero angular rate update for ins kalman filter
- * @param[in] 	inskf		ins kalman filter struct
- * @param[in] 	last_qbe	last quaternion
- * @param[in] 	dt			time interval[s]
- * @param[in] 	Qweb_b		uncertainty of three axis angle
+ * @param[in]   inskf       ins kalman filter struct
+ * @param[in]   last_qbe    last quaternion
+ * @param[in]   dt          time interval[s]
+ * @param[in]   Qweb_b      uncertainty of three axis angle
  * @return status(0: OK)
  */
 int inskf_ZRAU(kf_t *inskf, const quat_t *last_qbe, double dt,
@@ -917,8 +917,8 @@ int inskf_ZRAU(kf_t *inskf, const quat_t *last_qbe, double dt,
 
 /**
  * @brief Zero velocity update of ins kalman filter
- * @param[in,out] 	inskf	ins kalman filter struct
- * @param[in] 		Qveb_e	uncerainty of zero speed
+ * @param[in,out]   inskf   ins kalman filter struct
+ * @param[in]       Qveb_e  uncerainty of zero speed
  * @return Status(0: OK)
  */
 extern int inskf_ZUPT(kf_t *inskf, const m3_t *Qveb_e)
@@ -936,10 +936,10 @@ extern int inskf_ZUPT(kf_t *inskf, const m3_t *Qveb_e)
 
 /**
  * @brief ins kalman filter of update integral varables of odomemter
- * @param[in,out] 	inskf	ins kalman filter struct
- * @param[in] 	dS 		distance increment[s]
- * @param[in] 	lever_arm_car 	ref point uner b-frame
- * @param[in] 	wib_b	imu output angular rate
+ * @param[in,out]   inskf   ins kalman filter struct
+ * @param[in]   dS      distance increment[s]
+ * @param[in]   lever_arm_car   ref point uner b-frame
+ * @param[in]   wib_b   imu output angular rate
  * @return status(0: OK)
  */
 extern int inskf_uditg_dS(kf_t *inskf, double dS, const v3_t *lever_arm_car,
@@ -986,8 +986,8 @@ extern int inskf_uditg_dS(kf_t *inskf, double dS, const v3_t *lever_arm_car,
 
 /**
  * @brief ins kalman filter, use odometer's integral variables as measument
- * @param[in,out] 	inskf	ins kalman filter struct
- * @param[in] 		itgdS_std 	odometer's velocity intetral's stanadard error.
+ * @param[in,out]   inskf   ins kalman filter struct
+ * @param[in]       itgdS_std   odometer's velocity intetral's stanadard error.
  * @return status(0: OK)
  */
 extern int inskf_udmeas_itgdS(kf_t *inskf, const v3_t *itgdS_std)
@@ -1103,12 +1103,12 @@ extern int inskf_udmeas_itgdS(kf_t *inskf, const v3_t *itgdS_std)
 
 /**
  * @brief ins kalman filter, use odometer output velocity as measurement
- * @param[in,out] 	inskf		ins kalman filter struct
- * @param[in] 		vod			odometer output velocity[m/s]
- * @param[in] 		vod_std		odometer output velocity uncertainty[m/s]
+ * @param[in,out]   inskf       ins kalman filter struct
+ * @param[in]       vod         odometer output velocity[m/s]
+ * @param[in]       vod_std     odometer output velocity uncertainty[m/s]
  * @return status(0: OK)
  * @note vod_std.x is vod uncertainty, vod_std.y and vod_std.z is the Zero
- * 		velocity noise
+ *      velocity noise
  */
 int inskf_udmeas_vod(kf_t *inskf, double vod, const v3_t *vod_std)
 {
@@ -1160,11 +1160,11 @@ int inskf_udmeas_vod(kf_t *inskf, double vod, const v3_t *vod_std)
 
 /**
  * @brief ins kalman filter of car's motion constraint
- * @param[in,out] 	inskf	ins kalman filter struct
- * @param[in] 	wib_b		imu output angular rate[rad/s]
- * @param[in] 	lever_arm_car car ref point under b-frame[m]
- * @param[in] 	std_vy		zero velocity around y-axis under c-frame[m/s]
- * @param[in] 	std_vz		zero veloctiy around z-axis under c-frame[m/s]
+ * @param[in,out]   inskf   ins kalman filter struct
+ * @param[in]   wib_b       imu output angular rate[rad/s]
+ * @param[in]   lever_arm_car car ref point under b-frame[m]
+ * @param[in]   std_vy      zero velocity around y-axis under c-frame[m/s]
+ * @param[in]   std_vz      zero veloctiy around z-axis under c-frame[m/s]
  * @return status(0: OK)
  */
 extern int inskf_MC_car(kf_t *inskf, const v3_t * wib_b,
@@ -1225,8 +1225,8 @@ extern int inskf_MC_car(kf_t *inskf, const v3_t * wib_b,
 
 /**
  * @brief Zero speed test by postion difference
- * @param[in] 	inskf		ins kalman filter struct
- * @param[in] 	last_sol 	last solution
+ * @param[in]   inskf       ins kalman filter struct
+ * @param[in]   last_sol    last solution
  * @return 0: kinematic  1: static  -1: can not be determniated
  */
 extern int inskf_ZST_pos(kf_t *inskf, const solins_t *last_sol)
@@ -1271,9 +1271,9 @@ static int imu_mean_var_dv(const kf_t *inskf, double *mean_dv, double *var_dv)
 
 /**
  * @brief ins kalman filter to Zero Speed Test by imu data
- * @param[in,out] 	inskf 	ins kalman filter struct
- * @param[in] 	mean_dv		mean of a list imu dv output
- * @param[in] 	std_dv		stanadard error of a list of imu dv output
+ * @param[in,out]   inskf   ins kalman filter struct
+ * @param[in]   mean_dv     mean of a list imu dv output
+ * @param[in]   std_dv      stanadard error of a list of imu dv output
  * @return true: static, false: kinematic
  */
 extern bool inskf_ZST_imu(kf_t *inskf, double mean_dv, double std_dv)
@@ -1317,10 +1317,10 @@ extern bool inskf_ZST_imu(kf_t *inskf, double mean_dv, double std_dv)
 
 /**
  * @brief  Zero Speed Test automatically
- * @param[in,out] 	inskf	ins kalman filter struct
- * @param[in]	last_sol	last solution(to check by position difference)
- * @param[in,out] 	mean_dv		mean of a list imu dv output
- * @param[in,out] 	std_dv		stanadard error of a list of imu dv output
+ * @param[in,out]   inskf   ins kalman filter struct
+ * @param[in]   last_sol    last solution(to check by position difference)
+ * @param[in,out]   mean_dv     mean of a list imu dv output
+ * @param[in,out]   std_dv      stanadard error of a list of imu dv output
  * @return true: static, false: kinematic
  */
 extern bool inskf_ZST_auto(kf_t *inskf, const solins_t *last_sol,
