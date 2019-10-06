@@ -26,6 +26,7 @@
  **/
 
 #include "yins_core/ins.h"
+#include "yinsapp.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -111,13 +112,38 @@ void test_ygm_insod(){
 #undef NAME
 }
 
+void test_yinsapp_pureins(){
+#define WPATH "../yins/yins_data/ygm_insod/"
+#define NAME  "ygm_circle_"
+
+    /* read pva(position,velocity,attitude) file */
+    pva_t pva;  pva_init(&pva);
+    yins_readf(WPATH NAME "avp.txt",FT_YGM_AVP, NULL, &pva, NULL);
+
+    imup_t imup; memset(&imup, 0, sizeof(imup_t));
+    imup.tstart = pva.time[0];
+    imup.initr = pva.pos[0]; imup.initv = pva.vel[0]; imup.inita = pva.att[0];
+    ecef2ned(&imup.initr, &imup.initv, NULL);
+    imup.freq_imu = 100;
+
+    const char fin[] = 	WPATH NAME "imu.txt";
+    const char fsol[] =	WPATH NAME "sol.ycsv";
+    strcpy(cfg.log_path, WPATH NAME "yins.log");
+    yinsapp_pureins(fin, FT_YGM_IMU, &imup, fsol);
+#undef WPATH
+#undef NAME
+}
+
+
+
 
 int main()
 {
     FILE_LOG_LEVEL = LEVEL_TRACE;
     STDOUT_LOG_LEVEL = LEVEL_DEBUG;
 
-    test_ygm_insod();
+//    test_ygm_insod();
+    test_yinsapp_pureins();
 
     LOG_CLOSE();
     return 0;

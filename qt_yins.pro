@@ -11,7 +11,8 @@ SOURCES += \
         yins_core/ins.c \
         yins_core/inscmn.c \
         yins_core/insio.c \
-        yins_core/inskf.c
+        yins_core/inskf.c \
+        yinsapp.c
 
 config_nmea2ycsv{
     TARGET = nmea2ycsv
@@ -30,7 +31,8 @@ config_UT{
 
 
 HEADERS += \
-    yins_core/ins.h
+    yins_core/ins.h \
+    yinsapp.h
 
 unix:!macx: LIBS += -lcriterion
 

@@ -593,7 +593,7 @@ static int readf_ycsv_header(FILE *fp, imup_t *imup){
     while (fgets(buff, MAXLINELEN, fp)) {
         if(buff[0] == '>') break;       /* skip comment */
         if(buff[0] == '#') continue;    /* skip comment */
-        reads_ycsv_header(buff, imup);  /*
+        reads_ycsv_header(buff, imup);  /* */
     }
     return 0;
 }

@@ -68,7 +68,8 @@ cfg_t cfg = {
     .issol_header = true,
     .sol_refpos = 0,
     .feedratio = 1.0,
-    .is_imu_samenoise = false
+    .is_imu_samenoise = false,
+    .log_path = "yins.log",
 };
 
 /**
@@ -394,7 +395,7 @@ extern m3_t m3_del(m3_t A, m3_t B)
 
 /**
  * @brief Scalar multiplication between number and 3D matrix
- * @param[in] s     Input number
+ * @param[in] alpha Input number
  * @param[in] A     Input 3D matrix
  * @return Scalar muliplication result of s and A ( s x v )
  */

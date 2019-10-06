@@ -346,6 +346,7 @@ typedef struct{
     unsigned char nR;           /**< necessary measurent noise number */
 
     bool is_imu_samenoise;      /**< if imu three axis have same noise(use for speed up kalman filter) */
+    char log_path[1024];		/**< yins log file path */
 } cfg_t;            /**< configure struct */
 
 extern cfg_t cfg;   /**< global configuration */
@@ -528,18 +529,16 @@ int jacobi_trans_veb_e2reb_e(m3_t *F, double dt, const v3_t *reb_e);
 int jacobi_trans_veb_e2ba(m3_t *F, double dt, const m3_t *Cbe);
 int jacobi_trans_reb_e2veb_e(m3_t *F, double dt);
 int jacobi_trans_markov(m3_t *F, double dt, const v3_t *T);
+int jacobi_trans_Ebe2kgx(double *F, const m3_t *Cbe, const v3_t *dtheta);
+int jacobi_trans_Ebe2kgy(double *F, const m3_t *Cbe, const v3_t *dtheta);
+int jacobi_trans_Ebe2kgz(double *F, const m3_t *Cbe, const v3_t *dtheta);
+int jacobi_trans_veb_e2kax(double *F, const m3_t *Cbe, const v3_t *dv);
+int jacobi_trans_veb_e2kay(double *F, const m3_t *Cbe, const v3_t *dv);
+int jacobi_trans_veb_e2kaz(double *F, const m3_t *Cbe, const v3_t *dv);
 int jacobi_meas_reb_e2Ebe(m3_t *H, const m3_t *Cbe, const v3_t *lever_arm);
 int jacobi_meas_veb_e2Ebe(m3_t *H, const m3_t *Cbe, const v3_t *wib_b, const v3_t *lever_arm);
 int jacobi_meas_veb_e2bg(m3_t *H, const m3_t *Cbe, const v3_t *lever_arm);
 int jacobi_meas_Ebn2Ebe(m3_t *H, const m3_t *Cen);
-
-int jacobi_trans_Ebe2kgx(double *F, const m3_t *Cbe, const v3_t *dtheta);
-int jacobi_trans_Ebe2kgy(double *F, const m3_t *Cbe, const v3_t *dtheta);
-int jacobi_trans_Ebe2kgz(double *F, const m3_t *Cbe, const v3_t *dtheta);
-
-int jacobi_trans_veb_e2kax(double *F, const m3_t *Cbe, const v3_t *dv);
-int jacobi_trans_veb_e2kay(double *F, const m3_t *Cbe, const v3_t *dv);
-int jacobi_trans_veb_e2kaz(double *F, const m3_t *Cbe, const v3_t *dv);
 
 /* determinate attitude by velocity */
 int vel2yaw(const v3_t *veb_n, double *yaw, const m3_t *Qveb_n, double *Qyaw);
