@@ -99,11 +99,14 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="ins_8h__dep__incl.png" border="0" usemap="#yins__core_2ins_8hdep" alt=""/></div>
 <map name="yins__core_2ins_8hdep" id="yins__core_2ins_8hdep">
-<area shape="rect" title="ins header file" alt="" coords="228,5,339,32"/>
+<area shape="rect" title="ins header file" alt="" coords="448,5,559,32"/>
 <area shape="rect" href="ins_8c.html" title="ins core functions implementation" alt="" coords="5,80,116,107"/>
 <area shape="rect" href="inscmn_8c.html" title="INS common functions, include basic vector,matrix,quaternion operations." alt="" coords="140,80,275,107"/>
 <area shape="rect" href="insio_8c.html" title="ins read and write function" alt="" coords="299,80,419,107"/>
-<area shape="rect" href="unittest_8c.html" title="ins.h functions unit tests" alt="" coords="444,80,579,107"/>
+<area shape="rect" href="inskf_8c.html" title="ins kalman filter related function" alt="" coords="443,80,563,107"/>
+<area shape="rect" href="unittest_8c.html" title="ins.h functions unit tests" alt="" coords="588,80,723,107"/>
+<area shape="rect" href="main_8c.html" title="main function, provide CUI program" alt="" coords="769,155,830,181"/>
+<area shape="rect" href="yinsapp_8h.html" title="ins application functions" alt="" coords="799,80,877,107"/>
 </map>
 </div>
 </div>
@@ -299,10 +302,10 @@ Functions</h2></td></tr>
 <tr class="memdesc:a5866e62542e0400504b8546d77c3e5a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">outer product of 3d vectors  <a href="ins_8h.html#a5866e62542e0400504b8546d77c3e5a8">More...</a><br /></td></tr>
 <tr class="separator:a5866e62542e0400504b8546d77c3e5a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abeb48305adbdc8f4ff8f7a5a04ab75cf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#abeb48305adbdc8f4ff8f7a5a04ab75cf">normv3</a> (const double *a, double *b)</td></tr>
-<tr class="memdesc:abeb48305adbdc8f4ff8f7a5a04ab75cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">normv3  <a href="ins_8h.html#abeb48305adbdc8f4ff8f7a5a04ab75cf">More...</a><br /></td></tr>
+<tr class="memdesc:abeb48305adbdc8f4ff8f7a5a04ab75cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">normailize 3D vector  <a href="ins_8h.html#abeb48305adbdc8f4ff8f7a5a04ab75cf">More...</a><br /></td></tr>
 <tr class="separator:abeb48305adbdc8f4ff8f7a5a04ab75cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50d2d9511da542d472f3390449fedf38"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a50d2d9511da542d472f3390449fedf38">matcpy</a> (double *A, const double *B, int n, int m)</td></tr>
-<tr class="memdesc:a50d2d9511da542d472f3390449fedf38"><td class="mdescLeft">&#160;</td><td class="mdescRight">matcpy  <a href="ins_8h.html#a50d2d9511da542d472f3390449fedf38">More...</a><br /></td></tr>
+<tr class="memdesc:a50d2d9511da542d472f3390449fedf38"><td class="mdescLeft">&#160;</td><td class="mdescRight">copy matrix  <a href="ins_8h.html#a50d2d9511da542d472f3390449fedf38">More...</a><br /></td></tr>
 <tr class="separator:a50d2d9511da542d472f3390449fedf38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc33998911a24938042604ba1f8e6196"><td class="memItemLeft" align="right" valign="top"><a id="adc33998911a24938042604ba1f8e6196"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>matmul</b> (const char *tr, int n, int k, int m, double alpha, const double *A, const double *B, double beta, double *C)</td></tr>
@@ -313,19 +316,20 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>matinv</b> (double *A,
 <tr class="memitem:a54fd9b64416949c38e879ac889964d2a"><td class="memItemLeft" align="right" valign="top"><a id="a54fd9b64416949c38e879ac889964d2a"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>solve</b> (const char *tr, const double *A, const double *Y, int n, int m, double *X)</td></tr>
 <tr class="separator:a54fd9b64416949c38e879ac889964d2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44f90bf2ce8fd1c0c35394830c122a36"><td class="memItemLeft" align="right" valign="top"><a id="a44f90bf2ce8fd1c0c35394830c122a36"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>lsq</b> (const double *A, const double *y, int n, int m, double *x, double *Q)</td></tr>
+<tr class="memitem:a44f90bf2ce8fd1c0c35394830c122a36"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a44f90bf2ce8fd1c0c35394830c122a36">lsq</a> (const double *A, const double *y, int n, int m, double *x, double *Q)</td></tr>
+<tr class="memdesc:a44f90bf2ce8fd1c0c35394830c122a36"><td class="mdescLeft">&#160;</td><td class="mdescRight">least square estimation by solving normal equation (x=(A*A')^-1*A*y)  <a href="ins_8h.html#a44f90bf2ce8fd1c0c35394830c122a36">More...</a><br /></td></tr>
 <tr class="separator:a44f90bf2ce8fd1c0c35394830c122a36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ea059bb23d61724fbf19f16354f9c73"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a8ea059bb23d61724fbf19f16354f9c73">filter</a> (double *x, double *P, const double *H, const double *v, const double *R, int n, int m)</td></tr>
+<tr class="memdesc:a8ea059bb23d61724fbf19f16354f9c73"><td class="mdescLeft">&#160;</td><td class="mdescRight">kalman filter  <a href="ins_8h.html#a8ea059bb23d61724fbf19f16354f9c73">More...</a><br /></td></tr>
 <tr class="separator:a8ea059bb23d61724fbf19f16354f9c73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f7ee22bc4f2f6b90e3eff9f917b53aa"><td class="memItemLeft" align="right" valign="top"><a id="a1f7ee22bc4f2f6b90e3eff9f917b53aa"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>smoother</b> (const double *xf, const double *Qf, const double *xb, const double *Qb, int n, double *xs, double *Qs)</td></tr>
+<tr class="memitem:a1f7ee22bc4f2f6b90e3eff9f917b53aa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a1f7ee22bc4f2f6b90e3eff9f917b53aa">smoother</a> (const double *xf, const double *Qf, const double *xb, const double *Qb, int n, double *xs, double *Qs)</td></tr>
+<tr class="memdesc:a1f7ee22bc4f2f6b90e3eff9f917b53aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">combine forward and backward filters by fixed-interval smoother as follows: xs=Qs*(Qf^-1*xf+Qb^-1*xb), Qs=(Qf^-1+Qb^-1)^-1)  <a href="ins_8h.html#a1f7ee22bc4f2f6b90e3eff9f917b53aa">More...</a><br /></td></tr>
 <tr class="separator:a1f7ee22bc4f2f6b90e3eff9f917b53aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa284cf8f07237f88ff3fc12ec26d0e26"><td class="memItemLeft" align="right" valign="top"><a id="aa284cf8f07237f88ff3fc12ec26d0e26"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>matprint</b> (const double *A, int n, int m, int p, int q)</td></tr>
 <tr class="separator:aa284cf8f07237f88ff3fc12ec26d0e26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf978c5a5dd31194e837c41ecfd464a5"><td class="memItemLeft" align="right" valign="top"><a id="acf978c5a5dd31194e837c41ecfd464a5"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>mat_symmetry</b> (double *A, int n)</td></tr>
+<tr class="memitem:acf978c5a5dd31194e837c41ecfd464a5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#acf978c5a5dd31194e837c41ecfd464a5">mat_symmetry</a> (double *A, int n)</td></tr>
+<tr class="memdesc:acf978c5a5dd31194e837c41ecfd464a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">symmetrize matrix  <a href="ins_8h.html#acf978c5a5dd31194e837c41ecfd464a5">More...</a><br /></td></tr>
 <tr class="separator:acf978c5a5dd31194e837c41ecfd464a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a942c19835596f29c8dbbc45eb0b65305"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a942c19835596f29c8dbbc45eb0b65305">timediff</a> (<a class="el" href="structgtime__t.html">gtime_t</a> t1, <a class="el" href="structgtime__t.html">gtime_t</a> t2)</td></tr>
 <tr class="memdesc:a942c19835596f29c8dbbc45eb0b65305"><td class="mdescLeft">&#160;</td><td class="mdescRight">time differenece between two <a class="el" href="structgtime__t.html">gtime_t</a> struct  <a href="ins_8h.html#a942c19835596f29c8dbbc45eb0b65305">More...</a><br /></td></tr>
@@ -588,9 +592,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_blh</b> (const <a 
 <tr class="memitem:a5dd27f5d6678042f7ba6606fef4a2b59"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a5dd27f5d6678042f7ba6606fef4a2b59">align_coarse_inertial</a> (const <a class="el" href="structimu__t.html">imu_t</a> *imu, double lat, <a class="el" href="structm3__t.html">m3_t</a> *Cnb)</td></tr>
 <tr class="memdesc:a5dd27f5d6678042f7ba6606fef4a2b59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Coarse align under inertial fame(anti-vibration method)  <a href="ins_8h.html#a5dd27f5d6678042f7ba6606fef4a2b59">More...</a><br /></td></tr>
 <tr class="separator:a5dd27f5d6678042f7ba6606fef4a2b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e727b0353091ed4b1137892eebf09d1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a3e727b0353091ed4b1137892eebf09d1">align_coarse_wuhba</a> (const <a class="el" href="structimu__t.html">imu_t</a> *imu, double lat, const <a class="el" href="structv3__t.html">v3_t</a> *veb_n, int Nveb_n, <a class="el" href="structm3__t.html">m3_t</a> *Cnb)</td></tr>
-<tr class="memdesc:a3e727b0353091ed4b1137892eebf09d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Coarse Alignment by solving Wuhba problem under inertial frame.  <a href="ins_8h.html#a3e727b0353091ed4b1137892eebf09d1">More...</a><br /></td></tr>
-<tr class="separator:a3e727b0353091ed4b1137892eebf09d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af94c92bc8a3c7ee78a1389afa9cc63f3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#af94c92bc8a3c7ee78a1389afa9cc63f3">align_coarse_wuhba</a> (const <a class="el" href="structimu__t.html">imu_t</a> *imu, double lat, const <a class="el" href="structv3__t.html">v3_t</a> *veb_n, unsigned int Nveb_n, <a class="el" href="structm3__t.html">m3_t</a> *Cnb)</td></tr>
+<tr class="memdesc:af94c92bc8a3c7ee78a1389afa9cc63f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Coarse Alignment by solving Wuhba problem under inertial frame.  <a href="ins_8h.html#af94c92bc8a3c7ee78a1389afa9cc63f3">More...</a><br /></td></tr>
+<tr class="separator:af94c92bc8a3c7ee78a1389afa9cc63f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a244d8a2a76d5b66bbff004fa7111e4a9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a244d8a2a76d5b66bbff004fa7111e4a9">ins_nav_ecef</a> (double dt, const <a class="el" href="structv3__t.html">v3_t</a> *dtheta, const <a class="el" href="structv3__t.html">v3_t</a> *dv, <a class="el" href="structv3__t.html">v3_t</a> *r, <a class="el" href="structv3__t.html">v3_t</a> *v, <a class="el" href="structquat__t.html">quat_t</a> *q)</td></tr>
 <tr class="memdesc:a244d8a2a76d5b66bbff004fa7111e4a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Strapdown-INS equations under ECEF frame.  <a href="ins_8h.html#a244d8a2a76d5b66bbff004fa7111e4a9">More...</a><br /></td></tr>
 <tr class="separator:a244d8a2a76d5b66bbff004fa7111e4a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -666,36 +670,36 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>outsolins</b> (FILE *f
 <tr class="memitem:a2cf266d0287fd790517b83bc0cc9aff8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a2cf266d0287fd790517b83bc0cc9aff8">jacobi_trans_markov</a> (<a class="el" href="structm3__t.html">m3_t</a> *F, double dt, const <a class="el" href="structv3__t.html">v3_t</a> *T)</td></tr>
 <tr class="memdesc:a2cf266d0287fd790517b83bc0cc9aff8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation jacobi matrix of 1st order markov/random walk process.  <a href="ins_8h.html#a2cf266d0287fd790517b83bc0cc9aff8">More...</a><br /></td></tr>
 <tr class="separator:a2cf266d0287fd790517b83bc0cc9aff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d14dbd7bc4c0241fbb5a60adbe3dda7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a5d14dbd7bc4c0241fbb5a60adbe3dda7">jacobi_trans_Ebe2kgx</a> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dtheta)</td></tr>
+<tr class="memdesc:a5d14dbd7bc4c0241fbb5a60adbe3dda7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation matrix from veb_e to kg.x.  <a href="ins_8h.html#a5d14dbd7bc4c0241fbb5a60adbe3dda7">More...</a><br /></td></tr>
+<tr class="separator:a5d14dbd7bc4c0241fbb5a60adbe3dda7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9242e67414fd5d0ffbdaa737401c97ba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a9242e67414fd5d0ffbdaa737401c97ba">jacobi_trans_Ebe2kgy</a> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dtheta)</td></tr>
+<tr class="memdesc:a9242e67414fd5d0ffbdaa737401c97ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation matrix from veb_e to kg.y.  <a href="ins_8h.html#a9242e67414fd5d0ffbdaa737401c97ba">More...</a><br /></td></tr>
+<tr class="separator:a9242e67414fd5d0ffbdaa737401c97ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeba87b72c5b27669c9c76f9bcbe03c8a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#aeba87b72c5b27669c9c76f9bcbe03c8a">jacobi_trans_Ebe2kgz</a> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dtheta)</td></tr>
+<tr class="memdesc:aeba87b72c5b27669c9c76f9bcbe03c8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation matrix from veb_e to kg.z.  <a href="ins_8h.html#aeba87b72c5b27669c9c76f9bcbe03c8a">More...</a><br /></td></tr>
+<tr class="separator:aeba87b72c5b27669c9c76f9bcbe03c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9a08dc54e4ad7ff94d592e546272ed8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#ac9a08dc54e4ad7ff94d592e546272ed8">jacobi_trans_veb_e2kax</a> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dv)</td></tr>
+<tr class="memdesc:ac9a08dc54e4ad7ff94d592e546272ed8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation matrix from veb_e to ka.x.  <a href="ins_8h.html#ac9a08dc54e4ad7ff94d592e546272ed8">More...</a><br /></td></tr>
+<tr class="separator:ac9a08dc54e4ad7ff94d592e546272ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae049fae22d64bc86ba88c5266fc5d466"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#ae049fae22d64bc86ba88c5266fc5d466">jacobi_trans_veb_e2kay</a> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dv)</td></tr>
+<tr class="memdesc:ae049fae22d64bc86ba88c5266fc5d466"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation matrix from veb_e to ka.y.  <a href="ins_8h.html#ae049fae22d64bc86ba88c5266fc5d466">More...</a><br /></td></tr>
+<tr class="separator:ae049fae22d64bc86ba88c5266fc5d466"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae413161c4db0d219aefecd176035e181"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#ae413161c4db0d219aefecd176035e181">jacobi_trans_veb_e2kaz</a> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dv)</td></tr>
+<tr class="memdesc:ae413161c4db0d219aefecd176035e181"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation matrix from veb_e to ka.z.  <a href="ins_8h.html#ae413161c4db0d219aefecd176035e181">More...</a><br /></td></tr>
+<tr class="separator:ae413161c4db0d219aefecd176035e181"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a786f9673ef6f179e3961c24230e52faa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a786f9673ef6f179e3961c24230e52faa">jacobi_meas_reb_e2Ebe</a> (<a class="el" href="structm3__t.html">m3_t</a> *H, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm)</td></tr>
-<tr class="memdesc:a786f9673ef6f179e3961c24230e52faa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation jacobi matrix of 1st order markov/random walk process.  <a href="ins_8h.html#a786f9673ef6f179e3961c24230e52faa">More...</a><br /></td></tr>
+<tr class="memdesc:a786f9673ef6f179e3961c24230e52faa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form measurement jacobi matrix from reb_e to Ebe.  <a href="ins_8h.html#a786f9673ef6f179e3961c24230e52faa">More...</a><br /></td></tr>
 <tr class="separator:a786f9673ef6f179e3961c24230e52faa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64b24d31662fcacb935362f34a5639b0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a64b24d31662fcacb935362f34a5639b0">jacobi_meas_veb_e2Ebe</a> (<a class="el" href="structm3__t.html">m3_t</a> *H, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *wib_b, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm)</td></tr>
-<tr class="memdesc:a64b24d31662fcacb935362f34a5639b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">jacobi_meas_veb_e2Ebe  <a href="ins_8h.html#a64b24d31662fcacb935362f34a5639b0">More...</a><br /></td></tr>
+<tr class="memdesc:a64b24d31662fcacb935362f34a5639b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form measurement jacobi matrix from veb_e to Ebe.  <a href="ins_8h.html#a64b24d31662fcacb935362f34a5639b0">More...</a><br /></td></tr>
 <tr class="separator:a64b24d31662fcacb935362f34a5639b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2e1450c0eca7849a700b85c7995da43"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#aa2e1450c0eca7849a700b85c7995da43">jacobi_meas_veb_e2bg</a> (<a class="el" href="structm3__t.html">m3_t</a> *H, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm)</td></tr>
-<tr class="memdesc:aa2e1450c0eca7849a700b85c7995da43"><td class="mdescLeft">&#160;</td><td class="mdescRight">jacobi_meas_veb_e2bg  <a href="ins_8h.html#aa2e1450c0eca7849a700b85c7995da43">More...</a><br /></td></tr>
+<tr class="memdesc:aa2e1450c0eca7849a700b85c7995da43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form measurement jacobi matrix from veb_e to bg.  <a href="ins_8h.html#aa2e1450c0eca7849a700b85c7995da43">More...</a><br /></td></tr>
 <tr class="separator:aa2e1450c0eca7849a700b85c7995da43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f93279e08c77caaa3c25417e001f541"><td class="memItemLeft" align="right" valign="top"><a id="a5f93279e08c77caaa3c25417e001f541"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_meas_Ebn2Ebe</b> (<a class="el" href="structm3__t.html">m3_t</a> *H, const <a class="el" href="structm3__t.html">m3_t</a> *Cen)</td></tr>
 <tr class="separator:a5f93279e08c77caaa3c25417e001f541"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d14dbd7bc4c0241fbb5a60adbe3dda7"><td class="memItemLeft" align="right" valign="top"><a id="a5d14dbd7bc4c0241fbb5a60adbe3dda7"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgx</b> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dtheta)</td></tr>
-<tr class="separator:a5d14dbd7bc4c0241fbb5a60adbe3dda7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9242e67414fd5d0ffbdaa737401c97ba"><td class="memItemLeft" align="right" valign="top"><a id="a9242e67414fd5d0ffbdaa737401c97ba"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgy</b> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dtheta)</td></tr>
-<tr class="separator:a9242e67414fd5d0ffbdaa737401c97ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeba87b72c5b27669c9c76f9bcbe03c8a"><td class="memItemLeft" align="right" valign="top"><a id="aeba87b72c5b27669c9c76f9bcbe03c8a"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</b> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dtheta)</td></tr>
-<tr class="separator:aeba87b72c5b27669c9c76f9bcbe03c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9a08dc54e4ad7ff94d592e546272ed8"><td class="memItemLeft" align="right" valign="top"><a id="ac9a08dc54e4ad7ff94d592e546272ed8"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_veb_e2kax</b> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dv)</td></tr>
-<tr class="separator:ac9a08dc54e4ad7ff94d592e546272ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae049fae22d64bc86ba88c5266fc5d466"><td class="memItemLeft" align="right" valign="top"><a id="ae049fae22d64bc86ba88c5266fc5d466"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_veb_e2kay</b> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dv)</td></tr>
-<tr class="separator:ae049fae22d64bc86ba88c5266fc5d466"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae413161c4db0d219aefecd176035e181"><td class="memItemLeft" align="right" valign="top"><a id="ae413161c4db0d219aefecd176035e181"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_veb_e2kaz</b> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dv)</td></tr>
-<tr class="separator:ae413161c4db0d219aefecd176035e181"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a226ecd4a6a5a3a7b74e032a36548a969"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a226ecd4a6a5a3a7b74e032a36548a969">vel2yaw</a> (const <a class="el" href="structv3__t.html">v3_t</a> *veb_n, double *yaw, const <a class="el" href="structm3__t.html">m3_t</a> *Qveb_n, double *Qyaw)</td></tr>
 <tr class="memdesc:a226ecd4a6a5a3a7b74e032a36548a969"><td class="mdescLeft">&#160;</td><td class="mdescRight">determinate yaw angel by velocity(velocity yaw angel under n-frame)  <a href="ins_8h.html#a226ecd4a6a5a3a7b74e032a36548a969">More...</a><br /></td></tr>
 <tr class="separator:a226ecd4a6a5a3a7b74e032a36548a969"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -709,62 +713,64 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_veb_e2kaz
 int&#160;</td><td class="memItemRight" valign="bottom"><b>vel2pitch</b> (const <a class="el" href="structv3__t.html">v3_t</a> *veb_n, double *pitch, const <a class="el" href="structm3__t.html">m3_t</a> *Qveb_n, double *Qpitch)</td></tr>
 <tr class="separator:ac7cea5e863979d8301d9bd2c0c56dd43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9578f9341aa79539524b9adfb5342d5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#ad9578f9341aa79539524b9adfb5342d5">inskf_init</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structimup__t.html">imup_t</a> *imup)</td></tr>
+<tr class="memdesc:ad9578f9341aa79539524b9adfb5342d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">initial ins kalman filter  <a href="ins_8h.html#ad9578f9341aa79539524b9adfb5342d5">More...</a><br /></td></tr>
 <tr class="separator:ad9578f9341aa79539524b9adfb5342d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2c4b864473a34a407caf617b5f0202d"><td class="memItemLeft" align="right" valign="top"><a id="ad2c4b864473a34a407caf617b5f0202d"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>inskf_udstate</b> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structimud__t.html">imud_t</a> *imud, const <a class="el" href="structimup__t.html">imup_t</a> *imup)</td></tr>
+<tr class="memitem:ad2c4b864473a34a407caf617b5f0202d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#ad2c4b864473a34a407caf617b5f0202d">inskf_udstate</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structimud__t.html">imud_t</a> *imud, const <a class="el" href="structimup__t.html">imup_t</a> *imup)</td></tr>
+<tr class="memdesc:ad2c4b864473a34a407caf617b5f0202d"><td class="mdescLeft">&#160;</td><td class="mdescRight">kalman filter update state x = Fx, P = F * P * F' + Q, and full state transfer  <a href="ins_8h.html#ad2c4b864473a34a407caf617b5f0202d">More...</a><br /></td></tr>
 <tr class="separator:ad2c4b864473a34a407caf617b5f0202d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a932e92342f68149d73121171b9737064"><td class="memItemLeft" align="right" valign="top"><a id="a932e92342f68149d73121171b9737064"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>inskf_udmeasr</b> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structv3__t.html">v3_t</a> *reg_e, const <a class="el" href="structm3__t.html">m3_t</a> *Qreg_e, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm_gps)</td></tr>
+<tr class="memitem:a932e92342f68149d73121171b9737064"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a932e92342f68149d73121171b9737064">inskf_udmeasr</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structv3__t.html">v3_t</a> *reg_e, const <a class="el" href="structm3__t.html">m3_t</a> *Qreg_e, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm_gps)</td></tr>
+<tr class="memdesc:a932e92342f68149d73121171b9737064"><td class="mdescLeft">&#160;</td><td class="mdescRight">kalman filter position measment update  <a href="ins_8h.html#a932e92342f68149d73121171b9737064">More...</a><br /></td></tr>
 <tr class="separator:a932e92342f68149d73121171b9737064"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af975e58a62b4976c48aed945ca82ca7d"><td class="memItemLeft" align="right" valign="top"><a id="af975e58a62b4976c48aed945ca82ca7d"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>inskf_udmeasv</b> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structv3__t.html">v3_t</a> *veg_e, const <a class="el" href="structm3__t.html">m3_t</a> *Qveg_e, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm_gps, const <a class="el" href="structv3__t.html">v3_t</a> *wib_b)</td></tr>
+<tr class="memitem:af975e58a62b4976c48aed945ca82ca7d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#af975e58a62b4976c48aed945ca82ca7d">inskf_udmeasv</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structv3__t.html">v3_t</a> *veg_e, const <a class="el" href="structm3__t.html">m3_t</a> *Qveg_e, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm_gps, const <a class="el" href="structv3__t.html">v3_t</a> *wib_b)</td></tr>
+<tr class="memdesc:af975e58a62b4976c48aed945ca82ca7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">kalman filter velocity update  <a href="ins_8h.html#af975e58a62b4976c48aed945ca82ca7d">More...</a><br /></td></tr>
 <tr class="separator:af975e58a62b4976c48aed945ca82ca7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38612328e80299c025ff74e4aa871e6b"><td class="memItemLeft" align="right" valign="top"><a id="a38612328e80299c025ff74e4aa871e6b"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>inskf_udmeas_vod</b> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structsolins__t.html">solins_t</a> *last_sol, double vod, double Qvod)</td></tr>
-<tr class="separator:a38612328e80299c025ff74e4aa871e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3742f814620a998f7194ef529b54f040"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a3742f814620a998f7194ef529b54f040">inskf_udmeas_vod</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, double vod, const <a class="el" href="structv3__t.html">v3_t</a> *vod_std)</td></tr>
+<tr class="memdesc:a3742f814620a998f7194ef529b54f040"><td class="mdescLeft">&#160;</td><td class="mdescRight">ins kalman filter, use odometer output velocity as measurement  <a href="ins_8h.html#a3742f814620a998f7194ef529b54f040">More...</a><br /></td></tr>
+<tr class="separator:a3742f814620a998f7194ef529b54f040"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae907e09ccf9698fda9b31dcdee93c493"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#ae907e09ccf9698fda9b31dcdee93c493">inskf_constraint_yaw</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structv3__t.html">v3_t</a> *wib_b, const <a class="el" href="structimup__t.html">imup_t</a> *imup)</td></tr>
-<tr class="memdesc:ae907e09ccf9698fda9b31dcdee93c493"><td class="mdescLeft">&#160;</td><td class="mdescRight">ins_kf_constraint_yaw  <a href="ins_8h.html#ae907e09ccf9698fda9b31dcdee93c493">More...</a><br /></td></tr>
+<tr class="memdesc:ae907e09ccf9698fda9b31dcdee93c493"><td class="mdescLeft">&#160;</td><td class="mdescRight">constraint yaw by velocity(Use velocity to caculate yaw, and then update)  <a href="ins_8h.html#ae907e09ccf9698fda9b31dcdee93c493">More...</a><br /></td></tr>
 <tr class="separator:ae907e09ccf9698fda9b31dcdee93c493"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77c6ea8747b980a69fb5670acbc60083"><td class="memItemLeft" align="right" valign="top"><a id="a77c6ea8747b980a69fb5670acbc60083"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>inskf_MC_car</b> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structv3__t.html">v3_t</a> *wib_b, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm_car, double std_vy, double std_vz)</td></tr>
+<tr class="memitem:a77c6ea8747b980a69fb5670acbc60083"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a77c6ea8747b980a69fb5670acbc60083">inskf_MC_car</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structv3__t.html">v3_t</a> *wib_b, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm_car, double std_vy, double std_vz)</td></tr>
+<tr class="memdesc:a77c6ea8747b980a69fb5670acbc60083"><td class="mdescLeft">&#160;</td><td class="mdescRight">ins kalman filter of car's motion constraint  <a href="ins_8h.html#a77c6ea8747b980a69fb5670acbc60083">More...</a><br /></td></tr>
 <tr class="separator:a77c6ea8747b980a69fb5670acbc60083"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e4aec8831d33b817af20ea0e2a8900d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a8e4aec8831d33b817af20ea0e2a8900d">inskf_ZST_pos</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structsolins__t.html">solins_t</a> *last_sol)</td></tr>
-<tr class="memdesc:a8e4aec8831d33b817af20ea0e2a8900d"><td class="mdescLeft">&#160;</td><td class="mdescRight">insod_kf_ZST_pos  <a href="ins_8h.html#a8e4aec8831d33b817af20ea0e2a8900d">More...</a><br /></td></tr>
+<tr class="memdesc:a8e4aec8831d33b817af20ea0e2a8900d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zero speed test by postion difference.  <a href="ins_8h.html#a8e4aec8831d33b817af20ea0e2a8900d">More...</a><br /></td></tr>
 <tr class="separator:a8e4aec8831d33b817af20ea0e2a8900d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a533d2fe56ebb9fd744c3e2c4d1ae9075"><td class="memItemLeft" align="right" valign="top"><a id="a533d2fe56ebb9fd744c3e2c4d1ae9075"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>inskf_ZST_imu</b> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, double mean_dv, double std_dv)</td></tr>
+<tr class="memitem:a533d2fe56ebb9fd744c3e2c4d1ae9075"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a533d2fe56ebb9fd744c3e2c4d1ae9075">inskf_ZST_imu</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, double mean_dv, double std_dv)</td></tr>
+<tr class="memdesc:a533d2fe56ebb9fd744c3e2c4d1ae9075"><td class="mdescLeft">&#160;</td><td class="mdescRight">ins kalman filter to Zero Speed Test by imu data  <a href="ins_8h.html#a533d2fe56ebb9fd744c3e2c4d1ae9075">More...</a><br /></td></tr>
 <tr class="separator:a533d2fe56ebb9fd744c3e2c4d1ae9075"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af431969659e043deb1d21b96cf6fbf6e"><td class="memItemLeft" align="right" valign="top"><a id="af431969659e043deb1d21b96cf6fbf6e"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>inskf_ZST_auto</b> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structsolins__t.html">solins_t</a> *last_sol, double *meandv, double *std_dv)</td></tr>
+<tr class="memitem:af431969659e043deb1d21b96cf6fbf6e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#af431969659e043deb1d21b96cf6fbf6e">inskf_ZST_auto</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structsolins__t.html">solins_t</a> *last_sol, double *meandv, double *std_dv)</td></tr>
+<tr class="memdesc:af431969659e043deb1d21b96cf6fbf6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zero Speed Test automatically.  <a href="ins_8h.html#af431969659e043deb1d21b96cf6fbf6e">More...</a><br /></td></tr>
 <tr class="separator:af431969659e043deb1d21b96cf6fbf6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12ca75cadbec752d9212d84a0289ff08"><td class="memItemLeft" align="right" valign="top"><a id="a12ca75cadbec752d9212d84a0289ff08"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>inskf_ZRAU</b> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structquat__t.html">quat_t</a> *last_qbe, double dt, const <a class="el" href="structm3__t.html">m3_t</a> *Qweb_b)</td></tr>
+<tr class="memitem:a12ca75cadbec752d9212d84a0289ff08"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a12ca75cadbec752d9212d84a0289ff08">inskf_ZRAU</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structquat__t.html">quat_t</a> *last_qbe, double dt, const <a class="el" href="structm3__t.html">m3_t</a> *Qweb_b)</td></tr>
+<tr class="memdesc:a12ca75cadbec752d9212d84a0289ff08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zero angular rate update for ins kalman filter.  <a href="ins_8h.html#a12ca75cadbec752d9212d84a0289ff08">More...</a><br /></td></tr>
 <tr class="separator:a12ca75cadbec752d9212d84a0289ff08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e3fee5b2141940de453a0b111dc185b"><td class="memItemLeft" align="right" valign="top"><a id="a9e3fee5b2141940de453a0b111dc185b"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>inskf_ZUPT</b> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structm3__t.html">m3_t</a> *Qveb_e)</td></tr>
+<tr class="memitem:a9e3fee5b2141940de453a0b111dc185b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a9e3fee5b2141940de453a0b111dc185b">inskf_ZUPT</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structm3__t.html">m3_t</a> *Qveb_e)</td></tr>
+<tr class="memdesc:a9e3fee5b2141940de453a0b111dc185b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zero velocity update of ins kalman filter.  <a href="ins_8h.html#a9e3fee5b2141940de453a0b111dc185b">More...</a><br /></td></tr>
 <tr class="separator:a9e3fee5b2141940de453a0b111dc185b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f2cc27f15de055c2990b26428bf51d6"><td class="memItemLeft" align="right" valign="top"><a id="a3f2cc27f15de055c2990b26428bf51d6"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>inskf_ZAU</b> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, double yaw, double Qyaw)</td></tr>
+<tr class="memitem:a3f2cc27f15de055c2990b26428bf51d6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a3f2cc27f15de055c2990b26428bf51d6">inskf_ZAU</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, double yaw, double Qyaw)</td></tr>
+<tr class="memdesc:a3f2cc27f15de055c2990b26428bf51d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">ins kalman filter Zero Angular Update  <a href="ins_8h.html#a3f2cc27f15de055c2990b26428bf51d6">More...</a><br /></td></tr>
 <tr class="separator:a3f2cc27f15de055c2990b26428bf51d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f930427ea610bdff5fa38195410722f"><td class="memItemLeft" align="right" valign="top"><a id="a7f930427ea610bdff5fa38195410722f"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>inskf_udmeas_Cbe</b> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structm3__t.html">m3_t</a> *QEbe)</td></tr>
+<tr class="memitem:a7f930427ea610bdff5fa38195410722f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a7f930427ea610bdff5fa38195410722f">inskf_udmeas_Cbe</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structm3__t.html">m3_t</a> *QEbe)</td></tr>
+<tr class="memdesc:a7f930427ea610bdff5fa38195410722f"><td class="mdescLeft">&#160;</td><td class="mdescRight">ins kalman filter update attitude measment.  <a href="ins_8h.html#a7f930427ea610bdff5fa38195410722f">More...</a><br /></td></tr>
 <tr class="separator:a7f930427ea610bdff5fa38195410722f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4d0cec9486ebb80789a68da72b091f4"><td class="memItemLeft" align="right" valign="top"><a id="aa4d0cec9486ebb80789a68da72b091f4"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>inskf_udmeas_yaw</b> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, double yaw, double Qyaw)</td></tr>
+<tr class="memitem:aa4d0cec9486ebb80789a68da72b091f4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#aa4d0cec9486ebb80789a68da72b091f4">inskf_udmeas_yaw</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, double yaw, double Qyaw)</td></tr>
+<tr class="memdesc:aa4d0cec9486ebb80789a68da72b091f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">kalman filter yaw angle measument update  <a href="ins_8h.html#aa4d0cec9486ebb80789a68da72b091f4">More...</a><br /></td></tr>
 <tr class="separator:aa4d0cec9486ebb80789a68da72b091f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a741d4038c338c1c91b191a71d1c14433"><td class="memItemLeft" align="right" valign="top"><a id="a741d4038c338c1c91b191a71d1c14433"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>inskf_uditg_dS</b> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, double dS, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm_car, const <a class="el" href="structv3__t.html">v3_t</a> *wib_b)</td></tr>
+<tr class="memitem:a741d4038c338c1c91b191a71d1c14433"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a741d4038c338c1c91b191a71d1c14433">inskf_uditg_dS</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, double dS, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm_car, const <a class="el" href="structv3__t.html">v3_t</a> *wib_b)</td></tr>
+<tr class="memdesc:a741d4038c338c1c91b191a71d1c14433"><td class="mdescLeft">&#160;</td><td class="mdescRight">ins kalman filter of update integral varables of odomemter  <a href="ins_8h.html#a741d4038c338c1c91b191a71d1c14433">More...</a><br /></td></tr>
 <tr class="separator:a741d4038c338c1c91b191a71d1c14433"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9e18663ea2929fd409faf1547ae0314"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#ab9e18663ea2929fd409faf1547ae0314">inskf_udmeas_itgdS</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const <a class="el" href="structv3__t.html">v3_t</a> *QitgdS)</td></tr>
+<tr class="memdesc:ab9e18663ea2929fd409faf1547ae0314"><td class="mdescLeft">&#160;</td><td class="mdescRight">ins kalman filter, use odometer's integral variables as measument  <a href="ins_8h.html#ab9e18663ea2929fd409faf1547ae0314">More...</a><br /></td></tr>
 <tr class="separator:ab9e18663ea2929fd409faf1547ae0314"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0e63267cdab8b1c5675036bba867604"><td class="memItemLeft" align="right" valign="top"><a id="ae0e63267cdab8b1c5675036bba867604"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>inskf_feedback</b> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, unsigned int SOL_TYPE)</td></tr>
+<tr class="memitem:ae0e63267cdab8b1c5675036bba867604"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#ae0e63267cdab8b1c5675036bba867604">inskf_feedback</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, unsigned int SOL_TYPE)</td></tr>
+<tr class="memdesc:ae0e63267cdab8b1c5675036bba867604"><td class="mdescLeft">&#160;</td><td class="mdescRight">ins kalman filter feedback (move inskf-&gt;x to inskf.sol)  <a href="ins_8h.html#ae0e63267cdab8b1c5675036bba867604">More...</a><br /></td></tr>
 <tr class="separator:ae0e63267cdab8b1c5675036bba867604"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf33fc57f01eefb1bc1b198d5cb86c35"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#aaf33fc57f01eefb1bc1b198d5cb86c35">inskf_norm_innov</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf, const double *R, const double *dz, double *ndz)</td></tr>
 <tr class="memdesc:aaf33fc57f01eefb1bc1b198d5cb86c35"><td class="mdescLeft">&#160;</td><td class="mdescRight">inskf_norm_innov  <a href="ins_8h.html#aaf33fc57f01eefb1bc1b198d5cb86c35">More...</a><br /></td></tr>
 <tr class="separator:aaf33fc57f01eefb1bc1b198d5cb86c35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7df2afc7bd935540d870d6af943bbdb3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#a7df2afc7bd935540d870d6af943bbdb3">inskf_close</a> (<a class="el" href="structkf__t.html">kf_t</a> *inskf)</td></tr>
-<tr class="memdesc:a7df2afc7bd935540d870d6af943bbdb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">inskf_close this is to close ins kalman filter  <a href="ins_8h.html#a7df2afc7bd935540d870d6af943bbdb3">More...</a><br /></td></tr>
+<tr class="memdesc:a7df2afc7bd935540d870d6af943bbdb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">close ins kalman filter, free all variable memory  <a href="ins_8h.html#a7df2afc7bd935540d870d6af943bbdb3">More...</a><br /></td></tr>
 <tr class="separator:a7df2afc7bd935540d870d6af943bbdb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae55381fc2a329d204907590f64711635"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8h.html#ae55381fc2a329d204907590f64711635">LOG_OPEN</a> (const char *file)</td></tr>
 <tr class="memdesc:ae55381fc2a329d204907590f64711635"><td class="mdescLeft">&#160;</td><td class="mdescRight">Open log file, so that all logs could write into.  <a href="ins_8h.html#ae55381fc2a329d204907590f64711635">More...</a><br /></td></tr>
@@ -1036,7 +1042,7 @@ Variables</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="ins_8c.html#a6fbe5e2d2cc072d600a9174307ae198f" title="Coarse align on the static base.">align_coarse_static_base()</a> </dd>
 <dd>
 <a class="el" href="ins_8c.html#a71e8dbf8718c473e1a29938c264398ed" title="Determinate attitude by using double vector.">dblvec2att()</a> </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>ref Qin Yunyuan, 惯性导航(2nd Edition), P319 </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>ref: Qin Yunyuan, 惯性导航(2nd Edition), P319 </dd></dl>
 
 </div>
 </div>
@@ -1085,12 +1091,12 @@ Variables</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="ins_8c.html#a5dd27f5d6678042f7ba6606fef4a2b59" title="Coarse align under inertial fame(anti-vibration method)">align_coarse_inertial()</a> </dd>
 <dd>
 <a class="el" href="ins_8c.html#a71e8dbf8718c473e1a29938c264398ed" title="Determinate attitude by using double vector.">dblvec2att()</a> </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Yan Gongming, 捷联惯导算法与组合导航讲义, 2016, P144 </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>ref: Yan Gongming, 捷联惯导算法与组合导航讲义, 2016, P144 </dd></dl>
 
 </div>
 </div>
-<a id="a3e727b0353091ed4b1137892eebf09d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e727b0353091ed4b1137892eebf09d1">&#9670;&nbsp;</a></span>align_coarse_wuhba()</h2>
+<a id="af94c92bc8a3c7ee78a1389afa9cc63f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af94c92bc8a3c7ee78a1389afa9cc63f3">&#9670;&nbsp;</a></span>align_coarse_wuhba()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1116,7 +1122,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>Nveb_n</em>, </td>
         </tr>
         <tr>
@@ -1153,7 +1159,13 @@ Variables</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="ins_8c.html#a6fbe5e2d2cc072d600a9174307ae198f" title="Coarse align on the static base.">align_coarse_static_base()</a> </dd>
 <dd>
 <a class="el" href="ins_8c.html#a5dd27f5d6678042f7ba6606fef4a2b59" title="Coarse align under inertial fame(anti-vibration method)">align_coarse_inertial()</a> </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Ref: Peter M.G. Silson, Coarse Align of Ship's Strapdown Inertial Attitude Reference System Using Velocity Loci, 2011 F. Landis Markley, Attitude Determination using Vector Observations and the Singular Value Decompostion, 1988 </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: <br  />
+<ol type="1">
+<li>Peter M.G. Silson, Coarse Align of Ship's Strapdown Inertial Attitude Reference System Using Velocity Loci, 2011 <br  />
+</li>
+<li>F. Landis Markley, Attitude Determination using Vector Observations and the Singular Value Decompostion, 1988 </li>
+</ol>
+</dd></dl>
 
 </div>
 </div>
@@ -1784,7 +1796,7 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
 
 </div>
 </div>
@@ -2473,19 +2485,22 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
+
+<p>kalman filter </p>
+<p>kalman filter state update as follows: K=P*H*(H'*P*H+R)^-1, x=x+K*v, P=(I-K*H')*P </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">x</td><td></td></tr>
-    <tr><td class="paramname">P</td><td></td></tr>
-    <tr><td class="paramname">H</td><td></td></tr>
-    <tr><td class="paramname">v</td><td></td></tr>
-    <tr><td class="paramname">R</td><td></td></tr>
-    <tr><td class="paramname">n</td><td></td></tr>
-    <tr><td class="paramname">m</td><td></td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">x</td><td>states vector (n x 1) </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">P</td><td>covariance matrix of states (n x n) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">H</td><td>transpose of design matrix (n x m) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>innovation (measurement - model) (m x 1) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">R</td><td>covariance matrix of measurement error (m x m) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of states </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>number of measurements </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status (0:ok,&lt;0:error) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>matirix stored by column-major order (fortran convention) if state x[i]==0.0, not updates state x[i]/P[i+i*n] </dd></dl>
 
 </div>
 </div>
@@ -2776,14 +2791,14 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>inskf_close this is to close ins kalman filter </p>
+<p>close ins kalman filter, free all variable memory </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">inskf</td><td></td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
 
 </div>
 </div>
@@ -2819,18 +2834,56 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>ins_kf_constraint_yaw </p>
+<p>constraint yaw by velocity(Use velocity to caculate yaw, and then update) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">wib_b</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">imup</td><td></td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">wib_b</td><td>currnet imu output angular rate </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">imup</td><td>imu property struct </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>make sure all necessary imu proerties are well setted. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>related imu property: imup-&gt;phi_install.z imu install yaw angel error[rad] imup-&gt;phi_install_std.z imu install yaw angel error variance[rad^2] imup-&gt;lever_arm_car.x car reference point(forward direction)[m] imup-&gt;lever_arm_car_std.x car reference point variance[m^2] imup-&gt;gyro_noise.z gryo downward axis output error[rad/s] </dd></dl>
+
+</div>
+</div>
+<a id="ae0e63267cdab8b1c5675036bba867604"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0e63267cdab8b1c5675036bba867604">&#9670;&nbsp;</a></span>inskf_feedback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int inskf_feedback </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structkf__t.html">kf_t</a> *&#160;</td>
+          <td class="paramname"><em>inskf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>SOL_TYPE</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ins kalman filter feedback (move inskf-&gt;x to inskf.sol) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>ins kalman filter </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">SOL_TYPE</td><td>solution type, see enum SOL </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
 
 </div>
 </div>
@@ -2859,12 +2912,75 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>initial ins kalman filter </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname"></td><td></td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>kalman filter of ins </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">imup</td><td>imu property sturct </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+
+</div>
+</div>
+<a id="a77c6ea8747b980a69fb5670acbc60083"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77c6ea8747b980a69fb5670acbc60083">&#9670;&nbsp;</a></span>inskf_MC_car()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int inskf_MC_car </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structkf__t.html">kf_t</a> *&#160;</td>
+          <td class="paramname"><em>inskf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>wib_b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>lever_arm_car</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>std_vy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>std_vz</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ins kalman filter of car's motion constraint </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">wib_b</td><td>imu output angular rate[rad/s] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lever_arm_car</td><td>car ref point under b-frame[m] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">std_vy</td><td>zero velocity around y-axis under c-frame[m/s] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">std_vz</td><td>zero veloctiy around z-axis under c-frame[m/s] </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
 
 </div>
 </div>
@@ -2920,6 +3036,103 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a741d4038c338c1c91b191a71d1c14433"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a741d4038c338c1c91b191a71d1c14433">&#9670;&nbsp;</a></span>inskf_uditg_dS()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int inskf_uditg_dS </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structkf__t.html">kf_t</a> *&#160;</td>
+          <td class="paramname"><em>inskf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>dS</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>lever_arm_car</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>wib_b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ins kalman filter of update integral varables of odomemter </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dS</td><td>distance increment[s] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lever_arm_car</td><td>ref point uner b-frame </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">wib_b</td><td>imu output angular rate </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+
+</div>
+</div>
+<a id="a7f930427ea610bdff5fa38195410722f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f930427ea610bdff5fa38195410722f">&#9670;&nbsp;</a></span>inskf_udmeas_Cbe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int inskf_udmeas_Cbe </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structkf__t.html">kf_t</a> *&#160;</td>
+          <td class="paramname"><em>inskf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Cbe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>QEbe</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ins kalman filter update attitude measment. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>DCM from b-frame to e-frame </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">QEbe</td><td>uncertainty of Ebe. [rad^2] </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+
+</div>
+</div>
 <a id="ab9e18663ea2929fd409faf1547ae0314"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab9e18663ea2929fd409faf1547ae0314">&#9670;&nbsp;</a></span>inskf_udmeas_itgdS()</h2>
 
@@ -2936,7 +3149,7 @@ Variables</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
-          <td class="paramname"><em>QitgdS</em>&#160;</td>
+          <td class="paramname"><em>itgdS_std</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2945,7 +3158,459 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>ins kalman filter, use odometer's integral variables as measument </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">itgdS_std</td><td>odometer's velocity intetral's stanadard error. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
 <p>QQ = H'*P*H + R</p>
+
+</div>
+</div>
+<a id="a3742f814620a998f7194ef529b54f040"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3742f814620a998f7194ef529b54f040">&#9670;&nbsp;</a></span>inskf_udmeas_vod()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int inskf_udmeas_vod </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structkf__t.html">kf_t</a> *&#160;</td>
+          <td class="paramname"><em>inskf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>vod</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>vod_std</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ins kalman filter, use odometer output velocity as measurement </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">vod</td><td>odometer output velocity[m/s] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">vod_std</td><td>odometer output velocity uncertainty[m/s] </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>vod_std.x is vod uncertainty, vod_std.y and vod_std.z is the Zero velocity noise </dd></dl>
+
+</div>
+</div>
+<a id="aa4d0cec9486ebb80789a68da72b091f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4d0cec9486ebb80789a68da72b091f4">&#9670;&nbsp;</a></span>inskf_udmeas_yaw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int inskf_udmeas_yaw </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structkf__t.html">kf_t</a> *&#160;</td>
+          <td class="paramname"><em>inskf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>yaw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>Qyaw</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>kalman filter yaw angle measument update </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>ins kalman fitler struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">yaw</td><td>yaw angle measuremnt(Enb.k) [rad] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Qyaw</td><td>uncertainty of yaw [rad^2] </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK, 1: failed) </dd></dl>
+
+</div>
+</div>
+<a id="a932e92342f68149d73121171b9737064"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a932e92342f68149d73121171b9737064">&#9670;&nbsp;</a></span>inskf_udmeasr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int inskf_udmeasr </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structkf__t.html">kf_t</a> *&#160;</td>
+          <td class="paramname"><em>inskf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>reg_e</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Qreg_e</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>lever_arm</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>kalman filter position measment update </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">reg_e</td><td>(gnss) position under e-frame[m] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Qreg_e</td><td>(gnss) position variance matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lever_arm</td><td>lever arm of (gnss) postion(under b-frame) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+
+</div>
+</div>
+<a id="af975e58a62b4976c48aed945ca82ca7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af975e58a62b4976c48aed945ca82ca7d">&#9670;&nbsp;</a></span>inskf_udmeasv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int inskf_udmeasv </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structkf__t.html">kf_t</a> *&#160;</td>
+          <td class="paramname"><em>inskf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>veg_e</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Qveg_e</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>lever_arm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>wib_b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>kalman filter velocity update </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">veg_e</td><td>(gnss) velocity under e-frame[m/s] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Qveg_e</td><td>(gnss) velocity variance matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lever_arm</td><td>lever arm of (gnss) position(unber b-frame) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">wib_b</td><td>angular rate of imu </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+
+</div>
+</div>
+<a id="ad2c4b864473a34a407caf617b5f0202d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2c4b864473a34a407caf617b5f0202d">&#9670;&nbsp;</a></span>inskf_udstate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int inskf_udstate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structkf__t.html">kf_t</a> *&#160;</td>
+          <td class="paramname"><em>inskf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structimud__t.html">imud_t</a> *&#160;</td>
+          <td class="paramname"><em>imud</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structimup__t.html">imup_t</a> *&#160;</td>
+          <td class="paramname"><em>imup</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>kalman filter update state x = Fx, P = F * P * F' + Q, and full state transfer </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">inskf</td><td>kalman filter </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">imud</td><td>imu data struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">imup</td><td>imu property struct </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0:OK) </dd></dl>
+
+</div>
+</div>
+<a id="a3f2cc27f15de055c2990b26428bf51d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f2cc27f15de055c2990b26428bf51d6">&#9670;&nbsp;</a></span>inskf_ZAU()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int inskf_ZAU </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structkf__t.html">kf_t</a> *&#160;</td>
+          <td class="paramname"><em>inskf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>yaw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>Qyaw</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ins kalman filter Zero Angular Update </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">yaw</td><td>yaw measment at start of static moment[rad] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Qyaw</td><td>uncertainty of yaw[rad^2] </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK, 1: failed, current momoent may be not static) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>this function nearly the same as <a class="el" href="inskf_8c.html#aa4d0cec9486ebb80789a68da72b091f4" title="kalman filter yaw angle measument update">inskf_udmeas_yaw()</a>, but do not have same function. </dd></dl>
+
+</div>
+</div>
+<a id="a12ca75cadbec752d9212d84a0289ff08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12ca75cadbec752d9212d84a0289ff08">&#9670;&nbsp;</a></span>inskf_ZRAU()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int inskf_ZRAU </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structkf__t.html">kf_t</a> *&#160;</td>
+          <td class="paramname"><em>inskf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structquat__t.html">quat_t</a> *&#160;</td>
+          <td class="paramname"><em>last_qbe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>dt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Qweb_b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zero angular rate update for ins kalman filter. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">last_qbe</td><td>last quaternion </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dt</td><td>time interval[s] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Qweb_b</td><td>uncertainty of three axis angle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+
+</div>
+</div>
+<a id="af431969659e043deb1d21b96cf6fbf6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af431969659e043deb1d21b96cf6fbf6e">&#9670;&nbsp;</a></span>inskf_ZST_auto()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool inskf_ZST_auto </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structkf__t.html">kf_t</a> *&#160;</td>
+          <td class="paramname"><em>inskf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structsolins__t.html">solins_t</a> *&#160;</td>
+          <td class="paramname"><em>last_sol</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>mean_dv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>std_dv</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zero Speed Test automatically. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">last_sol</td><td>last solution(to check by position difference) </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">mean_dv</td><td>mean of a list imu dv output </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">std_dv</td><td>stanadard error of a list of imu dv output </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true: static, false: kinematic </dd></dl>
+
+</div>
+</div>
+<a id="a533d2fe56ebb9fd744c3e2c4d1ae9075"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a533d2fe56ebb9fd744c3e2c4d1ae9075">&#9670;&nbsp;</a></span>inskf_ZST_imu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool inskf_ZST_imu </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structkf__t.html">kf_t</a> *&#160;</td>
+          <td class="paramname"><em>inskf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>mean_dv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>std_dv</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ins kalman filter to Zero Speed Test by imu data </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mean_dv</td><td>mean of a list imu dv output </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">std_dv</td><td>stanadard error of a list of imu dv output </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true: static, false: kinematic </dd></dl>
 
 </div>
 </div>
@@ -2975,15 +3640,53 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>insod_kf_ZST_pos </p>
+<p>Zero speed test by postion difference. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">inskf</td><td></td></tr>
-    <tr><td class="paramname">last_sol</td><td></td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">last_sol</td><td>last solution </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>0: Failed 1: Sucessed -1: can not determinate </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>0: kinematic 1: static -1: can not be determniated </dd></dl>
+
+</div>
+</div>
+<a id="a9e3fee5b2141940de453a0b111dc185b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e3fee5b2141940de453a0b111dc185b">&#9670;&nbsp;</a></span>inskf_ZUPT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int inskf_ZUPT </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structkf__t.html">kf_t</a> *&#160;</td>
+          <td class="paramname"><em>inskf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Qveb_e</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zero velocity update of ins kalman filter. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">inskf</td><td>ins kalman filter struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Qveb_e</td><td>uncerainty of zero speed </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Status(0: OK) </dd></dl>
 
 </div>
 </div>
@@ -3043,7 +3746,7 @@ Variables</h2></td></tr>
           <td class="memname">int jacobi_meas_reb_e2Ebe </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
-          <td class="paramname"><em>F</em>, </td>
+          <td class="paramname"><em>H</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -3065,16 +3768,17 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Form state transformation jacobi matrix of 1st order markov/random walk process. </p>
+<p>Form measurement jacobi matrix from reb_e to Ebe. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">H</td><td>Jacobi matrix </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>Current average attitude </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lever_arm</td><td>gnss to imu lever arm </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lever_arm</td><td>gnss to imu lever arm[m] </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P600, 14.111 </dd></dl>
 
 </div>
 </div>
@@ -3088,7 +3792,7 @@ Variables</h2></td></tr>
           <td class="memname">int jacobi_meas_veb_e2bg </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
-          <td class="paramname"><em>F</em>, </td>
+          <td class="paramname"><em>H</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -3110,16 +3814,17 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>jacobi_meas_veb_e2bg </p>
+<p>Form measurement jacobi matrix from veb_e to bg. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">F</td><td></td></tr>
-    <tr><td class="paramname">Cbe</td><td></td></tr>
-    <tr><td class="paramname">lever_arm</td><td></td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">H</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>Current average attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lever_arm</td><td>gnss lever arm[m] </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: 0K) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P600, 14.111 </dd></dl>
 
 </div>
 </div>
@@ -3133,7 +3838,7 @@ Variables</h2></td></tr>
           <td class="memname">int jacobi_meas_veb_e2Ebe </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
-          <td class="paramname"><em>F</em>, </td>
+          <td class="paramname"><em>H</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -3161,17 +3866,18 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>jacobi_meas_veb_e2Ebe </p>
+<p>Form measurement jacobi matrix from veb_e to Ebe. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">wib_b</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lever_arm</td><td></td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">H</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>Current average attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">wib_b</td><td>imu output angluar rate[rad/s] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lever_arm</td><td>gnss to imu lever arm[m] </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P600, 14.111 </dd></dl>
 
 </div>
 </div>
@@ -3225,6 +3931,7 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P583, 14.48 </dd></dl>
 
 </div>
 </div>
@@ -3271,7 +3978,168 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>O: OK </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>This function relate to the earth rotation rate, use wgs84 parameter. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This function relate to the earth rotation rate, use wgs84 parameter. <pre class="fragment"> Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ Integrated Navigation Systems(2nd Edition), P583, 14.48
+</pre> </dd></dl>
+
+</div>
+</div>
+<a id="a5d14dbd7bc4c0241fbb5a60adbe3dda7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d14dbd7bc4c0241fbb5a60adbe3dda7">&#9670;&nbsp;</a></span>jacobi_trans_Ebe2kgx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int jacobi_trans_Ebe2kgx </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>F</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Cbe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>dtheta</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Form state transformation matrix from veb_e to kg.x. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>current average attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dtheta</td><td>imu output angular increment </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+
+</div>
+</div>
+<a id="a9242e67414fd5d0ffbdaa737401c97ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9242e67414fd5d0ffbdaa737401c97ba">&#9670;&nbsp;</a></span>jacobi_trans_Ebe2kgy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int jacobi_trans_Ebe2kgy </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>F</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Cbe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>dtheta</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Form state transformation matrix from veb_e to kg.y. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>current average attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dtheta</td><td>imu output angular increment </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+
+</div>
+</div>
+<a id="aeba87b72c5b27669c9c76f9bcbe03c8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeba87b72c5b27669c9c76f9bcbe03c8a">&#9670;&nbsp;</a></span>jacobi_trans_Ebe2kgz()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int jacobi_trans_Ebe2kgz </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>F</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Cbe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>dtheta</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Form state transformation matrix from veb_e to kg.z. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>current average attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dtheta</td><td>imu output angular increment </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
 
 </div>
 </div>
@@ -3318,11 +4186,14 @@ Variables</h2></td></tr>
 <p>Form state transformation jacobi matrix of 1st order markov/random walk process. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname"></td><td></td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dt</td><td>Time interval[s] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">T</td><td>correlation time[s] </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section warning"><dt>Warning</dt><dd>dt should far less than T(dt &lt;&lt; T) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>if T == V0, this function will return random walk process factor(I3) markov process should not used if you can not comprehend what really it is. </dd></dl>
 
 </div>
 </div>
@@ -3368,7 +4239,8 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P583, 14.48 </dd></dl>
 
 </div>
 </div>
@@ -3421,7 +4293,8 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P583, 14.48 </dd></dl>
 
 </div>
 </div>
@@ -3475,6 +4348,166 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P583, 14.48 </dd></dl>
+
+</div>
+</div>
+<a id="ac9a08dc54e4ad7ff94d592e546272ed8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9a08dc54e4ad7ff94d592e546272ed8">&#9670;&nbsp;</a></span>jacobi_trans_veb_e2kax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int jacobi_trans_veb_e2kax </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>F</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Cbe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>dv</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Form state transformation matrix from veb_e to ka.x. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>current average attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dv</td><td>imu output velocity increment </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+
+</div>
+</div>
+<a id="ae049fae22d64bc86ba88c5266fc5d466"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae049fae22d64bc86ba88c5266fc5d466">&#9670;&nbsp;</a></span>jacobi_trans_veb_e2kay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int jacobi_trans_veb_e2kay </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>F</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Cbe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>dv</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Form state transformation matrix from veb_e to ka.y. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>current avearge attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dv</td><td>imu output velocity increment </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+
+</div>
+</div>
+<a id="ae413161c4db0d219aefecd176035e181"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae413161c4db0d219aefecd176035e181">&#9670;&nbsp;</a></span>jacobi_trans_veb_e2kaz()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int jacobi_trans_veb_e2kaz </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>F</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Cbe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>dv</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Form state transformation matrix from veb_e to ka.z. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>current average attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dv</td><td>imu output velocity increment </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
 
 </div>
 </div>
@@ -3528,6 +4561,7 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P583, 14.48 </dd></dl>
 
 </div>
 </div>
@@ -3574,6 +4608,7 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P583, 14.48 </dd></dl>
 
 </div>
 </div>
@@ -3844,6 +4879,73 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 <dl class="section note"><dt>Note</dt><dd>the function will will append a line break automatically </dd></dl>
+
+</div>
+</div>
+<a id="a44f90bf2ce8fd1c0c35394830c122a36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44f90bf2ce8fd1c0c35394830c122a36">&#9670;&nbsp;</a></span>lsq()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int lsq </td>
+          <td>(</td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>A</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>Q</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>least square estimation by solving normal equation (x=(A*A')^-1*A*y) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>transpose of (weighted) design matrix (n x m) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>(weighted) measurements (m x 1) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of parameters(n&lt;=m) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>number of measurements(n&lt;=m) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">x</td><td>estmated parameters (n x 1) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">Q</td><td>esimated parameters covariance matrix (n x n) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status (0: ok, &gt;0: error) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>for weighted least square, replace A and y by A*w and w*y (w=W^(1/2)) matirix stored by column-major order (fortran convention) </dd></dl>
 
 </div>
 </div>
@@ -4370,7 +5472,7 @@ Variables</h2></td></tr>
 <p>Scalar multiplication between number and 3D matrix. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>Input number </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">alpha</td><td>Input number </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>Input 3D matrix </td></tr>
   </table>
   </dd>
@@ -4688,6 +5790,44 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="acf978c5a5dd31194e837c41ecfd464a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf978c5a5dd31194e837c41ecfd464a5">&#9670;&nbsp;</a></span>mat_symmetry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int mat_symmetry </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>A</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>symmetrize matrix </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">A</td><td>matrix A (n x ) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>size of matrix A </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+
+</div>
+</div>
 <a id="a50d2d9511da542d472f3390449fedf38"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a50d2d9511da542d472f3390449fedf38">&#9670;&nbsp;</a></span>matcpy()</h2>
 
@@ -4726,13 +5866,13 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>matcpy </p>
+<p>copy matrix </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">A</td><td></td></tr>
-    <tr><td class="paramname">B</td><td></td></tr>
-    <tr><td class="paramname">n</td><td></td></tr>
-    <tr><td class="paramname">m</td><td></td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">A</td><td>destination matrix A (n x m) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">B</td><td>source matrix B (n x m) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of rows of matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>number of columns of matrix </td></tr>
   </table>
   </dd>
 </dl>
@@ -4795,8 +5935,10 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0: OK 1: Error </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Ref:<ol type="1">
-<li>Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition)</li>
+<dl class="section note"><dt>Note</dt><dd>Ref: <br  />
+<ol type="1">
+<li>Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition) <br  />
+</li>
 <li>Yan Gongming, 捷联惯导算法与组合导航讲义, 2016 </li>
 </ol>
 </dd></dl>
@@ -4967,15 +6109,15 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>normv3 </p>
+<p>normailize 3D vector </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td></td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>vector a (3x1) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">b</td><td>normlized vector(3x1) || b || = 1 </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status (1:ok, 0:error) </dd></dl>
 
 </div>
 </div>
@@ -5564,6 +6706,80 @@ Variables</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>O: OK </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="inscmn_8c.html#a7214fc50e14a97c3c88f4c2050ef6b49" title="Rotation vector(Angular increment) to DCM attitude transformation (New to Old)">rv2dcm()</a> </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Quaternion attitude transforman can be expressed as Qbi+_bi-, And fellow the compluting: (Qbi+ = Qbi- * Qbi+_bi- ) Ref: Yan Gongming, 捷联惯导算法与组合导航原理讲义, 2016, P29 </dd></dl>
+
+</div>
+</div>
+<a id="a1f7ee22bc4f2f6b90e3eff9f917b53aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f7ee22bc4f2f6b90e3eff9f917b53aa">&#9670;&nbsp;</a></span>smoother()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int smoother </td>
+          <td>(</td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>xf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>Qf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>xb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>Qb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>xs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>Qs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>combine forward and backward filters by fixed-interval smoother as follows: xs=Qs*(Qf^-1*xf+Qb^-1*xb), Qs=(Qf^-1+Qb^-1)^-1) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">xf</td><td>forward solutions (n x 1) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Qf</td><td>forward solutions covariance matrix (n x n) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xb</td><td>backward solutions (n x 1) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Qb</td><td>backward solutions covariance matrix (n x n) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of solutions </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xs</td><td>smoothed solutions (n x 1) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">Qs</td><td>smoothed solutions covariance matrix (n x n) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status (0:ok,0&gt;:error) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>matirix stored by column-major order (fortran convention) </dd></dl>
 
 </div>
 </div>

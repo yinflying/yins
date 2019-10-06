@@ -5,13 +5,13 @@
  * @author yinflying(yinfying@foxmail.com)
  * @version 0.0.1
  * @note
- *  2019-06-11  Created Files
- *  2019-06-14  Add earth_RN and earth_RE function
- *  2019-06-21  Add v3_normalize
- *  2019-06-27  Add m3_inv
- *  2019-07-01  Full all functions' comments of the file
- *  2019-08-03  Add multiple attitude transform functions
- *  2019-08-10  Add cfg relatived functions
+ *  2019-06-11  Created Files \n
+ *  2019-06-14  Add earth_RN and earth_RE function \n
+ *  2019-06-21  Add v3_normalize \n
+ *  2019-06-27  Add m3_inv \n
+ *  2019-07-01  Full all functions' comments of the file \n
+ *  2019-08-03  Add multiple attitude transform functions \n
+ *  2019-08-10  Add cfg relatived functions \n
  *  2019-08-28  Add randn function
  */
 /*

@@ -172,7 +172,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>outsolins</b> (FILE *f
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>ins read and write function </p>
 <dl class="section author"><dt>Author</dt><dd>yinflying(<a href="#" onclick="location.href='mai'+'lto:'+'yin'+'fl'+'yin'+'g@'+'fox'+'ma'+'il.'+'co'+'m'; return false;">yinfl<span style="display: none;">.nosp@m.</span>ying<span style="display: none;">.nosp@m.</span>@foxm<span style="display: none;">.nosp@m.</span>ail.<span style="display: none;">.nosp@m.</span>com</a>) </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>2019-05-21 Created 2019-09-03 Add ycsv read and output support </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>2019-05-21 Created <br  />
+ 2019-09-03 Add ycsv read and output support </dd></dl>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a4f0b7792c90d0a23eefae041ab731a56"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4f0b7792c90d0a23eefae041ab731a56">&#9670;&nbsp;</a></span>MALLOC</h2>
@@ -205,8 +206,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>outsolins</b> (FILE *f
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">if</span>(!((pointer) = (type *)malloc(((<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)sz)*<span class="keyword">sizeof</span>(type)))){                    \</div>
-<div class="line">        LOG_FATAL(#pointer <span class="stringliteral">&quot; memory allocation failed&quot;</span>);                     \</div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">if</span>(!((pointer) = (type *)malloc(((<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)sz)*<span class="keyword">sizeof</span>(type)))){        \</div>
+<div class="line">        LOG_FATAL(#pointer <span class="stringliteral">&quot; memory allocation failed&quot;</span>);                        \</div>
 <div class="line">    }</div>
 </div><!-- fragment -->
 <p>safe to call malloc </p>
@@ -244,8 +245,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>outsolins</b> (FILE *f
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">if</span>(!((pointer) = (type *)realloc((pointer), ((<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)sz)*<span class="keyword">sizeof</span>(type)))){        \</div>
-<div class="line">        LOG_FATAL(#pointer <span class="stringliteral">&quot; memeory realloc failed&quot;</span>);                       \</div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">if</span>(!((pointer) =                                                            \</div>
+<div class="line">        (type *)realloc((pointer), ((<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)sz)*<span class="keyword">sizeof</span>(type)))){         \</div>
+<div class="line">        LOG_FATAL(#pointer <span class="stringliteral">&quot; memeory realloc failed&quot;</span>);                          \</div>
 <div class="line">    }</div>
 </div><!-- fragment -->
 <p>safe to call realloc </p>

@@ -27,7 +27,7 @@
 
 #ifndef YINSAPP_H
 #define YINSAPP_H
-#include <yins_core/ins.h>
+#include "yins_core/ins.h"
 
 /**
  * @brief pure ins navigation

@@ -1,0 +1,11 @@
+<map id="main.c" name="main.c">
+<area shape="rect" id="node1" title="main function, provide CUI program" alt="" coords="221,5,283,32"/>
+<area shape="rect" id="node2" href="$ins_8h.html" title="ins header file" alt="" coords="69,155,179,181"/>
+<area shape="rect" id="node5" title=" " alt="" coords="187,229,248,256"/>
+<area shape="rect" id="node6" href="$yinsapp_8h.html" title="ins application functions" alt="" coords="101,80,179,107"/>
+<area shape="rect" id="node7" title=" " alt="" coords="255,80,319,107"/>
+<area shape="rect" id="node8" title=" " alt="" coords="343,80,409,107"/>
+<area shape="rect" id="node9" title=" " alt="" coords="433,80,495,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,229,64,256"/>
+<area shape="rect" id="node4" title=" " alt="" coords="88,229,163,256"/>
+</map>

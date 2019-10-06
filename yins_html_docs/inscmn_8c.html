@@ -399,10 +399,10 @@ Functions</h2></td></tr>
 <tr class="memdesc:a5866e62542e0400504b8546d77c3e5a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">outer product of 3d vectors  <a href="inscmn_8c.html#a5866e62542e0400504b8546d77c3e5a8">More...</a><br /></td></tr>
 <tr class="separator:a5866e62542e0400504b8546d77c3e5a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abeb48305adbdc8f4ff8f7a5a04ab75cf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="inscmn_8c.html#abeb48305adbdc8f4ff8f7a5a04ab75cf">normv3</a> (const double *a, double *b)</td></tr>
-<tr class="memdesc:abeb48305adbdc8f4ff8f7a5a04ab75cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">normv3  <a href="inscmn_8c.html#abeb48305adbdc8f4ff8f7a5a04ab75cf">More...</a><br /></td></tr>
+<tr class="memdesc:abeb48305adbdc8f4ff8f7a5a04ab75cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">normailize 3D vector  <a href="inscmn_8c.html#abeb48305adbdc8f4ff8f7a5a04ab75cf">More...</a><br /></td></tr>
 <tr class="separator:abeb48305adbdc8f4ff8f7a5a04ab75cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50d2d9511da542d472f3390449fedf38"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="inscmn_8c.html#a50d2d9511da542d472f3390449fedf38">matcpy</a> (double *A, const double *B, int n, int m)</td></tr>
-<tr class="memdesc:a50d2d9511da542d472f3390449fedf38"><td class="mdescLeft">&#160;</td><td class="mdescRight">matcpy  <a href="inscmn_8c.html#a50d2d9511da542d472f3390449fedf38">More...</a><br /></td></tr>
+<tr class="memdesc:a50d2d9511da542d472f3390449fedf38"><td class="mdescLeft">&#160;</td><td class="mdescRight">copy matrix  <a href="inscmn_8c.html#a50d2d9511da542d472f3390449fedf38">More...</a><br /></td></tr>
 <tr class="separator:a50d2d9511da542d472f3390449fedf38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc33998911a24938042604ba1f8e6196"><td class="memItemLeft" align="right" valign="top"><a id="adc33998911a24938042604ba1f8e6196"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>matmul</b> (const char *tr, int n, int k, int m, double alpha, const double *A, const double *B, double beta, double *C)</td></tr>
@@ -413,18 +413,20 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>matinv</b> (double *A,
 <tr class="memitem:a54fd9b64416949c38e879ac889964d2a"><td class="memItemLeft" align="right" valign="top"><a id="a54fd9b64416949c38e879ac889964d2a"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>solve</b> (const char *tr, const double *A, const double *Y, int n, int m, double *X)</td></tr>
 <tr class="separator:a54fd9b64416949c38e879ac889964d2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44f90bf2ce8fd1c0c35394830c122a36"><td class="memItemLeft" align="right" valign="top"><a id="a44f90bf2ce8fd1c0c35394830c122a36"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>lsq</b> (const double *A, const double *y, int n, int m, double *x, double *Q)</td></tr>
+<tr class="memitem:a44f90bf2ce8fd1c0c35394830c122a36"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="inscmn_8c.html#a44f90bf2ce8fd1c0c35394830c122a36">lsq</a> (const double *A, const double *y, int n, int m, double *x, double *Q)</td></tr>
+<tr class="memdesc:a44f90bf2ce8fd1c0c35394830c122a36"><td class="mdescLeft">&#160;</td><td class="mdescRight">least square estimation by solving normal equation (x=(A*A')^-1*A*y)  <a href="inscmn_8c.html#a44f90bf2ce8fd1c0c35394830c122a36">More...</a><br /></td></tr>
 <tr class="separator:a44f90bf2ce8fd1c0c35394830c122a36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ea059bb23d61724fbf19f16354f9c73"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="inscmn_8c.html#a8ea059bb23d61724fbf19f16354f9c73">filter</a> (double *x, double *P, const double *H, const double *v, const double *R, int n, int m)</td></tr>
+<tr class="memdesc:a8ea059bb23d61724fbf19f16354f9c73"><td class="mdescLeft">&#160;</td><td class="mdescRight">kalman filter  <a href="inscmn_8c.html#a8ea059bb23d61724fbf19f16354f9c73">More...</a><br /></td></tr>
 <tr class="separator:a8ea059bb23d61724fbf19f16354f9c73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f7ee22bc4f2f6b90e3eff9f917b53aa"><td class="memItemLeft" align="right" valign="top"><a id="a1f7ee22bc4f2f6b90e3eff9f917b53aa"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>smoother</b> (const double *xf, const double *Qf, const double *xb, const double *Qb, int n, double *xs, double *Qs)</td></tr>
+<tr class="memitem:a1f7ee22bc4f2f6b90e3eff9f917b53aa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="inscmn_8c.html#a1f7ee22bc4f2f6b90e3eff9f917b53aa">smoother</a> (const double *xf, const double *Qf, const double *xb, const double *Qb, int n, double *xs, double *Qs)</td></tr>
+<tr class="memdesc:a1f7ee22bc4f2f6b90e3eff9f917b53aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">combine forward and backward filters by fixed-interval smoother as follows: xs=Qs*(Qf^-1*xf+Qb^-1*xb), Qs=(Qf^-1+Qb^-1)^-1)  <a href="inscmn_8c.html#a1f7ee22bc4f2f6b90e3eff9f917b53aa">More...</a><br /></td></tr>
 <tr class="separator:a1f7ee22bc4f2f6b90e3eff9f917b53aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c16ce44b35c3836325e135ffd922f35"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="inscmn_8c.html#a8c16ce44b35c3836325e135ffd922f35">matprint</a> (const double A[], int n, int m, int p, int q)</td></tr>
+<tr class="memdesc:a8c16ce44b35c3836325e135ffd922f35"><td class="mdescLeft">&#160;</td><td class="mdescRight">print matrix to file  <a href="inscmn_8c.html#a8c16ce44b35c3836325e135ffd922f35">More...</a><br /></td></tr>
 <tr class="separator:a8c16ce44b35c3836325e135ffd922f35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf978c5a5dd31194e837c41ecfd464a5"><td class="memItemLeft" align="right" valign="top"><a id="acf978c5a5dd31194e837c41ecfd464a5"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>mat_symmetry</b> (double *A, int n)</td></tr>
+<tr class="memitem:acf978c5a5dd31194e837c41ecfd464a5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="inscmn_8c.html#acf978c5a5dd31194e837c41ecfd464a5">mat_symmetry</a> (double *A, int n)</td></tr>
+<tr class="memdesc:acf978c5a5dd31194e837c41ecfd464a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">symmetrize matrix  <a href="inscmn_8c.html#acf978c5a5dd31194e837c41ecfd464a5">More...</a><br /></td></tr>
 <tr class="separator:acf978c5a5dd31194e837c41ecfd464a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae55381fc2a329d204907590f64711635"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="inscmn_8c.html#ae55381fc2a329d204907590f64711635">LOG_OPEN</a> (const char *file)</td></tr>
 <tr class="memdesc:ae55381fc2a329d204907590f64711635"><td class="mdescLeft">&#160;</td><td class="mdescRight">Open log file, so that all logs could write into.  <a href="inscmn_8c.html#ae55381fc2a329d204907590f64711635">More...</a><br /></td></tr>
@@ -534,7 +536,14 @@ Variables</h2></td></tr>
 <div class="textblock"><p>INS common functions, include basic vector,matrix,quaternion operations. </p>
 <dl class="section author"><dt>Author</dt><dd>yinflying(<a href="#" onclick="location.href='mai'+'lto:'+'yin'+'fy'+'ing'+'@f'+'oxm'+'ai'+'l.c'+'om'; return false;">yinfy<span style="display: none;">.nosp@m.</span>ing@<span style="display: none;">.nosp@m.</span>foxma<span style="display: none;">.nosp@m.</span>il.c<span style="display: none;">.nosp@m.</span>om</a>) </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>0.0.1 </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>2019-06-11 Created Files 2019-06-14 Add earth_RN and earth_RE function 2019-06-21 Add v3_normalize 2019-06-27 Add m3_inv 2019-07-01 Full all functions' comments of the file 2019-08-03 Add multiple attitude transform functions 2019-08-10 Add cfg relatived functions 2019-08-28 Add randn function </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>2019-06-11 Created Files <br  />
+ 2019-06-14 Add earth_RN and earth_RE function <br  />
+ 2019-06-21 Add v3_normalize <br  />
+ 2019-06-27 Add m3_inv <br  />
+ 2019-07-01 Full all functions' comments of the file <br  />
+ 2019-08-03 Add multiple attitude transform functions <br  />
+ 2019-08-10 Add cfg relatived functions <br  />
+ 2019-08-28 Add randn function </dd></dl>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a9b80c51efe5c639303b524bc5bc3745a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9b80c51efe5c639303b524bc5bc3745a">&#9670;&nbsp;</a></span>LOG_LEVEL_BODY</h2>
@@ -1779,19 +1788,22 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
+
+<p>kalman filter </p>
+<p>kalman filter state update as follows: K=P*H*(H'*P*H+R)^-1, x=x+K*v, P=(I-K*H')*P </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">x</td><td></td></tr>
-    <tr><td class="paramname">P</td><td></td></tr>
-    <tr><td class="paramname">H</td><td></td></tr>
-    <tr><td class="paramname">v</td><td></td></tr>
-    <tr><td class="paramname">R</td><td></td></tr>
-    <tr><td class="paramname">n</td><td></td></tr>
-    <tr><td class="paramname">m</td><td></td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">x</td><td>states vector (n x 1) </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">P</td><td>covariance matrix of states (n x n) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">H</td><td>transpose of design matrix (n x m) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>innovation (measurement - model) (m x 1) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">R</td><td>covariance matrix of measurement error (m x m) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of states </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>number of measurements </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status (0:ok,&lt;0:error) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>matirix stored by column-major order (fortran convention) if state x[i]==0.0, not updates state x[i]/P[i+i*n] </dd></dl>
 
 </div>
 </div>
@@ -2223,6 +2235,73 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 <dl class="section note"><dt>Note</dt><dd>the function will will append a line break automatically </dd></dl>
+
+</div>
+</div>
+<a id="a44f90bf2ce8fd1c0c35394830c122a36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44f90bf2ce8fd1c0c35394830c122a36">&#9670;&nbsp;</a></span>lsq()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int lsq </td>
+          <td>(</td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>A</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>Q</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>least square estimation by solving normal equation (x=(A*A')^-1*A*y) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>transpose of (weighted) design matrix (n x m) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>(weighted) measurements (m x 1) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of parameters(n&lt;=m) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>number of measurements(n&lt;=m) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">x</td><td>estmated parameters (n x 1) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">Q</td><td>esimated parameters covariance matrix (n x n) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status (0: ok, &gt;0: error) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>for weighted least square, replace A and y by A*w and w*y (w=W^(1/2)) matirix stored by column-major order (fortran convention) </dd></dl>
 
 </div>
 </div>
@@ -2749,7 +2828,7 @@ Variables</h2></td></tr>
 <p>Scalar multiplication between number and 3D matrix. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>Input number </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">alpha</td><td>Input number </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>Input 3D matrix </td></tr>
   </table>
   </dd>
@@ -3067,6 +3146,44 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="acf978c5a5dd31194e837c41ecfd464a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf978c5a5dd31194e837c41ecfd464a5">&#9670;&nbsp;</a></span>mat_symmetry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int mat_symmetry </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>A</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>symmetrize matrix </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">A</td><td>matrix A (n x ) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>size of matrix A </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+
+</div>
+</div>
 <a id="a50d2d9511da542d472f3390449fedf38"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a50d2d9511da542d472f3390449fedf38">&#9670;&nbsp;</a></span>matcpy()</h2>
 
@@ -3105,13 +3222,13 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>matcpy </p>
+<p>copy matrix </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">A</td><td></td></tr>
-    <tr><td class="paramname">B</td><td></td></tr>
-    <tr><td class="paramname">n</td><td></td></tr>
-    <tr><td class="paramname">m</td><td></td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">A</td><td>destination matrix A (n x m) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">B</td><td>source matrix B (n x m) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of rows of matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>number of columns of matrix </td></tr>
   </table>
   </dd>
 </dl>
@@ -3161,16 +3278,20 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>print matrix to file </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">A[]</td><td></td></tr>
-    <tr><td class="paramname">n</td><td></td></tr>
-    <tr><td class="paramname">m</td><td></td></tr>
-    <tr><td class="paramname">p</td><td></td></tr>
-    <tr><td class="paramname">q</td><td></td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>matrix A (n x m) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of rows of A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>number of columns of A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p</td><td>total columns, columns under decimal point </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">q</td><td>total columns, columns under decimal point </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">fp</td><td>output file pointer </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section note"><dt>Note</dt><dd>matirix stored by column-major order (fortran convention) </dd></dl>
 
 </div>
 </div>
@@ -3338,15 +3459,15 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>normv3 </p>
+<p>normailize 3D vector </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td></td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>vector a (3x1) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">b</td><td>normlized vector(3x1) || b || = 1 </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status (1:ok, 0:error) </dd></dl>
 
 </div>
 </div>
@@ -3935,6 +4056,80 @@ Variables</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>O: OK </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="inscmn_8c.html#a7214fc50e14a97c3c88f4c2050ef6b49" title="Rotation vector(Angular increment) to DCM attitude transformation (New to Old)">rv2dcm()</a> </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Quaternion attitude transforman can be expressed as Qbi+_bi-, And fellow the compluting: (Qbi+ = Qbi- * Qbi+_bi- ) Ref: Yan Gongming, 捷联惯导算法与组合导航原理讲义, 2016, P29 </dd></dl>
+
+</div>
+</div>
+<a id="a1f7ee22bc4f2f6b90e3eff9f917b53aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f7ee22bc4f2f6b90e3eff9f917b53aa">&#9670;&nbsp;</a></span>smoother()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int smoother </td>
+          <td>(</td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>xf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>Qf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>xb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>Qb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>xs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>Qs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>combine forward and backward filters by fixed-interval smoother as follows: xs=Qs*(Qf^-1*xf+Qb^-1*xb), Qs=(Qf^-1+Qb^-1)^-1) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">xf</td><td>forward solutions (n x 1) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Qf</td><td>forward solutions covariance matrix (n x n) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xb</td><td>backward solutions (n x 1) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Qb</td><td>backward solutions covariance matrix (n x n) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of solutions </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xs</td><td>smoothed solutions (n x 1) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">Qs</td><td>smoothed solutions covariance matrix (n x n) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status (0:ok,0&gt;:error) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>matirix stored by column-major order (fortran convention) </dd></dl>
 
 </div>
 </div>
@@ -5240,7 +5435,8 @@ Variables</h2></td></tr>
 <div class="line">    .issol_header = <span class="keyword">true</span>,</div>
 <div class="line">    .sol_refpos = 0,</div>
 <div class="line">    .feedratio = 1.0,</div>
-<div class="line">    .is_imu_samenoise = <span class="keyword">false</span></div>
+<div class="line">    .is_imu_samenoise = <span class="keyword">false</span>,</div>
+<div class="line">    .log_path = <span class="stringliteral">&quot;yins.log&quot;</span>,</div>
 <div class="line">}</div>
 </div><!-- fragment -->
 <p>global configuration </p>
@@ -5407,13 +5603,13 @@ Variables</h2></td></tr>
 </div>
 </div>
 </div><!-- contents -->
-<div class="ttc" id="ainscmn_8c_html_ae590af5d4b5b2df86688442920fb790b"><div class="ttname"><a href="inscmn_8c.html#ae590af5d4b5b2df86688442920fb790b">LOG_FP</a></div><div class="ttdeci">FILE * LOG_FP</div><div class="ttdoc">default log file pointer(stdout)</div><div class="ttdef"><b>Definition:</b> inscmn.c:2146</div></div>
+<div class="ttc" id="ainscmn_8c_html_ae590af5d4b5b2df86688442920fb790b"><div class="ttname"><a href="inscmn_8c.html#ae590af5d4b5b2df86688442920fb790b">LOG_FP</a></div><div class="ttdeci">FILE * LOG_FP</div><div class="ttdoc">default log file pointer(stdout)</div><div class="ttdef"><b>Definition:</b> inscmn.c:2155</div></div>
 <div class="ttc" id="astructgtime__t_html_a1520b8ed03fbb32b47417deeff089aa1"><div class="ttname"><a href="structgtime__t.html#a1520b8ed03fbb32b47417deeff089aa1">gtime_t::sec</a></div><div class="ttdeci">double sec</div><div class="ttdoc">fraction of second under 1 s</div><div class="ttdef"><b>Definition:</b> ins.h:186</div></div>
-<div class="ttc" id="ainscmn_8c_html_a985daad1b7329e19b520e522f1c2c297"><div class="ttname"><a href="inscmn_8c.html#a985daad1b7329e19b520e522f1c2c297">time2gpst</a></div><div class="ttdeci">double time2gpst(gtime_t t, int *week)</div><div class="ttdoc">convert gtime_t struct to week and tow in gps time</div><div class="ttdef"><b>Definition:</b> inscmn.c:829</div></div>
+<div class="ttc" id="ainscmn_8c_html_a985daad1b7329e19b520e522f1c2c297"><div class="ttname"><a href="inscmn_8c.html#a985daad1b7329e19b520e522f1c2c297">time2gpst</a></div><div class="ttdeci">double time2gpst(gtime_t t, int *week)</div><div class="ttdoc">convert gtime_t struct to week and tow in gps time</div><div class="ttdef"><b>Definition:</b> inscmn.c:830</div></div>
 <div class="ttc" id="astructgtime__t_html_a8b130d86698a8a9e3c3a7a5c590eb392"><div class="ttname"><a href="structgtime__t.html#a8b130d86698a8a9e3c3a7a5c590eb392">gtime_t::time</a></div><div class="ttdeci">time_t time</div><div class="ttdoc">time (s) expressed by standard time_t</div><div class="ttdef"><b>Definition:</b> ins.h:185</div></div>
-<div class="ttc" id="ainscmn_8c_html_a84157cdc36b1c85ff64b0403c5108767"><div class="ttname"><a href="inscmn_8c.html#a84157cdc36b1c85ff64b0403c5108767">LOG_CURTIME</a></div><div class="ttdeci">gtime_t LOG_CURTIME</div><div class="ttdoc">default log time</div><div class="ttdef"><b>Definition:</b> inscmn.c:2147</div></div>
-<div class="ttc" id="ainscmn_8c_html_ab023441a02c64276696f57cb59c5d52a"><div class="ttname"><a href="inscmn_8c.html#ab023441a02c64276696f57cb59c5d52a">FILE_LOG_LEVEL</a></div><div class="ttdeci">enum LOG_LEVEL FILE_LOG_LEVEL</div><div class="ttdoc">default file log level</div><div class="ttdef"><b>Definition:</b> inscmn.c:2144</div></div>
-<div class="ttc" id="ainscmn_8c_html_ac8b06b8413d59757a8f5b3a0147bb292"><div class="ttname"><a href="inscmn_8c.html#ac8b06b8413d59757a8f5b3a0147bb292">STDOUT_LOG_LEVEL</a></div><div class="ttdeci">enum LOG_LEVEL STDOUT_LOG_LEVEL</div><div class="ttdoc">default stdout log level</div><div class="ttdef"><b>Definition:</b> inscmn.c:2145</div></div>
+<div class="ttc" id="ainscmn_8c_html_a84157cdc36b1c85ff64b0403c5108767"><div class="ttname"><a href="inscmn_8c.html#a84157cdc36b1c85ff64b0403c5108767">LOG_CURTIME</a></div><div class="ttdeci">gtime_t LOG_CURTIME</div><div class="ttdoc">default log time</div><div class="ttdef"><b>Definition:</b> inscmn.c:2156</div></div>
+<div class="ttc" id="ainscmn_8c_html_ab023441a02c64276696f57cb59c5d52a"><div class="ttname"><a href="inscmn_8c.html#ab023441a02c64276696f57cb59c5d52a">FILE_LOG_LEVEL</a></div><div class="ttdeci">enum LOG_LEVEL FILE_LOG_LEVEL</div><div class="ttdoc">default file log level</div><div class="ttdef"><b>Definition:</b> inscmn.c:2153</div></div>
+<div class="ttc" id="ainscmn_8c_html_ac8b06b8413d59757a8f5b3a0147bb292"><div class="ttname"><a href="inscmn_8c.html#ac8b06b8413d59757a8f5b3a0147bb292">STDOUT_LOG_LEVEL</a></div><div class="ttdeci">enum LOG_LEVEL STDOUT_LOG_LEVEL</div><div class="ttdoc">default stdout log level</div><div class="ttdef"><b>Definition:</b> inscmn.c:2154</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

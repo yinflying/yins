@@ -3,7 +3,7 @@
  * @brief ins read and write function
  * @author yinflying(yinflying@foxmail.com)
  * @note
- *  2019-05-21 Created
+ *  2019-05-21 Created \n
  *  2019-09-03 Add ycsv read and output support
  */
 /*

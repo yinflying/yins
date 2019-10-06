@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.16"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>yins: Main Page</title>
+<title>yins: yins (An simple implementation of SINS)</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -62,11 +62,99 @@ $(function() {
 </iframe>
 </div>
 
-<div class="header">
+<div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">yins Documentation</div>  </div>
+<div class="title">yins (An simple implementation of SINS) </div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><h1>introduction</h1>
+<p>Here is introduction</p>
+<h1>history</h1>
+<p>2019/09/30 Add GNSS/INS/OD loosely kalman filter combination.</p>
+<h1>docs</h1>
+<p>See <code>yins_html_docs</code>, use browser to open html file.</p>
+<h1>Abbreviation in code</h1>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Abbre  </th><th class="markdownTableHeadNone">explanation   </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Cnb  </td><td class="markdownTableBodyNone"><img class="formulaInl" alt="$ C_n^b $" src="form_2.png"/>, trans matrix n-axis to b-axis(the same as Qnb)   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Cnb,Qnb,Enb  </td><td class="markdownTableBodyNone">trans from n-frame to b-axis(or attitude b-axis to n-axis)   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">n,b,e,i,c,d  </td><td class="markdownTableBodyNone">reference frame, navitaion/imu body/ecef/eci/carrier/odometer   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">euler  </td><td class="markdownTableBodyNone">Euler attitude, [roll, pitch, yaw]   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">g  </td><td class="markdownTableBodyNone">gps(or gnss phase center),gravity   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">d  </td><td class="markdownTableBodyNone">data, or DELTA, mean difference, e.g. dv, dtheta   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">theta  </td><td class="markdownTableBodyNone">angle increment   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">v  </td><td class="markdownTableBodyNone">velocity   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SHF  </td><td class="markdownTableBodyNone">Spherical Harmonics Function   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">dbl  </td><td class="markdownTableBodyNone">double   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">enu,ned  </td><td class="markdownTableBodyNone">East, North, Up, Down   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">v3  </td><td class="markdownTableBodyNone">3D vector   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">m3  </td><td class="markdownTableBodyNone">3D matrix   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">_t  </td><td class="markdownTableBodyNone">data type   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">att  </td><td class="markdownTableBodyNone">attitude(could express by DCM,Quat,Euler), most express as "Enb"   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">mul  </td><td class="markdownTableBodyNone">multiply   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">dcm,ctm  </td><td class="markdownTableBodyNone">Direct Cosine Matrix, Coordinate Transform Matrix   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">w  </td><td class="markdownTableBodyNone">Omega, Rotation rate(wie_e mean <img class="formulaInl" alt="$ w_ie^e $" src="form_3.png"/>, project to e-axis)   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">rv  </td><td class="markdownTableBodyNone">rotation vector   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">lat  </td><td class="markdownTableBodyNone">latitude   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">lon  </td><td class="markdownTableBodyNone">longitude   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">hgt  </td><td class="markdownTableBodyNone">height   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">pos  </td><td class="markdownTableBodyNone">position, most represent under geodetic coordinate, (lat,lon,hgt)   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">xyz  </td><td class="markdownTableBodyNone">position under ECEF, Cartesian coordinate   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">rad  </td><td class="markdownTableBodyNone">radius   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">deg  </td><td class="markdownTableBodyNone">degree, unit   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">nav  </td><td class="markdownTableBodyNone">navigtaion   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">cfg  </td><td class="markdownTableBodyNone">config/configuration   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">kf  </td><td class="markdownTableBodyNone">kalman filter   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">od  </td><td class="markdownTableBodyNone">odometer   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">sol  </td><td class="markdownTableBodyNone">solution   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">ft  </td><td class="markdownTableBodyNone">filetype   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">kod  </td><td class="markdownTableBodyNone">odometer scalar factor, true/output   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">itg  </td><td class="markdownTableBodyNone">intergral   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">ycsv  </td><td class="markdownTableBodyNone">yins csv file, a self-explain extended csv file format for yins   </td></tr>
+</table>
+<h1>Example for LATEX</h1>
+<p>you can use LATEX here:</p>
+<p><img class="formulaInl" alt="$ \lambda = \alpha $" src="form_0.png"/></p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \lambda = \frac{a}{b} \]" src="form_1.png"/>
+</p>
+ </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

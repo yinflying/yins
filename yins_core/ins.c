@@ -4,7 +4,7 @@
  * @author yinflying(yinflying@foxmail.com)
  * @version 0.0.1
  * @note
- *  2019-05-21  Created
+ *  2019-05-21  Created \n
  */
 
 /*
@@ -170,9 +170,9 @@ int ins_nav_ecef_back(double dt,const v3_t *dtheta, const v3_t *dv,
  * @param[out]  dtheta          Sum of angular increment with conning error compensation
  * @param[out]  dv              Sum of velocity incrment with scull error compensation
  * @return 0: OK    1: Error
- * @note Ref:
+ * @note Ref: \n
  *  1. Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
- *      Integrated Navigation Systems(2nd Edition)
+ *      Integrated Navigation Systems(2nd Edition) \n
  *  2. Yan Gongming, 捷联惯导算法与组合导航讲义, 2016
  */
 extern int multisample( const v3_t* dtheta_list, const v3_t* dv_list, int N,
@@ -274,7 +274,7 @@ extern int dblvec2att(const v3_t* vn1, const v3_t* vn2, const v3_t* vb1,
  * @return 0: Ok
  * @see align_coarse_inertial()
  * @see dblvec2att()
- * @note Yan Gongming, 捷联惯导算法与组合导航讲义, 2016, P144
+ * @note ref: Yan Gongming, 捷联惯导算法与组合导航讲义, 2016, P144
  */
 extern int align_coarse_static_base(const imu_t* imu, double lat, m3_t *Cnb)
 {
@@ -306,7 +306,7 @@ extern int align_coarse_static_base(const imu_t* imu, double lat, m3_t *Cnb)
  * @return 0: OK
  * @see align_coarse_static_base()
  * @see dblvec2att()
- * @note ref Qin Yunyuan, 惯性导航(2nd Edition), P319
+ * @note ref: Qin Yunyuan, 惯性导航(2nd Edition), P319
  */
 extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
 {
@@ -377,10 +377,10 @@ extern int align_coarse_inertial(const imu_t *imu, double lat, m3_t *Cnb)
  *              3. imu data should be uniform sampling
  * @see align_coarse_static_base()
  * @see align_coarse_inertial()
- * @note Ref:
- *  Peter M.G. Silson, Coarse Align of Ship's Strapdown Inertial Attitude
- *  Reference System Using Velocity Loci, 2011
- *  F. Landis Markley, Attitude Determination using Vector Observations and the
+ * @note Ref: \n
+ *  1. Peter M.G. Silson, Coarse Align of Ship's Strapdown Inertial Attitude
+ *  Reference System Using Velocity Loci, 2011 \n
+ *  2. F. Landis Markley, Attitude Determination using Vector Observations and the
  *  Singular Value Decompostion, 1988
  */
 extern int align_coarse_wuhba(const imu_t *imu, double lat, const v3_t *veb_n,
@@ -525,8 +525,7 @@ extern inline int jacobi_trans_Ebe2Ebe(m3_t *F, double dt)
  * @param[in]   dt  Time interval
  * @param[in]   Cbe Current average attitude
  * @return 0: OK
- * @note
- *      Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ * @note Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
  *      Integrated Navigation Systems(2nd Edition), P583, 14.48
  */
 extern inline int jacobi_trans_Ebe2bg(m3_t *F, double dt, const m3_t *Cbe)
@@ -542,8 +541,7 @@ extern inline int jacobi_trans_Ebe2bg(m3_t *F, double dt, const m3_t *Cbe)
  * @param[in]   Cbe Current average attitude.
  * @param[in]   dv  Velocity increment[m/s]
  * @return 0: OK
- * @note
- *      Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ * @note Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
  *      Integrated Navigation Systems(2nd Edition), P583, 14.48
  */
 extern inline int
@@ -560,8 +558,7 @@ jacobi_trans_veb_e2Ebe(m3_t *F, const m3_t *Cbe, const v3_t *dv)
  * @param[out]  F   Jacobi matrix
  * @param[in]   dt  Time interval[s]
  * @return 0: OK
- * @note
- *      Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ * @note Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
  *      Integrated Navigation Systems(2nd Edition), P583, 14.48
  */
 extern inline int jacobi_trans_veb_e2veb_e(m3_t *F, double dt)

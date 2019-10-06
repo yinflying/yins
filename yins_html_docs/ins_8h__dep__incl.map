@@ -1,7 +1,10 @@
 <map id="yins_core/ins.h" name="yins_core/ins.h">
-<area shape="rect" id="node1" title="ins header file" alt="" coords="228,5,339,32"/>
+<area shape="rect" id="node1" title="ins header file" alt="" coords="448,5,559,32"/>
 <area shape="rect" id="node2" href="$ins_8c.html" title="ins core functions implementation" alt="" coords="5,80,116,107"/>
 <area shape="rect" id="node3" href="$inscmn_8c.html" title="INS common functions, include basic vector,matrix,quaternion operations." alt="" coords="140,80,275,107"/>
 <area shape="rect" id="node4" href="$insio_8c.html" title="ins read and write function" alt="" coords="299,80,419,107"/>
-<area shape="rect" id="node5" href="$unittest_8c.html" title="ins.h functions unit tests" alt="" coords="444,80,579,107"/>
+<area shape="rect" id="node5" href="$inskf_8c.html" title="ins kalman filter related function" alt="" coords="443,80,563,107"/>
+<area shape="rect" id="node6" href="$unittest_8c.html" title="ins.h functions unit tests" alt="" coords="588,80,723,107"/>
+<area shape="rect" id="node7" href="$main_8c.html" title="main function, provide CUI program" alt="" coords="769,155,830,181"/>
+<area shape="rect" id="node8" href="$yinsapp_8h.html" title="ins application functions" alt="" coords="799,80,877,107"/>
 </map>

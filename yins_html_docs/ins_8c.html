@@ -136,9 +136,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>dr_nav_ned</b> ()</td>
 <tr class="memitem:a5dd27f5d6678042f7ba6606fef4a2b59"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#a5dd27f5d6678042f7ba6606fef4a2b59">align_coarse_inertial</a> (const <a class="el" href="structimu__t.html">imu_t</a> *imu, double lat, <a class="el" href="structm3__t.html">m3_t</a> *Cnb)</td></tr>
 <tr class="memdesc:a5dd27f5d6678042f7ba6606fef4a2b59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Coarse align under inertial fame(anti-vibration method)  <a href="ins_8c.html#a5dd27f5d6678042f7ba6606fef4a2b59">More...</a><br /></td></tr>
 <tr class="separator:a5dd27f5d6678042f7ba6606fef4a2b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e727b0353091ed4b1137892eebf09d1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#a3e727b0353091ed4b1137892eebf09d1">align_coarse_wuhba</a> (const <a class="el" href="structimu__t.html">imu_t</a> *imu, double lat, const <a class="el" href="structv3__t.html">v3_t</a> *veb_n, int Nveb_n, <a class="el" href="structm3__t.html">m3_t</a> *Cnb)</td></tr>
-<tr class="memdesc:a3e727b0353091ed4b1137892eebf09d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Coarse Alignment by solving Wuhba problem under inertial frame.  <a href="ins_8c.html#a3e727b0353091ed4b1137892eebf09d1">More...</a><br /></td></tr>
-<tr class="separator:a3e727b0353091ed4b1137892eebf09d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af94c92bc8a3c7ee78a1389afa9cc63f3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#af94c92bc8a3c7ee78a1389afa9cc63f3">align_coarse_wuhba</a> (const <a class="el" href="structimu__t.html">imu_t</a> *imu, double lat, const <a class="el" href="structv3__t.html">v3_t</a> *veb_n, unsigned int Nveb_n, <a class="el" href="structm3__t.html">m3_t</a> *Cnb)</td></tr>
+<tr class="memdesc:af94c92bc8a3c7ee78a1389afa9cc63f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Coarse Alignment by solving Wuhba problem under inertial frame.  <a href="ins_8c.html#af94c92bc8a3c7ee78a1389afa9cc63f3">More...</a><br /></td></tr>
+<tr class="separator:af94c92bc8a3c7ee78a1389afa9cc63f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeed44d9febc16bc8f257f1ea50531fc9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#aeed44d9febc16bc8f257f1ea50531fc9">jacobi_trans_Ebe2Ebe</a> (<a class="el" href="structm3__t.html">m3_t</a> *F, double dt)</td></tr>
 <tr class="memdesc:aeed44d9febc16bc8f257f1ea50531fc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation jacobi matrix from Ebe to Ebe.  <a href="ins_8c.html#aeed44d9febc16bc8f257f1ea50531fc9">More...</a><br /></td></tr>
 <tr class="separator:aeed44d9febc16bc8f257f1ea50531fc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -163,32 +163,32 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>dr_nav_ned</b> ()</td>
 <tr class="memitem:a2cf266d0287fd790517b83bc0cc9aff8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#a2cf266d0287fd790517b83bc0cc9aff8">jacobi_trans_markov</a> (<a class="el" href="structm3__t.html">m3_t</a> *F, double dt, const <a class="el" href="structv3__t.html">v3_t</a> *T)</td></tr>
 <tr class="memdesc:a2cf266d0287fd790517b83bc0cc9aff8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation jacobi matrix of 1st order markov/random walk process.  <a href="ins_8c.html#a2cf266d0287fd790517b83bc0cc9aff8">More...</a><br /></td></tr>
 <tr class="separator:a2cf266d0287fd790517b83bc0cc9aff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb3427c4bac9b61c22a66cb19d8c9318"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#adb3427c4bac9b61c22a66cb19d8c9318">jacobi_meas_reb_e2Ebe</a> (<a class="el" href="structm3__t.html">m3_t</a> *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm)</td></tr>
-<tr class="memdesc:adb3427c4bac9b61c22a66cb19d8c9318"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation jacobi matrix of 1st order markov/random walk process.  <a href="ins_8c.html#adb3427c4bac9b61c22a66cb19d8c9318">More...</a><br /></td></tr>
-<tr class="separator:adb3427c4bac9b61c22a66cb19d8c9318"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e9beee3a1600af727a89823f7752ac2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#a6e9beee3a1600af727a89823f7752ac2">jacobi_meas_veb_e2Ebe</a> (<a class="el" href="structm3__t.html">m3_t</a> *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *wib_b, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm)</td></tr>
-<tr class="memdesc:a6e9beee3a1600af727a89823f7752ac2"><td class="mdescLeft">&#160;</td><td class="mdescRight">jacobi_meas_veb_e2Ebe  <a href="ins_8c.html#a6e9beee3a1600af727a89823f7752ac2">More...</a><br /></td></tr>
-<tr class="separator:a6e9beee3a1600af727a89823f7752ac2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa2a1fc68032a19d73d4e7b5c87a79fa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#afa2a1fc68032a19d73d4e7b5c87a79fa">jacobi_meas_veb_e2bg</a> (<a class="el" href="structm3__t.html">m3_t</a> *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm)</td></tr>
-<tr class="memdesc:afa2a1fc68032a19d73d4e7b5c87a79fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">jacobi_meas_veb_e2bg  <a href="ins_8c.html#afa2a1fc68032a19d73d4e7b5c87a79fa">More...</a><br /></td></tr>
-<tr class="separator:afa2a1fc68032a19d73d4e7b5c87a79fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9a08dc54e4ad7ff94d592e546272ed8"><td class="memItemLeft" align="right" valign="top"><a id="ac9a08dc54e4ad7ff94d592e546272ed8"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_veb_e2kax</b> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dv)</td></tr>
+<tr class="memitem:a786f9673ef6f179e3961c24230e52faa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#a786f9673ef6f179e3961c24230e52faa">jacobi_meas_reb_e2Ebe</a> (<a class="el" href="structm3__t.html">m3_t</a> *H, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm)</td></tr>
+<tr class="memdesc:a786f9673ef6f179e3961c24230e52faa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form measurement jacobi matrix from reb_e to Ebe.  <a href="ins_8c.html#a786f9673ef6f179e3961c24230e52faa">More...</a><br /></td></tr>
+<tr class="separator:a786f9673ef6f179e3961c24230e52faa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64b24d31662fcacb935362f34a5639b0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#a64b24d31662fcacb935362f34a5639b0">jacobi_meas_veb_e2Ebe</a> (<a class="el" href="structm3__t.html">m3_t</a> *H, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *wib_b, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm)</td></tr>
+<tr class="memdesc:a64b24d31662fcacb935362f34a5639b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form measurement jacobi matrix from veb_e to Ebe.  <a href="ins_8c.html#a64b24d31662fcacb935362f34a5639b0">More...</a><br /></td></tr>
+<tr class="separator:a64b24d31662fcacb935362f34a5639b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2e1450c0eca7849a700b85c7995da43"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#aa2e1450c0eca7849a700b85c7995da43">jacobi_meas_veb_e2bg</a> (<a class="el" href="structm3__t.html">m3_t</a> *H, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *lever_arm)</td></tr>
+<tr class="memdesc:aa2e1450c0eca7849a700b85c7995da43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form measurement jacobi matrix from veb_e to bg.  <a href="ins_8c.html#aa2e1450c0eca7849a700b85c7995da43">More...</a><br /></td></tr>
+<tr class="separator:aa2e1450c0eca7849a700b85c7995da43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9a08dc54e4ad7ff94d592e546272ed8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#ac9a08dc54e4ad7ff94d592e546272ed8">jacobi_trans_veb_e2kax</a> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dv)</td></tr>
+<tr class="memdesc:ac9a08dc54e4ad7ff94d592e546272ed8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation matrix from veb_e to ka.x.  <a href="ins_8c.html#ac9a08dc54e4ad7ff94d592e546272ed8">More...</a><br /></td></tr>
 <tr class="separator:ac9a08dc54e4ad7ff94d592e546272ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae049fae22d64bc86ba88c5266fc5d466"><td class="memItemLeft" align="right" valign="top"><a id="ae049fae22d64bc86ba88c5266fc5d466"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_veb_e2kay</b> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dv)</td></tr>
+<tr class="memitem:ae049fae22d64bc86ba88c5266fc5d466"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#ae049fae22d64bc86ba88c5266fc5d466">jacobi_trans_veb_e2kay</a> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dv)</td></tr>
+<tr class="memdesc:ae049fae22d64bc86ba88c5266fc5d466"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation matrix from veb_e to ka.y.  <a href="ins_8c.html#ae049fae22d64bc86ba88c5266fc5d466">More...</a><br /></td></tr>
 <tr class="separator:ae049fae22d64bc86ba88c5266fc5d466"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae413161c4db0d219aefecd176035e181"><td class="memItemLeft" align="right" valign="top"><a id="ae413161c4db0d219aefecd176035e181"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_veb_e2kaz</b> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dv)</td></tr>
+<tr class="memitem:ae413161c4db0d219aefecd176035e181"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#ae413161c4db0d219aefecd176035e181">jacobi_trans_veb_e2kaz</a> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dv)</td></tr>
+<tr class="memdesc:ae413161c4db0d219aefecd176035e181"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation matrix from veb_e to ka.z.  <a href="ins_8c.html#ae413161c4db0d219aefecd176035e181">More...</a><br /></td></tr>
 <tr class="separator:ae413161c4db0d219aefecd176035e181"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d14dbd7bc4c0241fbb5a60adbe3dda7"><td class="memItemLeft" align="right" valign="top"><a id="a5d14dbd7bc4c0241fbb5a60adbe3dda7"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgx</b> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dtheta)</td></tr>
+<tr class="memitem:a5d14dbd7bc4c0241fbb5a60adbe3dda7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#a5d14dbd7bc4c0241fbb5a60adbe3dda7">jacobi_trans_Ebe2kgx</a> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dtheta)</td></tr>
+<tr class="memdesc:a5d14dbd7bc4c0241fbb5a60adbe3dda7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation matrix from veb_e to kg.x.  <a href="ins_8c.html#a5d14dbd7bc4c0241fbb5a60adbe3dda7">More...</a><br /></td></tr>
 <tr class="separator:a5d14dbd7bc4c0241fbb5a60adbe3dda7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9242e67414fd5d0ffbdaa737401c97ba"><td class="memItemLeft" align="right" valign="top"><a id="a9242e67414fd5d0ffbdaa737401c97ba"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgy</b> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dtheta)</td></tr>
+<tr class="memitem:a9242e67414fd5d0ffbdaa737401c97ba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#a9242e67414fd5d0ffbdaa737401c97ba">jacobi_trans_Ebe2kgy</a> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dtheta)</td></tr>
+<tr class="memdesc:a9242e67414fd5d0ffbdaa737401c97ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation matrix from veb_e to kg.y.  <a href="ins_8c.html#a9242e67414fd5d0ffbdaa737401c97ba">More...</a><br /></td></tr>
 <tr class="separator:a9242e67414fd5d0ffbdaa737401c97ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeba87b72c5b27669c9c76f9bcbe03c8a"><td class="memItemLeft" align="right" valign="top"><a id="aeba87b72c5b27669c9c76f9bcbe03c8a"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</b> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dtheta)</td></tr>
+<tr class="memitem:aeba87b72c5b27669c9c76f9bcbe03c8a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#aeba87b72c5b27669c9c76f9bcbe03c8a">jacobi_trans_Ebe2kgz</a> (double *F, const <a class="el" href="structm3__t.html">m3_t</a> *Cbe, const <a class="el" href="structv3__t.html">v3_t</a> *dtheta)</td></tr>
+<tr class="memdesc:aeba87b72c5b27669c9c76f9bcbe03c8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Form state transformation matrix from veb_e to kg.z.  <a href="ins_8c.html#aeba87b72c5b27669c9c76f9bcbe03c8a">More...</a><br /></td></tr>
 <tr class="separator:aeba87b72c5b27669c9c76f9bcbe03c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af520d939b4e8a761da7548a3902f76da"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ins_8c.html#af520d939b4e8a761da7548a3902f76da">dr_nav_ecef</a> (double dt, const <a class="el" href="structv3__t.html">v3_t</a> *dtheta, double dS, <a class="el" href="structv3__t.html">v3_t</a> *r, <a class="el" href="structquat__t.html">quat_t</a> *q)</td></tr>
 <tr class="memdesc:af520d939b4e8a761da7548a3902f76da"><td class="mdescLeft">&#160;</td><td class="mdescRight">dead reckoning on navigation  <a href="ins_8c.html#af520d939b4e8a761da7548a3902f76da">More...</a><br /></td></tr>
@@ -198,7 +198,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
 <div class="textblock"><p>ins core functions implementation </p>
 <dl class="section author"><dt>Author</dt><dd>yinflying(<a href="#" onclick="location.href='mai'+'lto:'+'yin'+'fl'+'yin'+'g@'+'fox'+'ma'+'il.'+'co'+'m'; return false;">yinfl<span style="display: none;">.nosp@m.</span>ying<span style="display: none;">.nosp@m.</span>@foxm<span style="display: none;">.nosp@m.</span>ail.<span style="display: none;">.nosp@m.</span>com</a>) </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>0.0.1 </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>2019-05-21 Created </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>2019-05-21 Created <br  />
+</dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
 <a id="a5dd27f5d6678042f7ba6606fef4a2b59"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5dd27f5d6678042f7ba6606fef4a2b59">&#9670;&nbsp;</a></span>align_coarse_inertial()</h2>
@@ -245,7 +246,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="ins_8c.html#a6fbe5e2d2cc072d600a9174307ae198f" title="Coarse align on the static base.">align_coarse_static_base()</a> </dd>
 <dd>
 <a class="el" href="ins_8c.html#a71e8dbf8718c473e1a29938c264398ed" title="Determinate attitude by using double vector.">dblvec2att()</a> </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>ref Qin Yunyuan, 惯性导航(2nd Edition), P319 </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>ref: Qin Yunyuan, 惯性导航(2nd Edition), P319 </dd></dl>
 
 </div>
 </div>
@@ -294,12 +295,12 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="ins_8c.html#a5dd27f5d6678042f7ba6606fef4a2b59" title="Coarse align under inertial fame(anti-vibration method)">align_coarse_inertial()</a> </dd>
 <dd>
 <a class="el" href="ins_8c.html#a71e8dbf8718c473e1a29938c264398ed" title="Determinate attitude by using double vector.">dblvec2att()</a> </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Yan Gongming, 捷联惯导算法与组合导航讲义, 2016, P144 </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>ref: Yan Gongming, 捷联惯导算法与组合导航讲义, 2016, P144 </dd></dl>
 
 </div>
 </div>
-<a id="a3e727b0353091ed4b1137892eebf09d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e727b0353091ed4b1137892eebf09d1">&#9670;&nbsp;</a></span>align_coarse_wuhba()</h2>
+<a id="af94c92bc8a3c7ee78a1389afa9cc63f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af94c92bc8a3c7ee78a1389afa9cc63f3">&#9670;&nbsp;</a></span>align_coarse_wuhba()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -325,7 +326,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>Nveb_n</em>, </td>
         </tr>
         <tr>
@@ -362,7 +363,13 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="ins_8c.html#a6fbe5e2d2cc072d600a9174307ae198f" title="Coarse align on the static base.">align_coarse_static_base()</a> </dd>
 <dd>
 <a class="el" href="ins_8c.html#a5dd27f5d6678042f7ba6606fef4a2b59" title="Coarse align under inertial fame(anti-vibration method)">align_coarse_inertial()</a> </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Ref: Peter M.G. Silson, Coarse Align of Ship's Strapdown Inertial Attitude Reference System Using Velocity Loci, 2011 F. Landis Markley, Attitude Determination using Vector Observations and the Singular Value Decompostion, 1988 </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: <br  />
+<ol type="1">
+<li>Peter M.G. Silson, Coarse Align of Ship's Strapdown Inertial Attitude Reference System Using Velocity Loci, 2011 <br  />
+</li>
+<li>F. Landis Markley, Attitude Determination using Vector Observations and the Singular Value Decompostion, 1988 </li>
+</ol>
+</dd></dl>
 
 </div>
 </div>
@@ -481,7 +488,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
 
 </div>
 </div>
@@ -641,8 +648,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
 
 </div>
 </div>
-<a id="adb3427c4bac9b61c22a66cb19d8c9318"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb3427c4bac9b61c22a66cb19d8c9318">&#9670;&nbsp;</a></span>jacobi_meas_reb_e2Ebe()</h2>
+<a id="a786f9673ef6f179e3961c24230e52faa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a786f9673ef6f179e3961c24230e52faa">&#9670;&nbsp;</a></span>jacobi_meas_reb_e2Ebe()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -651,7 +658,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
           <td class="memname">int jacobi_meas_reb_e2Ebe </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
-          <td class="paramname"><em>F</em>, </td>
+          <td class="paramname"><em>H</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -673,21 +680,22 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
       </table>
 </div><div class="memdoc">
 
-<p>Form state transformation jacobi matrix of 1st order markov/random walk process. </p>
+<p>Form measurement jacobi matrix from reb_e to Ebe. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">H</td><td>Jacobi matrix </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>Current average attitude </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lever_arm</td><td>gnss to imu lever arm </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lever_arm</td><td>gnss to imu lever arm[m] </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P600, 14.111 </dd></dl>
 
 </div>
 </div>
-<a id="afa2a1fc68032a19d73d4e7b5c87a79fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa2a1fc68032a19d73d4e7b5c87a79fa">&#9670;&nbsp;</a></span>jacobi_meas_veb_e2bg()</h2>
+<a id="aa2e1450c0eca7849a700b85c7995da43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2e1450c0eca7849a700b85c7995da43">&#9670;&nbsp;</a></span>jacobi_meas_veb_e2bg()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -696,7 +704,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
           <td class="memname">int jacobi_meas_veb_e2bg </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
-          <td class="paramname"><em>F</em>, </td>
+          <td class="paramname"><em>H</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -718,21 +726,22 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
       </table>
 </div><div class="memdoc">
 
-<p>jacobi_meas_veb_e2bg </p>
+<p>Form measurement jacobi matrix from veb_e to bg. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">F</td><td></td></tr>
-    <tr><td class="paramname">Cbe</td><td></td></tr>
-    <tr><td class="paramname">lever_arm</td><td></td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">H</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>Current average attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lever_arm</td><td>gnss lever arm[m] </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: 0K) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P600, 14.111 </dd></dl>
 
 </div>
 </div>
-<a id="a6e9beee3a1600af727a89823f7752ac2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e9beee3a1600af727a89823f7752ac2">&#9670;&nbsp;</a></span>jacobi_meas_veb_e2Ebe()</h2>
+<a id="a64b24d31662fcacb935362f34a5639b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64b24d31662fcacb935362f34a5639b0">&#9670;&nbsp;</a></span>jacobi_meas_veb_e2Ebe()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -741,7 +750,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
           <td class="memname">int jacobi_meas_veb_e2Ebe </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
-          <td class="paramname"><em>F</em>, </td>
+          <td class="paramname"><em>H</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -769,17 +778,18 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
       </table>
 </div><div class="memdoc">
 
-<p>jacobi_meas_veb_e2Ebe </p>
+<p>Form measurement jacobi matrix from veb_e to Ebe. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">wib_b</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lever_arm</td><td></td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">H</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>Current average attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">wib_b</td><td>imu output angluar rate[rad/s] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lever_arm</td><td>gnss to imu lever arm[m] </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P600, 14.111 </dd></dl>
 
 </div>
 </div>
@@ -833,6 +843,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P583, 14.48 </dd></dl>
 
 </div>
 </div>
@@ -879,7 +890,168 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>O: OK </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>This function relate to the earth rotation rate, use wgs84 parameter. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This function relate to the earth rotation rate, use wgs84 parameter. <pre class="fragment"> Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor
+ Integrated Navigation Systems(2nd Edition), P583, 14.48
+</pre> </dd></dl>
+
+</div>
+</div>
+<a id="a5d14dbd7bc4c0241fbb5a60adbe3dda7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d14dbd7bc4c0241fbb5a60adbe3dda7">&#9670;&nbsp;</a></span>jacobi_trans_Ebe2kgx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int jacobi_trans_Ebe2kgx </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>F</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Cbe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>dtheta</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Form state transformation matrix from veb_e to kg.x. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>current average attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dtheta</td><td>imu output angular increment </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+
+</div>
+</div>
+<a id="a9242e67414fd5d0ffbdaa737401c97ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9242e67414fd5d0ffbdaa737401c97ba">&#9670;&nbsp;</a></span>jacobi_trans_Ebe2kgy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int jacobi_trans_Ebe2kgy </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>F</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Cbe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>dtheta</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Form state transformation matrix from veb_e to kg.y. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>current average attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dtheta</td><td>imu output angular increment </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+
+</div>
+</div>
+<a id="aeba87b72c5b27669c9c76f9bcbe03c8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeba87b72c5b27669c9c76f9bcbe03c8a">&#9670;&nbsp;</a></span>jacobi_trans_Ebe2kgz()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int jacobi_trans_Ebe2kgz </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>F</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Cbe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>dtheta</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Form state transformation matrix from veb_e to kg.z. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>current average attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dtheta</td><td>imu output angular increment </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
 
 </div>
 </div>
@@ -926,11 +1098,14 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
 <p>Form state transformation jacobi matrix of 1st order markov/random walk process. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname"></td><td></td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dt</td><td>Time interval[s] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">T</td><td>correlation time[s] </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section warning"><dt>Warning</dt><dd>dt should far less than T(dt &lt;&lt; T) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>if T == V0, this function will return random walk process factor(I3) markov process should not used if you can not comprehend what really it is. </dd></dl>
 
 </div>
 </div>
@@ -976,7 +1151,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P583, 14.48 </dd></dl>
 
 </div>
 </div>
@@ -1029,7 +1205,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P583, 14.48 </dd></dl>
 
 </div>
 </div>
@@ -1083,6 +1260,166 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P583, 14.48 </dd></dl>
+
+</div>
+</div>
+<a id="ac9a08dc54e4ad7ff94d592e546272ed8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9a08dc54e4ad7ff94d592e546272ed8">&#9670;&nbsp;</a></span>jacobi_trans_veb_e2kax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int jacobi_trans_veb_e2kax </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>F</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Cbe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>dv</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Form state transformation matrix from veb_e to ka.x. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>current average attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dv</td><td>imu output velocity increment </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+
+</div>
+</div>
+<a id="ae049fae22d64bc86ba88c5266fc5d466"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae049fae22d64bc86ba88c5266fc5d466">&#9670;&nbsp;</a></span>jacobi_trans_veb_e2kay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int jacobi_trans_veb_e2kay </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>F</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Cbe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>dv</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Form state transformation matrix from veb_e to ka.y. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>current avearge attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dv</td><td>imu output velocity increment </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+
+</div>
+</div>
+<a id="ae413161c4db0d219aefecd176035e181"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae413161c4db0d219aefecd176035e181">&#9670;&nbsp;</a></span>jacobi_trans_veb_e2kaz()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int jacobi_trans_veb_e2kaz </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>F</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structm3__t.html">m3_t</a> *&#160;</td>
+          <td class="paramname"><em>Cbe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structv3__t.html">v3_t</a> *&#160;</td>
+          <td class="paramname"><em>dv</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Form state transformation matrix from veb_e to ka.z. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">F</td><td>Jacobi matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Cbe</td><td>current average attitude </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dv</td><td>imu output velocity increment </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
 
 </div>
 </div>
@@ -1136,6 +1473,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P583, 14.48 </dd></dl>
 
 </div>
 </div>
@@ -1182,6 +1520,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0: OK </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Ref: Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition), P583, 14.48 </dd></dl>
 
 </div>
 </div>
@@ -1241,8 +1580,10 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>jacobi_trans_Ebe2kgz</
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0: OK 1: Error </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Ref:<ol type="1">
-<li>Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition)</li>
+<dl class="section note"><dt>Note</dt><dd>Ref: <br  />
+<ol type="1">
+<li>Paul. D. Groves. Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems(2nd Edition) <br  />
+</li>
 <li>Yan Gongming, 捷联惯导算法与组合导航讲义, 2016 </li>
 </ol>
 </dd></dl>

@@ -7,11 +7,14 @@ CPPFLAGS = -std=c++98 -O2
 CLINK = -static -lm
 CPPLINK = -static 
 
-yins_bin: main.o libyins.a
-	$(CC) main.o -o yins_bin -L. -lyins $(CLINK)
+yins_bin: main.o yinsapp.o libyins.a
+	$(CC) main.o yinsapp.o -o yins_bin -L. -lyins $(CLINK)
 
 main.o: main.c yins_core/ins.h
 	$(CC) $(CFLAGS) -c main.c -o main.o
+
+yinsapp.o: yinsapp.c yinsapp.h
+	$(CC) $(CFLAGS) -c yinsapp.c -o yinsapp.o
 
 static: libyins.a
 
@@ -34,4 +37,4 @@ dist-clean: clean
 	rm libyins.a yins_bin
 
 clean:
-	rm ins.o inscmn.o insio.o inskf.o main.o
+	rm ins.o inscmn.o insio.o inskf.o main.o yinsapp.o
