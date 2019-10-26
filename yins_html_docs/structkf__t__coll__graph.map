@@ -1,9 +1,9 @@
 <map id="kf_t" name="kf_t">
-<area shape="rect" id="node1" title=" " alt="" coords="294,333,338,360"/>
-<area shape="rect" id="node2" href="$structsolins__t.html" title=" " alt="" coords="136,243,203,269"/>
-<area shape="rect" id="node3" href="$structv3__t.html" title=" " alt="" coords="195,5,242,32"/>
-<area shape="rect" id="node7" href="$structimud__t.html" title=" " alt="" coords="285,243,347,269"/>
-<area shape="rect" id="node4" href="$structquat__t.html" title=" " alt="" coords="80,5,139,32"/>
-<area shape="rect" id="node5" href="$structm3__t.html" title=" " alt="" coords="5,5,56,32"/>
-<area shape="rect" id="node6" href="$structgtime__t.html" title=" " alt="" coords="343,5,409,32"/>
+<area shape="rect" id="node1" title="kalman filter struct" alt="" coords="294,333,338,360"/>
+<area shape="rect" id="node2" href="$structsolins__t.html" title="ins solution struct" alt="" coords="136,243,203,269"/>
+<area shape="rect" id="node3" href="$structv3__t.html" title="3D vector sturct" alt="" coords="195,5,242,32"/>
+<area shape="rect" id="node7" href="$structimud__t.html" title="IMU epoch data struct." alt="" coords="285,243,347,269"/>
+<area shape="rect" id="node4" href="$structquat__t.html" title="quaternion struct" alt="" coords="80,5,139,32"/>
+<area shape="rect" id="node5" href="$structm3__t.html" title="3D matrix struct" alt="" coords="5,5,56,32"/>
+<area shape="rect" id="node6" href="$structgtime__t.html" title="time struct" alt="" coords="343,5,409,32"/>
 </map>

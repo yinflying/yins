@@ -1,4 +1,4 @@
 <map id="od_t" name="od_t">
-<area shape="rect" id="node1" title=" " alt="" coords="15,95,61,121"/>
-<area shape="rect" id="node2" href="$structgtime__t.html" title=" " alt="" coords="5,5,71,32"/>
+<area shape="rect" id="node1" title="odometer data" alt="" coords="15,95,61,121"/>
+<area shape="rect" id="node2" href="$structgtime__t.html" title="time struct" alt="" coords="5,5,71,32"/>
 </map>

@@ -33,22 +33,14 @@
  */
 
 #include "ins.h"
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-#include <ctype.h>
-
-#define PI  3.14159265358979
-#define EPS 1E-50
-#define SQR(x)  ((x) * (x))
+#include "insmacro.h"
 
 const m3_t I3 = {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0}; /**< unit 3D matrix */
 const m3_t O3 = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}; /**< zero 3D matrix */
-const v3_t V0 = {0.0, 0.0, 0.0};            /**< zero 3D vector */
-const v3_t V1 = {1.0, 1.0, 1.0};            /**< unit 3D vector */
-v3_t WIE_E = {0.0, 0.0, 7.292115E-5};
+const v3_t V0 = {0.0, 0.0, 0.0};      /**< zero 3D vector */
+const v3_t V1 = {1.0, 1.0, 1.0};      /**< unit 3D vector */
+v3_t WIE_E = {0.0, 0.0, 7.292115E-5}; /**< earth rotation vector: \f$ \omega_{ie}^e \f$ */
+
 cfg_t cfg = {
     .IPOS = 6,
     .IVEL = 3,
@@ -69,7 +61,7 @@ cfg_t cfg = {
     .sol_refpos = 0,
     .feedratio = 1.0,
     .is_imu_samenoise = false,
-    .log_path = "yins.log",
+    .log_path = "yins.log"
 };
 
 /**
@@ -896,14 +888,6 @@ extern int quat2euler(const quat_t* quat, v3_t* euler)
     euler->y = asin(2 * (-quat->q0 * quat->q2 - quat->q1 * quat->q3));
     euler->z = atan2(2 * (-quat->q0 * quat->q3 + quat->q1 * quat->q2),
         1 - 2 * quat->q2 * quat->q2 - 2 * quat->q3 * quat->q3);
-
-    if (euler->x <= -PI) /* Limit Roll Angle to (-pi,pi] */
-        euler->x += 2 * PI;
-    else if (euler->x > PI)
-        euler->x -= 2 * PI;
-    if (euler->z < 0) /* Limit Heading Angle to [0,2pi) */
-        euler->z += 2 * PI;
-    /* Pitch Angle limit to [-pi/2,pi/2], asin return value range */
     return 0;
 }
 
@@ -918,14 +902,6 @@ int dcm2euler(const m3_t* dcm, v3_t* euler)
     euler->x = atan2(dcm->m23, dcm->m33);
     euler->y = -asin(dcm->m13);
     euler->z = atan2(dcm->m12, dcm->m11);
-
-    if (euler->x <= -PI) /* Limit Roll Angle to (-pi,pi] */
-        euler->x += 2 * PI;
-    else if (euler->x > PI)
-        euler->x -= 2 * PI;
-    if (euler->z < 0) /* Limit Heading Angle to [0,2pi) */
-        euler->z += 2 * PI;
-    /* Pitch Angle limit to [-pi/2,pi/2], asin return value range */
     return 0;
 }
 
@@ -1652,10 +1628,7 @@ extern int euler_delphi(v3_t *E, const v3_t *phi)
  */
 extern double yaw_del(double yaw1, double yaw2)
 {
-    double dyaw = yaw1 - yaw2;
-    while(dyaw > PI)    dyaw -= 2*PI;
-    while(dyaw < -PI)   dyaw += 2*PI;
-    return dyaw;
+    return angle_to180(yaw1 - yaw2);
 }
 
 #ifndef RTKLIB
@@ -2118,13 +2091,12 @@ static void matfprint(const double A[], int n, int m, int p, int q, FILE *fp)
 }
 
 /**
- * @brief print matrix to file
+ * @brief print matrix to standard output
  * @param[in] 	A		matrix A (n x m)
  * @param[in] 	n 		number of rows of A
  * @param[in] 	m 		number of columns of A
  * @param[in] 	p 		total columns, columns under decimal point
  * @param[in] 	q 		total columns, columns under decimal point
- * @param[in] 	fp 		output file pointer
  * @note  matirix stored by column-major order (fortran convention)
  */
 extern void matprint(const double A[], int n, int m, int p, int q)
@@ -2229,8 +2201,8 @@ extern void LOG_FATAL(const char *format, ...) {
  */
 extern void LOG_ERROR(const char *format, ...) { LOG_LEVEL_BODY(ERROR); }
 /**
- * @brief LOG WARNNING message, meas that program may not work as expected, but
- *      in most situations, program will give a not too bad result.
+ * @brief LOG WARNNING message, means that program may not work as expected, but
+ *      in most situations, program will give a not too bad result
  * @param format    the same as "printf" function pararmeters
  * @note  the function will will append a line break automatically
  */
@@ -2499,6 +2471,14 @@ inline extern bool is_soltype(unsigned int status, unsigned int SOL_TYPE)
     return (SOL_TYPE == (status & SOL_TYPE));
 }
 
+/**
+ * @brief judge current position type either geodetic Coordinates or ECEF
+ * Cartesian Coordinates by position data features
+ * @param[in] 	 pos  	input pos, [m or rad,m]
+ * @retval true  geodetic coordinates(Lat, lon, hgt)
+ * @retval false ECEF Cartesian coordiante, xyz
+ * @warning this function only work with earth surface position
+ */
 inline extern bool is_blh(const v3_t *pos){
     if(fabs(pos->x) < PI+1e-6 && fabs(pos->y) < 2*PI+1e-6){
         if(fabs(pos->z) < 1e6) return true;
@@ -2535,3 +2515,38 @@ markov_std2rw(double std, double T) { return sqrt(2.0*SQR(std))/T; }
  */
 inline extern double
 markov_rw2std(double rw, double T) { return sqrt(SQR(rw*T)/2.0); }
+
+
+/**
+ * @brief limit angle to (-pi, pi]
+ * @param[in] 	angle	input angle[rad]
+ * @return limited angle[rad]
+ */
+inline extern double angle_to180(double angle)
+{
+    if(angle > PI){
+        angle -= 2.0*PI;
+        if(angle > PI) return angle_to180(angle);
+    }else if(angle <= -PI){
+        angle += 2.0*PI;
+        if(angle < -PI) return angle_to180(angle);
+    }
+    return angle;
+}
+
+/**
+ * @brief limit angle to [0, 2pi)
+ * @param[in] 	angle	input angle[rad]
+ * @return limit angle [rad]
+ */
+inline extern double angle_to360(double angle)
+{
+    if(angle < 0.0){
+        angle += 2.0*PI;
+        if(angle < 0.0) return angle_to360(angle);
+    }else if(angle >= 2.0*PI){
+        angle -= 2.0*PI;
+        if(angle > 2.0*PI) return angle_to360(angle);
+    }
+    return angle;
+}

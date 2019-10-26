@@ -106,15 +106,15 @@ Macros</h2></td></tr>
 <tr class="separator:a624dbcb8b6ccc24c9bf891c174f60b6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bdd116c85b4c647e4ddc9f0b48be27c"><td class="memItemLeft" align="right" valign="top"><a id="a5bdd116c85b4c647e4ddc9f0b48be27c"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="insio_8c.html#a5bdd116c85b4c647e4ddc9f0b48be27c">MAXIMUOBS</a>&#160;&#160;&#160;100000</td></tr>
-<tr class="memdesc:a5bdd116c85b4c647e4ddc9f0b48be27c"><td class="mdescLeft">&#160;</td><td class="mdescRight">max memory allocate for <a class="el" href="structimu__t.html">imu_t</a> struct <br /></td></tr>
+<tr class="memdesc:a5bdd116c85b4c647e4ddc9f0b48be27c"><td class="mdescLeft">&#160;</td><td class="mdescRight">max memory allocate for <a class="el" href="structimu__t.html" title="IMU full data struct.">imu_t</a> struct <br /></td></tr>
 <tr class="separator:a5bdd116c85b4c647e4ddc9f0b48be27c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a831d5ef551c4bb74f4b1e8fa49d6f21b"><td class="memItemLeft" align="right" valign="top"><a id="a831d5ef551c4bb74f4b1e8fa49d6f21b"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="insio_8c.html#a831d5ef551c4bb74f4b1e8fa49d6f21b">MAXODOBS</a>&#160;&#160;&#160;100000</td></tr>
-<tr class="memdesc:a831d5ef551c4bb74f4b1e8fa49d6f21b"><td class="mdescLeft">&#160;</td><td class="mdescRight">max memory allocate for <a class="el" href="structod__t.html">od_t</a> sturct <br /></td></tr>
+<tr class="memdesc:a831d5ef551c4bb74f4b1e8fa49d6f21b"><td class="mdescLeft">&#160;</td><td class="mdescRight">max memory allocate for <a class="el" href="structod__t.html" title="odometer data">od_t</a> sturct <br /></td></tr>
 <tr class="separator:a831d5ef551c4bb74f4b1e8fa49d6f21b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a553e28053a8adb8001f8762ea84812e5"><td class="memItemLeft" align="right" valign="top"><a id="a553e28053a8adb8001f8762ea84812e5"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="insio_8c.html#a553e28053a8adb8001f8762ea84812e5">MAXPVAOBS</a>&#160;&#160;&#160;10000</td></tr>
-<tr class="memdesc:a553e28053a8adb8001f8762ea84812e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">max memory allocate for <a class="el" href="structpva__t.html">pva_t</a> struct <br /></td></tr>
+<tr class="memdesc:a553e28053a8adb8001f8762ea84812e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">max memory allocate for <a class="el" href="structpva__t.html" title="postion,velocity,attitude struct">pva_t</a> struct <br /></td></tr>
 <tr class="separator:a553e28053a8adb8001f8762ea84812e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7866fa5e4e0ee9b034e9dab6599a9cc"><td class="memItemLeft" align="right" valign="top"><a id="aa7866fa5e4e0ee9b034e9dab6599a9cc"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>SQR</b>(x)&#160;&#160;&#160;((x) * (x))</td></tr>
@@ -144,6 +144,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>imu_free</b> (<a clas
 <tr class="memitem:a988bc0c5150c9b6c1ea2380278a238db"><td class="memItemLeft" align="right" valign="top"><a id="a988bc0c5150c9b6c1ea2380278a238db"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>od_init</b> (<a class="el" href="structod__t.html">od_t</a> *od)</td></tr>
 <tr class="separator:a988bc0c5150c9b6c1ea2380278a238db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0704a85d10331fb713f597aad8405d4"><td class="memItemLeft" align="right" valign="top"><a id="af0704a85d10331fb713f597aad8405d4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>od_init1</b> (<a class="el" href="structod__t.html">od_t</a> *od)</td></tr>
+<tr class="separator:af0704a85d10331fb713f597aad8405d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a932cbd3646c469e7cea433958fd0edb2"><td class="memItemLeft" align="right" valign="top"><a id="a932cbd3646c469e7cea433958fd0edb2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>od_add</b> (<a class="el" href="structod__t.html">od_t</a> *od, const <a class="el" href="structgtime__t.html">gtime_t</a> *time, const double *dS)</td></tr>
 <tr class="separator:a932cbd3646c469e7cea433958fd0edb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,8 +168,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>yins_readf</b> (const 
 <tr class="memitem:a329c93fc6a7b0dbd4550cb74830068ed"><td class="memItemLeft" align="right" valign="top"><a id="a329c93fc6a7b0dbd4550cb74830068ed"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>yins_writef</b> (const char *fname, enum <a class="el" href="ins_8h.html#a576ac5076c61cb7750f879a506d25287">FT</a> FILETYPE, const <a class="el" href="structimu__t.html">imu_t</a> *imu, const <a class="el" href="structpva__t.html">pva_t</a> *pva, const <a class="el" href="structod__t.html">od_t</a> *od)</td></tr>
 <tr class="separator:a329c93fc6a7b0dbd4550cb74830068ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3df1b4008413d9980e86200196178ded"><td class="memItemLeft" align="right" valign="top"><a id="a3df1b4008413d9980e86200196178ded"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>outsolins</b> (FILE *fp, const <a class="el" href="structsolins__t.html">solins_t</a> *sol, const <a class="el" href="structimup__t.html">imup_t</a> *imup)</td></tr>
+<tr class="memitem:a3df1b4008413d9980e86200196178ded"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="insio_8c.html#a3df1b4008413d9980e86200196178ded">outsolins</a> (FILE *fp, const <a class="el" href="structsolins__t.html">solins_t</a> *sol, const <a class="el" href="structimup__t.html">imup_t</a> *imup)</td></tr>
+<tr class="memdesc:a3df1b4008413d9980e86200196178ded"><td class="mdescLeft">&#160;</td><td class="mdescRight">output ins solution struct to file  <a href="insio_8c.html#a3df1b4008413d9980e86200196178ded">More...</a><br /></td></tr>
 <tr class="separator:a3df1b4008413d9980e86200196178ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -251,6 +254,56 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>outsolins</b> (FILE *f
 <div class="line">    }</div>
 </div><!-- fragment -->
 <p>safe to call realloc </p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a3df1b4008413d9980e86200196178ded"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3df1b4008413d9980e86200196178ded">&#9670;&nbsp;</a></span>outsolins()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int outsolins </td>
+          <td>(</td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>fp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structsolins__t.html">solins_t</a> *&#160;</td>
+          <td class="paramname"><em>sol</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structimup__t.html">imup_t</a> *&#160;</td>
+          <td class="paramname"><em>imup</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>output ins solution struct to file </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">fp</td><td>file pointer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sol</td><td>solution struct </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">imup</td><td>imu propertty struct </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status(0: OK) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>this function control by global cfg varibale, related properties: <br  />
+ cfg.sol_refpos solution ouput reference point <br  />
+ cfg.issol_header output solution header or not(stanadard csv file) <br  />
+ cfg.isx_* output correspoding property or not </dd></dl>
 
 </div>
 </div>

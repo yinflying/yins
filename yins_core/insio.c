@@ -25,16 +25,12 @@
  */
 
 #include "ins.h"
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "insmacro.h"
 
 #define MAXLINELEN  512     /**< char numbner limit of line when reading file */
 #define MAXIMUOBS   100000  /**< max memory allocate for imu_t struct */
 #define MAXODOBS    100000  /**< max memory allocate for od_t sturct */
 #define MAXPVAOBS   10000   /**< max memory allocate for pva_t struct */
-#define SQR(x) ((x) * (x))
 
 /** safe to call realloc */
 #define REALLOC(pointer, type, sz)                                              \
@@ -588,7 +584,7 @@ static int reads_ycsv_header(char *buff, imup_t *imup)
     return 0;
 }
 
-static int readf_ycsv_header(FILE *fp, imup_t *imup){
+extern int readf_ycsv_header(FILE *fp, imup_t *imup){
     char buff[MAXLINELEN];
     while (fgets(buff, MAXLINELEN, fp)) {
         if(buff[0] == '>') break;       /* skip comment */
@@ -881,6 +877,13 @@ extern void od_init(od_t *od)
 
     MALLOC(od->time, gtime_t, od->nmax);
     MALLOC(od->dS, double, od->nmax);
+}
+
+extern void od_init1(od_t *od)
+{
+    od->n = 1; od->nmax = 1;
+    MALLOC(od->time, gtime_t, 1);
+    MALLOC(od->dS, double, 1);
 }
 
 extern void od_add(od_t *od, const gtime_t *time, const double *dS)
@@ -1176,6 +1179,17 @@ extern int yins_writef(const char *fname, enum FT FILETYPE, const imu_t *imu,
     return 0;
 }
 
+/**
+ * @brief output ins solution struct to file
+ * @param[in] 	fp	 	file pointer
+ * @param[in] 	sol		solution struct
+ * @param[in] 	imup 	imu propertty struct
+ * @return status(0: OK)
+ * @note this function control by global cfg varibale, related properties: \n
+ * 		cfg.sol_refpos		solution ouput reference point \n
+ * 		cfg.issol_header	output solution header or not(stanadard csv file) \n
+ * 		cfg.isx_*			output correspoding property or not
+ */
 extern int outsolins(FILE *fp, const solins_t *sol, const imup_t *imup)
 {
     solins_t outsol = *sol;
@@ -1298,17 +1312,16 @@ extern int outsolins(FILE *fp, const solins_t *sol, const imup_t *imup)
     }
     if(cfg.isx_eroll || cfg.isx_epitch  || cfg.isx_eyaw ){
         v3_t Ebc;  dcm2euler(&outsol.Cbc, &Ebc);
-        /* yaw_del: limit angle from -pi~pi */
         if(cfg.isx_eroll){
-            fprintf(fp, ",%8.4f", yaw_del(Ebc.x,0.0)*RAD2DEG);
+            fprintf(fp, ",%8.4f", angle_to180(Ebc.x)*RAD2DEG);
             fprintf(fp, ",%10.5G", outsol.std_Cbc.x*RAD2DEG);
         }
         if(cfg.isx_epitch){
-            fprintf(fp, ",%8.4f", yaw_del(Ebc.y,0.0)*RAD2DEG);
+            fprintf(fp, ",%8.4f", angle_to180(Ebc.y)*RAD2DEG);
             fprintf(fp, ",%10.5G", outsol.std_Cbc.y*RAD2DEG);
         }
         if(cfg.isx_eyaw){
-            fprintf(fp, ",%8.4f", yaw_del(Ebc.z,0.0)*RAD2DEG);
+            fprintf(fp, ",%8.4f", angle_to180(Ebc.z)*RAD2DEG);
             fprintf(fp, ",%10.5G", outsol.std_Cbc.z*RAD2DEG);
         }
     }

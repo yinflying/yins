@@ -32,6 +32,7 @@ config_UT{
 
 HEADERS += \
     yins_core/ins.h \
+    yins_core/insmacro.h \
     yinsapp.h
 
 unix:!macx: LIBS += -lcriterion

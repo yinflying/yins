@@ -24,14 +24,7 @@
  */
 
 #include "ins.h"
-
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
-#define PI 3.14159265358979
-#define SQR(x) ((x) * (x))
+#include "insmacro.h"
 
 /* Simplfiy the filter usage */
 #define KF_FILTER(kf, dz, Qdz)                                               \
@@ -171,12 +164,14 @@ extern int inskf_init(kf_t *inskf, const imup_t *imup)
     /* init sol_t */
     inskf->sol->time = imup->tstart;
     inskf->sol->status = SOL_MANUAL;
-    euler2dcm(&imup->inita, &inskf->sol->dcm);
-    euler2quat(&imup->inita, &inskf->sol->quat);
+    v3_t pos = imup->initr; ecef2ned(&pos, NULL, NULL);
+    inskf->sol->dcm = att2Cbe(&pos, &imup->inita);
+    dcm2quat(&inskf->sol->dcm, &inskf->sol->quat);
     inskf->sol->vel = imup->initv;
     inskf->sol->pos = imup->initr;
     /* init P */
-    m3_paste((inskf->P+cfg.IATT+cfg.IATT*cfg.nx), inskf->nx, &imup->initQa);
+    m3_t initQa = imup->initQa; ned2ecefQ(&pos, NULL, NULL, &initQa);
+    m3_paste((inskf->P+cfg.IATT+cfg.IATT*cfg.nx), inskf->nx, &initQa);
     m3_paste((inskf->P+cfg.IVEL+cfg.IVEL*cfg.nx), inskf->nx, &imup->initQv);
     m3_paste((inskf->P+cfg.IPOS+cfg.IPOS*cfg.nx), inskf->nx, &imup->initQr);
     /* init F (Some elements keep constant at equal time inteval */
@@ -359,13 +354,9 @@ extern int inskf_udstate(kf_t *inskf, const imud_t *imud, const imup_t *imup)
             LOG_WARN("%s: Autofix the time error", __FUNCTION__);
         }
     }
-    /* corrent imu output */
-    v3_t dv, dtheta;
-    if(cfg.isx_ba) dv = v3_del(imud->accel, v3_scalar(dt, inskf->sol->ba));
-    else dv = imud->accel;
-    if(cfg.isx_bg) dtheta = v3_del(imud->gyro, v3_scalar(dt, inskf->sol->bg));
-    else dtheta = imud->gyro;
-
+    /* corrent imu output, true = (output - bias)*factor */
+    v3_t dv     =   v3_del(imud->accel, v3_scalar(dt, inskf->sol->ba));
+    v3_t dtheta = 	v3_del(imud->gyro, v3_scalar(dt, inskf->sol->bg));
     dv =        v3_mul_cxc(inskf->sol->ka, dv);
     dtheta =    v3_mul_cxc(inskf->sol->kg, dtheta);
 

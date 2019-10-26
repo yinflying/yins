@@ -1,6 +1,6 @@
 <map id="pva_t" name="pva_t">
-<area shape="rect" id="node1" title=" " alt="" coords="75,124,129,151"/>
-<area shape="rect" id="node2" href="$structv3__t.html" title=" " alt="" coords="5,5,52,32"/>
-<area shape="rect" id="node3" href="$structm3__t.html" title=" " alt="" coords="77,5,127,32"/>
-<area shape="rect" id="node4" href="$structgtime__t.html" title=" " alt="" coords="152,5,217,32"/>
+<area shape="rect" id="node1" title="postion,velocity,attitude struct" alt="" coords="75,124,129,151"/>
+<area shape="rect" id="node2" href="$structv3__t.html" title="3D vector sturct" alt="" coords="5,5,52,32"/>
+<area shape="rect" id="node3" href="$structm3__t.html" title="3D matrix struct" alt="" coords="77,5,127,32"/>
+<area shape="rect" id="node4" href="$structgtime__t.html" title="time struct" alt="" coords="152,5,217,32"/>
 </map>

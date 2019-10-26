@@ -1,4 +1,8 @@
 var searchData=
 [
-  ['ug2mps2_792',['UG2MPS2',['../ins_8h.html#ac328b2775c92720313b0dcf99cbbe558',1,'ins.h']]]
+  ['rad2deg_798',['RAD2DEG',['../ins_8h.html#ac5a945020d3528355cda82d383676736',1,'ins.h']]],
+  ['realloc_799',['REALLOC',['../insio_8c.html#a17bf9358ae38b8cf0c0d1becf4977501',1,'insio.c']]],
+  ['rps2dph_800',['RPS2DPH',['../ins_8h.html#ae6748ba58d718ea61ae8abb850a4df07',1,'ins.h']]],
+  ['rpss2dphpshz_801',['RPSS2DPHPSHZ',['../ins_8h.html#adf44458842c88252b9e1513ee553beb9',1,'ins.h']]],
+  ['rpss2dpsh_802',['RPSS2DPSH',['../ins_8h.html#a4d6b793e8d3455a0297402057b33db14',1,'ins.h']]]
 ];

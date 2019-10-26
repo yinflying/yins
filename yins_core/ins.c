@@ -26,14 +26,7 @@
  */
 
 #include "ins.h"
-
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
-#define PI 3.14159265358979
-#define SQR(x) ((x) * (x))
+#include "insmacro.h"
 
 /**
  * @brief Gravitational acceleration of Earth project to e-frame
@@ -140,6 +133,8 @@ int ins_nav_ecef_back(double dt,const v3_t *dtheta, const v3_t *dv,
     v3_t *r, v3_t *v, quat_t *q)
 {
     /* TODO: test this function */
+    LOG_WARN("%s: need to test", __FUNCTION__);
+
     /* Attitude update */
     v3_t dtheta_ie = { 0.0, 0.0, wgs84.wie * dt };
     quat_t q_earth, q_body, old_q = *q;
@@ -231,6 +226,7 @@ extern int multisample( const v3_t* dtheta_list, const v3_t* dv_list, int N,
 int dr_nav_ned()
 {
     /* TODO: DR under ned */
+    LOG_FATAL("%s: NOT implemented", __FUNCTION__);
     return 0;
 }
 

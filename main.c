@@ -26,15 +26,13 @@
  **/
 
 #include "yins_core/ins.h"
+#include "yins_core/insmacro.h"
 #include "yinsapp.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-
-#define PI 3.14159265358979
-#define SQR(x) ((x)*(x))
 
 void test_ygm_insod(){
 #define WPATH "../yins/yins_data/ygm_insod/"
@@ -61,8 +59,9 @@ void test_ygm_insod(){
     imu.property->initr = pva.pos[0];
     imu.property->initv = pva.vel[0];
     imu.property->inita = pva.att[0];
-    v3_t initpos = imu.property->initr; ecef2ned(&initpos, NULL, NULL);
-    imu.property->inita = att2Ebe(&initpos, &imu.property->inita);
+    imu.property->initQa = m3_scalar(1.0*DEG2RAD, I3);
+    imu.property->initQr = m3_scalar(1.0, I3);
+    imu.property->initQv = m3_scalar(1.0, I3);
 
     // fix var-covarinace setting
     m3_t Qr = m3_scalar(SQR(0.10), I3);
@@ -113,6 +112,8 @@ void test_ygm_insod(){
 }
 
 void test_yinsapp_pureins(){
+#undef WPATH
+#undef NAME
 #define WPATH "../yins/yins_data/ygm_insod/"
 #define NAME  "ygm_circle_"
 
@@ -130,21 +131,75 @@ void test_yinsapp_pureins(){
     const char fsol[] =	WPATH NAME "sol.ycsv";
     strcpy(cfg.log_path, WPATH NAME "yins.log");
     yinsapp_pureins(fin, FT_YGM_IMU, &imup, fsol);
-#undef WPATH
-#undef NAME
 }
 
+void test_yinsapp_process(){
+#undef WPATH
+#undef NAME
+#define WPATH "../yins/yins_data/ygm_insod/"
+#define NAME  "ygm_circle_"
+    /* open a file to record solution */
+    FILE *fp_sol = fopen(WPATH NAME "sol.ycsv","w");
+    /* open a file to recoard log */
+    LOG_OPEN(WPATH NAME "yins.log");
 
+    /* read imu file  */
+    imu_t imu;  imu_init(&imu);
+    yins_readf(WPATH NAME "imu.txt",FT_YGM_IMU, &imu, NULL, NULL);
+    /* read pva(position,velocity,attitude) file */
+    pva_t pva;  pva_init(&pva);
+    yins_readf(WPATH NAME "avp.txt",FT_YGM_AVP, NULL, &pva, NULL);
+    /* read od(odometer) file */
+    od_t  od;   od_init(&od);
+    yins_readf(WPATH NAME "od.txt", FT_YGM_OD, NULL, NULL, &od);
 
+    char cfg_file[] = WPATH NAME "cfg.ycsv";
+
+    yinsapp_data_t appdata;
+    yinsapp_result_t result;
+
+    appdata.yaw2ant = 0.0;
+    appdata.yaw2ant_std = 0.0;
+    appdata.yaw2ant_stat = YINS_YAW2ANT_STAT_NONE;
+    for(unsigned int i = 0; i < imu.n; ++i){
+        appdata.isa_od = false;
+        appdata.isa_gnss = false;
+        appdata.isa_imu = true;
+        appdata.week = 0;
+        appdata.sow = imu.data[i].time.sec;
+        v3_paste(appdata.gyro, &imu.data[i].gyro);
+        v3_paste(appdata.accel, &imu.data[i].accel);
+        yinsapp_process(&appdata, &result, cfg_file);
+        if(i % 20 == 0 && i != 0){
+            appdata.isa_od = false;
+            appdata.isa_imu = false;
+            appdata.isa_gnss = true;
+            appdata.week = 0;
+            appdata.sow = pva.time[i].sec;
+            ecef2ned(&pva.pos[i], &pva.vel[i], NULL);
+            v3_paste(appdata.veg_n, &pva.vel[i]);
+            v3_paste(appdata.pos, &pva.pos[i]);
+            appdata.veg_n_std[0] = 0.1;
+            appdata.veg_n_std[1] = 0.1;
+            appdata.veg_n_std[2] = 0.1;
+            appdata.pos_std[0] = 0.05;
+            appdata.pos_std[1] = 0.05;
+            appdata.pos_std[2] = 0.05;
+            appdata.gnss_stat = YINS_GNSS_STAT_FIX;
+            yinsapp_process(&appdata, &result, cfg_file);
+        }
+    }
+}
 
 int main()
 {
     FILE_LOG_LEVEL = LEVEL_TRACE;
     STDOUT_LOG_LEVEL = LEVEL_DEBUG;
 
-//    test_ygm_insod();
-    test_yinsapp_pureins();
+    test_ygm_insod();
+//    test_yinsapp_pureins();
 
+//    test_yinsapp_process();
     LOG_CLOSE();
     return 0;
 }

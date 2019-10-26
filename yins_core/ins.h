@@ -62,27 +62,6 @@
 #ifndef INS_H
 #define INS_H
 
-/* Solution status */
-#ifndef YINS_CONVERT_PARAMETER
-#define DEG2RAD     0.0174532925199433      /**< deg to rad */
-#define RAD2DEG     57.2957795130823        /**< rad to deg */
-#define DPH2RPS     4.84813681109536e-06    /**< deg/h to rad/s */
-#define RPS2DPH     206264.806247096        /**< rad/s to deg/h */
-#define DPSH2RPSS   2.90888208665722e-4     /**< deg/sqrt(h) to rad/sqrt(s) */
-#define RPSS2DPSH   3437.74677078493        /**< rad/sqrt(s) to deg/sqrt(h) */
-#define DPHPSHZ2RPSS 4.84813681109536e-06   /**< deg/h/sqrt(Hz) to rad/sqrt(s) */
-#define RPSS2DPHPSHZ 206264.806247096       /**< rad/sqrt(s) to deg/h/sqrt(Hz) */
-
-#define G2MPS2      9.80665                 /**< g0 to m/s^2 */
-#define MPS22G      0.101971621297793       /**< m/s^2 to g0 */
-#define MG2MPS2     9.80665e-3              /**< millo-g0(mg) to m/s^2 */
-#define MPS22MG     101.971621297793        /**< m/s^2 to milli-g0(mg) */
-#define UG2MPS2     9.80665e-6              /**< micro-g0(ug) to m/s^2 */
-#define MPS22UG     101971.621297793        /**< m/s^2 to micro-g0(ug) */
-#define GAL2MPS2    0.01                    /**< gal to m/s^2 */
-#define MPS22GAL    100.0                   /**< m/s^2 to gal */
-#endif  /* YINS_CONVERT_PARAMETER */
-
 #include <time.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -181,10 +160,13 @@ int  smoother(const double *xf, const double *Qf, const double *xb, const double
 void matprint(const double *A, int n, int m, int p, int q);
 int mat_symmetry(double *A, int n);
 
+/**
+ * @brief time struct
+ */
 typedef struct {
     time_t time;    /**< time (s) expressed by standard time_t */
     double sec;     /**< fraction of second under 1 s */
-} gtime_t;          /**< time struct */
+} gtime_t;
 
 double  timediff (gtime_t t1, gtime_t t2);
 gtime_t epoch2time(const double* ep);
@@ -194,30 +176,48 @@ double  time2gpst(gtime_t t, int *week);
 gtime_t timeadd(gtime_t t, double sec);
 #endif /* RTKLIB */
 
+/**
+ * @brief 3D vector sturct
+ */
 typedef struct {
     double x, y, z;
-} v3_t;     /**< 3D vector sturct */
+} v3_t;
 
+/**
+ * @brief quaternion struct
+ */
 typedef struct {
     double q0, q1, q2, q3;
-} quat_t;   /**< quaternion struct */
+} quat_t;
 
+/**
+ * @brief 3D matrix struct
+ */
 typedef struct {
     double m11, m12, m13, m21, m22, m23, m31, m32, m33;
-} m3_t;     /**< 3D matrix struct */
+} m3_t;
 
+/**
+ * @brief IMU epoch data struct
+ */
 typedef struct {
     gtime_t time;   /**< current time */
     v3_t gyro;      /**< gyro output, angular increment */
     v3_t accel;     /**< accelermeter output, velocity increment */
-} imud_t;   /**< IMU epoch data struct */
+} imud_t;
 
+/**
+ * @brief odometer data
+ */
 typedef struct {
     unsigned int n, nmax;
     gtime_t *time;      /**< increment */
     double  *dS;        /**< increment */
 } od_t;     /**< odometer data */
 
+/**
+ * @brief  IMU property struct
+ */
 typedef struct {
     unsigned int freq_imu;  /**< IMU sample rate[Hz] */
     unsigned int freq_od;   /**< Odometer sample rate[Hz] */
@@ -234,11 +234,11 @@ typedef struct {
     v3_t kg_std;        /**< Standard error of Gyro scalar factor(initial value) */
     v3_t Ta;            /**< Accel bias correlation time(1st order Markov) [s] */
     v3_t Tg;            /**< Gryo bias correlation time(1st order Markov) [s] */
-    v3_t inita;         /**< initial attitude [rad] */
+    v3_t inita;         /**< initial attitude, Enb [rad] */
     m3_t initQa;        /**< initial attitude uncertainty [rad^2] */
-    v3_t initv;         /**< initial velocity [m/s] */
+    v3_t initv;         /**< initial velocity, veb_e [m/s] */
     m3_t initQv;        /**< initial velocity uncertainty [m^2/s^2] */
-    v3_t initr;         /**< initial position [m] */
+    v3_t initr;         /**< initial position, reb_e [m] */
     m3_t initQr;        /**< initial position uncertainty */
     v3_t ba;            /**< (initial) accel bias [m/s^2] */
     v3_t ba_std;        /**< (initial) accel bias stanadard error[m/s^2] */
@@ -259,14 +259,22 @@ typedef struct {
     v3_t err_angle_gps;     /**< GPS install error angle(gps-imu, roll, pitch, yaw)[rad] */
     v3_t err_angle_gps_std; /**< GPS install error angle uncertainty[rad] */
     v3_t ref_point;         /**< reference point under b-frame, use for solution output [m]*/
-} imup_t;   /**< IMU property struct */
+    unsigned char gyro_axis[3];
+    unsigned char accel_axis[3];
+} imup_t;
 
+/**
+ * @brief  IMU full data struct
+ */
 typedef struct {
     unsigned int n, nmax;   /**< number of data/allocated */
     imud_t* data;           /**< IMU observation data record */
     imup_t *property;       /**< IMU property */
-} imu_t;    /**< IMU full data strct */
+} imu_t;
 
+/**
+ * @brief postion,velocity,attitude struct
+ */
 typedef struct{
     unsigned int n;         /**< current pva number */
     unsigned int nmax;      /**< pva mamory allocated max number */
@@ -289,6 +297,9 @@ typedef struct{
     unsigned int *ext_status;   /**< extra variebles status, control by pva_t.is_ext */
 } pva_t;
 
+/**
+ * @brief postion,velocity,attitude struct
+ */
 typedef struct{
     bool isx_ba;        /**< if acceleremter bias in state vector or not */
     bool isx_bg;        /**< if gryo bias in state vector or not */
@@ -352,6 +363,9 @@ typedef struct{
 extern cfg_t cfg;   /**< global configuration */
 int updatecfg(void);
 
+/**
+ * @brief ins solution struct
+ */
 typedef struct{
     gtime_t time;       /**< current solution time */
     unsigned int status;/**< solution status, see macro SOL_* */
@@ -376,6 +390,9 @@ typedef struct{
     v3_t std_Cbc;       /**< standard error of install error angle */
 } solins_t;             /**< ins solution struct */
 
+/**
+ * @brief kalman filter struct
+ */
 typedef struct{
     gtime_t time;       /**< current time */
     double idt;         /**< time interval of imu */
@@ -470,6 +487,7 @@ double yaw_del(double yaw1, double yaw2);
 int euler_addphi(v3_t *Eab, const v3_t *phi_bc);
 int euler_delphi(v3_t *Eab, const v3_t *phi_bc);
 
+
 /* coordinate transformation */
 m3_t formCen_ned(double lat, double lon);
 int ned2ecef(v3_t* pos, v3_t* vel, m3_t* Cbn);
@@ -507,6 +525,7 @@ int multisample(const v3_t *dtheta_list, const v3_t *dv_list, int N, v3_t *dthet
 int dr_nav_ecef(double dt, const v3_t* dtheta, double dS, v3_t *r, quat_t *q);
 
 /* INS IO operation */
+int readf_ycsv_header(FILE *fp, imup_t *imup);
 int yins_readf(const char * fname, enum FT ft, imu_t *imu, pva_t *pva, od_t *od);
 int yins_writef(const char *fname, enum FT ft, const imu_t *imu, const pva_t *pva, const od_t *od);
 int imu_init(imu_t *imu);
@@ -606,7 +625,8 @@ void imu_orientation_adjust(imud_t *imud, const char *or1, const char *or2);
 unsigned int soltype_add(unsigned int status, unsigned int SOL_TYPE);
 unsigned int soltype_remove(unsigned int status, unsigned int SOL_TYPE);
 bool is_soltype(unsigned int status, unsigned int SOL_TYPE);
-
+double angle_to180(double angle);
+double angle_to360(double angle);
 double markov_std2rw(double std, double T);
 double markov_rw2std(double rw, double T);
 

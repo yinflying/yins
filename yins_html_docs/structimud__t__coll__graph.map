@@ -1,5 +1,5 @@
 <map id="imud_t" name="imud_t">
-<area shape="rect" id="node1" title=" " alt="" coords="38,109,99,136"/>
-<area shape="rect" id="node2" href="$structv3__t.html" title=" " alt="" coords="5,5,52,32"/>
-<area shape="rect" id="node3" href="$structgtime__t.html" title=" " alt="" coords="76,5,141,32"/>
+<area shape="rect" id="node1" title="IMU epoch data struct." alt="" coords="38,109,99,136"/>
+<area shape="rect" id="node2" href="$structv3__t.html" title="3D vector sturct" alt="" coords="5,5,52,32"/>
+<area shape="rect" id="node3" href="$structgtime__t.html" title="time struct" alt="" coords="76,5,141,32"/>
 </map>
