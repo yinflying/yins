@@ -30,7 +30,7 @@
 #define MAXLINELEN  512     /**< char numbner limit of line when reading file */
 #define MAXIMUOBS   100000  /**< max memory allocate for imu_t struct */
 #define MAXODOBS    100000  /**< max memory allocate for od_t sturct */
-#define MAXPVAOBS   10000   /**< max memory allocate for pva_t struct */
+#define MAXPVAOBS   100000  /**< max memory allocate for pva_t struct */
 
 /** safe to call realloc */
 #define REALLOC(pointer, type, sz)                                              \

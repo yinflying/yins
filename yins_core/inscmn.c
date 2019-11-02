@@ -1759,7 +1759,7 @@ extern int normv3(const double *a, double *b)
  */
 extern void matcpy(double *A, const double *B, int n, int m)
 {
-    memcpy(A,B,sizeof(double)*n*m);
+    memcpy(A,B,sizeof(double)*(unsigned long)n*(unsigned long)m);
 }
 /* matrix routines -----------------------------------------------------------*/
 

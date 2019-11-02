@@ -134,6 +134,7 @@ void test_yinsapp_pureins(){
 }
 
 void test_yinsapp_process(){
+/* this function need more test */
 #undef WPATH
 #undef NAME
 #define WPATH "../yins/yins_data/ygm_insod/"
@@ -198,8 +199,8 @@ int main()
 
     test_ygm_insod();
 //    test_yinsapp_pureins();
-
 //    test_yinsapp_process();
+
     LOG_CLOSE();
     return 0;
 }
